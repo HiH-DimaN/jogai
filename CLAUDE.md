@@ -87,3 +87,11 @@ jogai/
 - [x] **0.4** — БД: models.py (9 таблиц, i18n-поля, индексы), engine.py, alembic
 - [x] **0.5** — main.py, deps.py, 7 роутеров-заглушек
 - [x] **0.6** — docker-compose.yml, nginx.conf, Justfile, .env (порты: backend=8001, nginx=8080)
+- [x] **0.8** — Alembic migration (9 таблиц), seed (3 казино, 6 бонусов, 1 sport_pick)
+
+### Шаг 1 — Telegram-бот (все строки через t())
+- [x] bot.py, middlewares (User/Locale/RateLimit), handlers (start, bonus)
+- [x] /start → t("welcome") + 4 кнопки, deep link referral
+- [x] /bonus → top-3 по jogai_score WHERE geo, карточки через t(), клики с locale
+- [x] services/affiliate.py, utils/telegram.py, bot/polling.py
+- [x] main.py обновлён: webhook → aiogram dispatcher
