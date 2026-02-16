@@ -5,6 +5,8 @@ import logging
 from app.bot.bot import dp, get_bot
 from app.bot.handlers.analyze import router as analyze_router
 from app.bot.handlers.bonus import router as bonus_router
+from app.bot.handlers.casino import router as casino_router
+from app.bot.handlers.sport import router as sport_router
 from app.bot.handlers.start import router as start_router
 from app.bot.middlewares import LocaleMiddleware, RateLimitMiddleware, UserMiddleware
 
@@ -24,6 +26,8 @@ def setup_bot() -> None:
     dp.include_router(start_router)
     dp.include_router(bonus_router)
     dp.include_router(analyze_router)
+    dp.include_router(casino_router)
+    dp.include_router(sport_router)
 
 
 async def main() -> None:
