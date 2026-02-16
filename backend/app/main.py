@@ -12,6 +12,7 @@ from app.api.router_digest import router as digest_router
 from app.api.router_quiz import router as quiz_router
 from app.api.router_tracker import router as tracker_router
 from app.bot.bot import dp, get_bot
+from app.bot.handlers.analyze import router as analyze_handler_router
 from app.bot.handlers.bonus import router as bonus_handler_router
 from app.bot.handlers.start import router as start_handler_router
 from app.bot.middlewares import LocaleMiddleware, RateLimitMiddleware, UserMiddleware
@@ -28,6 +29,7 @@ def _setup_bot() -> None:
 
     dp.include_router(start_handler_router)
     dp.include_router(bonus_handler_router)
+    dp.include_router(analyze_handler_router)
 
 
 @asynccontextmanager
