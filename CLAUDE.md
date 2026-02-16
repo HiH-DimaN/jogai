@@ -77,3 +77,10 @@ jogai/
 ## Переменные окружения
 Полный список — в PROJECT_ARCHITECTURE.md раздел 8.
 Ключевые: DATABASE_URL, REDIS_URL, TELEGRAM_BOT_TOKEN, ANTHROPIC_API_KEY, DEFAULT_LOCALE=pt_BR, DEFAULT_GEO=BR.
+
+## Прогресс реализации
+- [x] **Шаг 0.1** — Структура папок: backend/, miniapp/, landing/, nginx/ со всеми подпапками и `__init__.py`
+- [x] **Шаг 0.2** — Backend инфраструктура: requirements.txt, .env.example, Dockerfile, config.py (Pydantic Settings)
+- [ ] **Шаг 0.3** — i18n: i18n.py, locales/pt_BR.json, locales/es_MX.json, formatters.py
+- [ ] **Шаг 0.4** — БД: models.py, engine.py, alembic
+- [ ] **Шаг 0.5** — main.py, deps.py, docker-compose.yml, nginx.conf
