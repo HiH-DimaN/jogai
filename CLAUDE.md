@@ -79,8 +79,11 @@ jogai/
 Ключевые: DATABASE_URL, REDIS_URL, TELEGRAM_BOT_TOKEN, ANTHROPIC_API_KEY, DEFAULT_LOCALE=pt_BR, DEFAULT_GEO=BR.
 
 ## Прогресс реализации
-- [x] **Шаг 0.1** — Структура папок: backend/, miniapp/, landing/, nginx/ со всеми подпапками и `__init__.py`
-- [x] **Шаг 0.2** — Backend инфраструктура: requirements.txt, .env.example, Dockerfile, config.py (Pydantic Settings)
-- [ ] **Шаг 0.3** — i18n: i18n.py, locales/pt_BR.json, locales/es_MX.json, formatters.py
-- [ ] **Шаг 0.4** — БД: models.py, engine.py, alembic
-- [ ] **Шаг 0.5** — main.py, deps.py, docker-compose.yml, nginx.conf
+
+### Шаг 0 — Скелет проекта + i18n
+- [x] **0.1** — Структура папок: backend/, miniapp/, landing/, nginx/ + `__init__.py`
+- [x] **0.2** — Backend: requirements.txt, .env.example, Dockerfile, config.py
+- [x] **0.3** — i18n: i18n.py, locales/pt_BR.json, locales/es_MX.json, formatters.py
+- [x] **0.4** — БД: models.py (9 таблиц, i18n-поля, индексы), engine.py, alembic
+- [x] **0.5** — main.py, deps.py, 7 роутеров-заглушек
+- [x] **0.6** — docker-compose.yml, nginx.conf, Justfile, .env (порты: backend=8001, nginx=8080)
