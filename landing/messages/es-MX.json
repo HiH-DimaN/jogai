@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "title": "Jogai — Tu Asistente Inteligente de Casinos y Bonos",
+    "description": "Análisis de bonos con IA, rankings de casinos, Jogai Score y mucho más. Encuentra los mejores bonos y casinos de México."
+  },
+  "hero": {
+    "title": "Jogai",
+    "subtitle": "Tu asistente inteligente de casinos y bonos",
+    "description": "Análisis de bonos con IA, rankings de casinos con Jogai Score, apuestas deportivas y mucho más.",
+    "cta": "Abrir en Telegram",
+    "cta_secondary": "Ver mejores bonos"
+  },
+  "casinos": {
+    "title": "Mejores Casinos",
+    "subtitle": "Rankings actualizados con Jogai Score",
+    "name": "Casino",
+    "bonus": "Bono",
+    "wagering": "Wagering",
+    "score": "Jogai Score",
+    "deposit": "Depósito mín.",
+    "withdraw": "Retiro",
+    "payment": "Pago",
+    "register": "Crear cuenta",
+    "pix": "PIX",
+    "crypto": "Cripto",
+    "card": "Tarjeta"
+  },
+  "bonuses": {
+    "title": "Mejores Bonos de Hoy",
+    "subtitle": "Analizados por la IA de Jogai",
+    "casino": "Casino",
+    "bonus": "Bono",
+    "wagering": "Wagering",
+    "deadline": "Plazo",
+    "score": "Jogai Score",
+    "verdict": "Veredicto",
+    "get_bonus": "Obtener bono",
+    "days": "días",
+    "verdict_excellent": "EXCELENTE",
+    "verdict_good": "BUEN NEGOCIO",
+    "verdict_caution": "CUIDADO",
+    "verdict_bad": "NO RECOMENDADO"
+  },
+  "features": {
+    "title": "¿Por qué usar Jogai?",
+    "analysis_title": "Análisis con IA",
+    "analysis_desc": "Nuestra IA analiza cada bono y calcula tus posibilidades reales de ganancia.",
+    "score_title": "Jogai Score",
+    "score_desc": "Sistema exclusivo de puntuación de 0 a 10 para cada bono y casino.",
+    "quiz_title": "¿Qué casino es para ti?",
+    "quiz_desc": "Quiz inteligente que encuentra el casino ideal para tu perfil.",
+    "tracker_title": "Tracker de Apuestas",
+    "tracker_desc": "Registra tus apuestas y sigue tu ROI en tiempo real."
+  },
+  "telegram": {
+    "title": "Únete a Jogai en Telegram",
+    "description": "Recibe bonos del día, análisis con IA y apuestas deportivas directo en Telegram.",
+    "cta_bot": "Abrir el Bot",
+    "cta_channel": "Entrar al Canal"
+  },
+  "header": {
+    "home": "Inicio",
+    "casinos": "Casinos",
+    "bonuses": "Bonos",
+    "guides": "Guías"
+  },
+  "footer": {
+    "disclaimer": "Jogai es un servicio de información. Juega con responsabilidad. 18+",
+    "copyright": "© 2026 Jogai. Todos los derechos reservados.",
+    "privacy": "Privacidad",
+    "terms": "Términos"
+  }
+}

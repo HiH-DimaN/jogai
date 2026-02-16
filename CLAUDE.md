@@ -109,3 +109,16 @@ jogai/
 - [x] bot/handlers/sport.py: /sport → sport_picks WHERE geo, pick_description_pt/es
 - [x] api/router_quiz.py: POST /quiz/start (локализованные вопросы), POST /quiz/result
 - [x] prompts/casino_matching.md, sport_analysis.md с {language}
+
+### Шаг 4 — SEO-лендинг (next-intl)
+- [x] Next.js 14 + next-intl: package.json, next.config.js (output: standalone), tsconfig.json
+- [x] TailwindCSS: jogai-bg/card/border/accent/green/red/text/muted (dark theme)
+- [x] i18n: src/i18n.ts, src/middleware.ts (locales: pt-BR, es-MX, prefix: always)
+- [x] navigation.ts: createSharedPathnamesNavigation (Link, useRouter, usePathname)
+- [x] messages/pt-BR.json, messages/es-MX.json — полные переводы (meta, hero, casinos, bonuses, features, telegram, header, footer)
+- [x] layout.tsx: <html lang={locale}>, meta/OG теги, hreflang alternates, NextIntlClientProvider
+- [x] page.tsx: Hero + Features (4 карточки) + CasinoTable + BonusTable + TelegramCTA
+- [x] Компоненты: CasinoTable, BonusTable, JogaiScoreBadge, TelegramCTA, Header, Footer, LocaleSwitcher
+- [x] verdict_key через t() → "EXCELENTE" / "BOM NEGÓCIO" — не хардкод!
+- [x] Dockerfile (node:20-slim, multi-stage), docker-compose.yml + nginx.conf обновлены
+- [x] Проверено: /pt-BR → lang="pt-BR", /es-MX → lang="es-MX", /api/health → 200
