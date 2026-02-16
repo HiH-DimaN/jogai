@@ -95,3 +95,10 @@ jogai/
 - [x] /bonus → top-3 по jogai_score WHERE geo, карточки через t(), клики с locale
 - [x] services/affiliate.py, utils/telegram.py, bot/polling.py
 - [x] main.py обновлён: webhook → aiogram dispatcher
+
+### Шаг 2 — Jogai Score + AI-анализ
+- [x] services/llm.py: chat() с {language}/{currency_symbol}, Anthropic + OpenAI, retry 3x
+- [x] services/bonus_analyzer.py: calculate_jogai_score() → verdict_key (ключ i18n, не текст!)
+- [x] bot/handlers/analyze.py: /analyze с FSM, все строки через t(), verdict через t(verdict_key)
+- [x] api/router_analyze.py: POST /api/analyze с Pydantic моделями
+- [x] prompts/bonus_analysis.md: шаблон с {language} и {currency_symbol}
