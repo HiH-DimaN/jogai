@@ -102,3 +102,10 @@ jogai/
 - [x] bot/handlers/analyze.py: /analyze с FSM, все строки через t(), verdict через t(verdict_key)
 - [x] api/router_analyze.py: POST /api/analyze с Pydantic моделями
 - [x] prompts/bonus_analysis.md: шаблон с {language} и {currency_symbol}
+
+### Шаг 3 — AI-подбор казино + спорт
+- [x] bot/handlers/casino.py: 5-step FSM квиз, все вопросы/варианты через t()
+- [x] services/casino_matcher.py: скоринг + фильтр по geo
+- [x] bot/handlers/sport.py: /sport → sport_picks WHERE geo, pick_description_pt/es
+- [x] api/router_quiz.py: POST /quiz/start (локализованные вопросы), POST /quiz/result
+- [x] prompts/casino_matching.md, sport_analysis.md с {language}
