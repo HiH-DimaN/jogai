@@ -86,5 +86,6 @@
   "channel_bonus_day": "🎁 BÔNUS DO DIA: [{casino}] — {title}\n⭐ Jogai Score: {score}/10 — {verdict}\n⏰ Válido até {expires}",
   "channel_slot_review": "🎰 SLOT DO DIA: {name} — RTP {rtp}%, volatilidade {volatility}\n💡 {tip}\nMelhor cassino: [{casino}]",
   "channel_sport": "⚽ APOSTA DO DIA: {match}\n📊 {analysis}\n💡 Jogai AI recomenda: {pick} (odd {odds})",
-  "channel_win": "🏆 RESULTADO: {text}"
+  "channel_win": "🏆 RESULTADO: {text}",
+  "miniapp_coming_soon": "📊 O App será liberado em breve! Por enquanto, use o bot."
 }

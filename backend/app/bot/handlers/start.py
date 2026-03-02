@@ -1,6 +1,6 @@
-from aiogram import Router
+from aiogram import F, Router
 from aiogram.filters import CommandStart
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
 from sqlalchemy import select
 
 from app.config import settings
@@ -68,3 +68,8 @@ async def cmd_start(message: Message, locale: str, db_user: User) -> None:
     )
 
     await message.answer(text, reply_markup=keyboard)
+
+
+@router.callback_query(F.data == "miniapp")
+async def cb_miniapp(callback: CallbackQuery, locale: str) -> None:
+    await callback.answer(t("miniapp_coming_soon", locale), show_alert=True)
