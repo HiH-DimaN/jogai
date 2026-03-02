@@ -122,3 +122,13 @@ jogai/
 - [x] verdict_key через t() → "EXCELENTE" / "BOM NEGÓCIO" — не хардкод!
 - [x] Dockerfile (node:20-slim, multi-stage), docker-compose.yml + nginx.conf обновлены
 - [x] Проверено: /pt-BR → lang="pt-BR", /es-MX → lang="es-MX", /api/health → 200
+
+### Шаг 5 — Автопостинг Celery (мульти-канал)
+- [x] celery_app.py: Redis broker, beat schedule (09:00 bonus, 14:00 slot, 18:00 sport, hourly expire)
+- [x] services/content_generator.py: AI generate_bonus_post + fallback шаблон, generate_sport_post
+- [x] services/channel_poster.py: CHANNELS dict {BR: {id, locale}}, MX закомментирован для фазы 3
+- [x] Задачи: task_post_bonus_day, task_post_sport_pick, task_deactivate_expired + slot placeholder
+- [x] prompts/content_post.md: шаблон с {language} и {currency_symbol}
+- [x] docker-compose.yml: celery-worker + celery-beat контейнеры
+- [x] Все тексты через t() + format_currency(), вердикт через t(verdict_key, locale)
+- [x] Проверено: worker ready (4 tasks), beat started, bonus_day → пост в БД на PT-BR

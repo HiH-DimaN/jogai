@@ -36,6 +36,32 @@ services:
       redis:
         condition: service_healthy
 
+  celery-worker:
+    build: ./backend
+    command: celery -A app.celery_app:celery worker --loglevel=info -Q jogai --concurrency=2
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  celery-beat:
+    build: ./backend
+    command: celery -A app.celery_app:celery beat --loglevel=info
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
   landing:
     build: ./landing
     environment:
