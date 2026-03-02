@@ -132,3 +132,23 @@ jogai/
 - [x] docker-compose.yml: celery-worker + celery-beat контейнеры
 - [x] Все тексты через t() + format_currency(), вердикт через t(verdict_key, locale)
 - [x] Проверено: worker ready (4 tasks), beat started, bonus_day → пост в БД на PT-BR
+
+### Шаг 6 — Mini App (react-i18next, dashboard, analyzer)
+- [x] React 18 + Vite + TailwindCSS: package.json, vite.config.ts, tsconfig.json, tailwind.config.js
+- [x] Тёмная тема jogai (bg/card/border/accent/green/red/text/muted), mobile-first
+- [x] i18n: src/i18n.ts (getTelegramLocale() → pt-BR/es-MX), i18next-http-backend
+- [x] public/locales/pt-BR/translation.json, es-MX/translation.json (~40 ключей)
+- [x] API client: axios + X-Telegram-Init-Data header + locale в params
+- [x] Types: Bonus, Casino, AnalysisResult, UserData, AuthResponse
+- [x] Zustand store: user, token, isAuthenticated
+- [x] Utils: formatCurrency(amount, locale) → R$/MX$ с правильными разделителями
+- [x] Components: Layout (header + nav), BonusCard, JogaiScore (color by score), AnalysisResult
+- [x] Pages: Home (greeting + бонусы из GET /api/bonuses), Analyze (форма → POST /api/analyze)
+- [x] App.tsx: Telegram WebApp init (ready/expand/colors), auto-auth, BrowserRouter
+- [x] Backend router_auth.py: POST /auth/telegram (HMAC-SHA256 initData → JWT), GET /auth/me
+- [x] Backend router_bonuses.py: GET /bonuses?geo&locale → DB query, title_pt/es по locale, format_currency
+- [x] Backend deps.py: get_current_user (HTTPBearer + JWT decode)
+- [x] Dockerfile (node:20-slim multi-stage → nginx:alpine, SPA fallback)
+- [x] docker-compose.yml: miniapp service, nginx.conf: /miniapp/ → miniapp:5173
+- [x] Все тексты через t() — ноль хардкода, verdict_key → t(verdict_key)
+- [x] TypeScript чистый (tsc --noEmit), Vite build OK

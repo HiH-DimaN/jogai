@@ -62,6 +62,11 @@ services:
       redis:
         condition: service_healthy
 
+  miniapp:
+    build: ./miniapp
+    depends_on:
+      - backend
+
   landing:
     build: ./landing
     environment:
@@ -78,6 +83,7 @@ services:
     depends_on:
       - backend
       - landing
+      - miniapp
 
 volumes:
   postgres_data:
