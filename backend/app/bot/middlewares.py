@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Any, Awaitable, Callable
 
 from aiogram import BaseMiddleware
@@ -52,7 +52,7 @@ class UserMiddleware(BaseMiddleware):
                     db_user.username = user.username
                     db_user.first_name = user.first_name
                     db_user.language_code = user.language_code
-                    db_user.last_active_at = datetime.now(timezone.utc)
+                    db_user.last_active_at = datetime.utcnow()
                 else:
                     db_user = User(
                         id=user.id,

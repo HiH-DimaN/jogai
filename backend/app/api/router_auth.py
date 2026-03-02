@@ -122,7 +122,7 @@ async def auth_telegram(
         user.username = user_data.get("username")
         user.first_name = user_data.get("first_name")
         user.language_code = language_code
-        user.last_active_at = datetime.now(timezone.utc)
+        user.last_active_at = datetime.utcnow()
     else:
         user = User(
             id=telegram_id,
