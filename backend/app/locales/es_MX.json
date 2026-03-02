@@ -6,6 +6,8 @@
   "btn_analyze": "🔍 Analisar um bônus",
   "btn_miniapp": "📊 Abrir Jogai App",
   "bonus_day_title": "🔥 TOP BÔNUS DE HOJE ({date}):",
+  "bonus_all_title": "📋 TODOS LOS BONOS ACTIVOS ({date}):",
+  "btn_see_all_bonuses": "📋 Ver todos los bonos",
   "bonus_card": "🏆 [{casino}] — {title}\nWagering: x{wagering} | Prazo: {deadline} dias\n⭐ Jogai Score: {score}/10 — {verdict}",
   "btn_get_bonus": "👉 Pegar bônus",
   "analyze_prompt": "Mande as condições do bônus — texto, screenshot ou link.",

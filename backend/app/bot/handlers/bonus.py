@@ -19,33 +19,30 @@ from app.utils.telegram import format_bonus_card
 router = Router()
 
 
-async def _get_top_bonuses(geo: str, limit: int = 3) -> list[Bonus]:
+async def _get_bonuses(geo: str, limit: int | None = None) -> list[Bonus]:
     async with async_session() as session:
-        result = await session.execute(
+        query = (
             select(Bonus)
             .where(Bonus.is_active.is_(True))
             .where(Bonus.geo.any(geo))
             .order_by(Bonus.jogai_score.desc())
-            .limit(limit)
         )
+        if limit:
+            query = query.limit(limit)
+        result = await session.execute(query)
         return list(result.scalars().all())
 
 
-@router.message(Command("bonus"))
-async def cmd_bonus(message: Message, locale: str, db_user: User) -> None:
-    bonuses = await _get_top_bonuses(geo=db_user.geo)
-
-    if not bonuses:
-        await message.answer(t("error_generic", locale))
-        return
-
+def _build_bonus_message(
+    bonuses: list[Bonus], locale: str, show_all: bool = False,
+) -> tuple[str, InlineKeyboardMarkup]:
     today = format_date(datetime.utcnow(), locale)
-    text = t("bonus_day_title", locale, date=today) + "\n"
+    title_key = "bonus_all_title" if show_all else "bonus_day_title"
+    text = t(title_key, locale, date=today) + "\n"
 
     for bonus in bonuses:
         text += "\n" + format_bonus_card(bonus, locale) + "\n"
 
-    # Button for each bonus
     buttons = []
     for bonus in bonuses:
         casino_name = bonus.casino.name if bonus.casino else "Casino"
@@ -58,38 +55,53 @@ async def cmd_bonus(message: Message, locale: str, db_user: User) -> None:
             ]
         )
 
-    keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
+    if not show_all:
+        buttons.append(
+            [InlineKeyboardButton(
+                text=t("btn_see_all_bonuses", locale),
+                callback_data="bonuses_all",
+            )]
+        )
+
+    return text, InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+@router.message(Command("bonus"))
+async def cmd_bonus(message: Message, locale: str, db_user: User) -> None:
+    bonuses = await _get_bonuses(geo=db_user.geo, limit=3)
+
+    if not bonuses:
+        await message.answer(t("error_generic", locale))
+        return
+
+    text, keyboard = _build_bonus_message(bonuses, locale)
     await message.answer(text, reply_markup=keyboard)
 
 
 @router.callback_query(F.data == "bonuses")
 async def cb_bonuses(callback: CallbackQuery, locale: str, db_user: User) -> None:
-    bonuses = await _get_top_bonuses(geo=db_user.geo)
+    bonuses = await _get_bonuses(geo=db_user.geo, limit=3)
 
     if not bonuses:
         await callback.message.answer(t("error_generic", locale))
         await callback.answer()
         return
 
-    today = format_date(datetime.utcnow(), locale)
-    text = t("bonus_day_title", locale, date=today) + "\n"
+    text, keyboard = _build_bonus_message(bonuses, locale)
+    await callback.message.answer(text, reply_markup=keyboard)
+    await callback.answer()
 
-    for bonus in bonuses:
-        text += "\n" + format_bonus_card(bonus, locale) + "\n"
 
-    buttons = []
-    for bonus in bonuses:
-        casino_name = bonus.casino.name if bonus.casino else "Casino"
-        buttons.append(
-            [
-                InlineKeyboardButton(
-                    text=f"{t('btn_get_bonus', locale)} [{casino_name}]",
-                    callback_data=f"click:{bonus.id}",
-                )
-            ]
-        )
+@router.callback_query(F.data == "bonuses_all")
+async def cb_bonuses_all(callback: CallbackQuery, locale: str, db_user: User) -> None:
+    bonuses = await _get_bonuses(geo=db_user.geo)
 
-    keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
+    if not bonuses:
+        await callback.message.answer(t("error_generic", locale))
+        await callback.answer()
+        return
+
+    text, keyboard = _build_bonus_message(bonuses, locale, show_all=True)
     await callback.message.answer(text, reply_markup=keyboard)
     await callback.answer()
 
