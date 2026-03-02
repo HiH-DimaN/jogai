@@ -24,12 +24,14 @@ class AnalyzeState(StatesGroup):
 
 @router.message(Command("analyze"))
 async def cmd_analyze(message: Message, locale: str, state: FSMContext) -> None:
+    await state.clear()
     await state.set_state(AnalyzeState.waiting_for_input)
     await message.answer(t("analyze_prompt", locale))
 
 
 @router.callback_query(F.data == "analyze")
 async def cb_analyze(callback: CallbackQuery, locale: str, state: FSMContext) -> None:
+    await state.clear()
     await state.set_state(AnalyzeState.waiting_for_input)
     await callback.message.answer(t("analyze_prompt", locale))
     await callback.answer()

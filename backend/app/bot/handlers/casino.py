@@ -1,6 +1,5 @@
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import (
     CallbackQuery,
     InlineKeyboardButton,
@@ -16,19 +15,11 @@ from app.utils.telegram import format_casino_card
 router = Router()
 
 
-class QuizState(StatesGroup):
-    q1_game = State()
-    q2_deposit = State()
-    q3_payment = State()
-    q4_priority = State()
-    q5_experience = State()
-
-
 # --- Q1: Game type ---
 
 @router.callback_query(F.data == "casino_quiz")
 async def quiz_start(callback: CallbackQuery, locale: str, state: FSMContext) -> None:
-    await state.set_state(QuizState.q1_game)
+    await state.clear()
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text=t("casino_q1_slots", locale), callback_data="q1:slots")],
         [InlineKeyboardButton(text=t("casino_q1_crash", locale), callback_data="q1:crash")],
@@ -39,10 +30,9 @@ async def quiz_start(callback: CallbackQuery, locale: str, state: FSMContext) ->
     await callback.answer()
 
 
-@router.callback_query(QuizState.q1_game, F.data.startswith("q1:"))
+@router.callback_query(F.data.startswith("q1:"))
 async def quiz_q1(callback: CallbackQuery, locale: str, state: FSMContext) -> None:
     await state.update_data(game_type=callback.data.split(":")[1])
-    await state.set_state(QuizState.q2_deposit)
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text=t("casino_q2_low", locale), callback_data="q2:low")],
         [InlineKeyboardButton(text=t("casino_q2_medium", locale), callback_data="q2:medium")],
@@ -55,10 +45,9 @@ async def quiz_q1(callback: CallbackQuery, locale: str, state: FSMContext) -> No
 
 # --- Q3: Payment ---
 
-@router.callback_query(QuizState.q2_deposit, F.data.startswith("q2:"))
+@router.callback_query(F.data.startswith("q2:"))
 async def quiz_q2(callback: CallbackQuery, locale: str, state: FSMContext) -> None:
     await state.update_data(deposit_range=callback.data.split(":")[1])
-    await state.set_state(QuizState.q3_payment)
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text=t("casino_q3_pix", locale), callback_data="q3:pix")],
         [InlineKeyboardButton(text=t("casino_q3_crypto", locale), callback_data="q3:crypto")],
@@ -70,10 +59,9 @@ async def quiz_q2(callback: CallbackQuery, locale: str, state: FSMContext) -> No
 
 # --- Q4: Priority ---
 
-@router.callback_query(QuizState.q3_payment, F.data.startswith("q3:"))
+@router.callback_query(F.data.startswith("q3:"))
 async def quiz_q3(callback: CallbackQuery, locale: str, state: FSMContext) -> None:
     await state.update_data(payment=callback.data.split(":")[1])
-    await state.set_state(QuizState.q4_priority)
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text=t("casino_q4_bonus", locale), callback_data="q4:bonus")],
         [InlineKeyboardButton(text=t("casino_q4_wagering", locale), callback_data="q4:wagering")],
@@ -85,10 +73,9 @@ async def quiz_q3(callback: CallbackQuery, locale: str, state: FSMContext) -> No
 
 # --- Q5: Experience ---
 
-@router.callback_query(QuizState.q4_priority, F.data.startswith("q4:"))
+@router.callback_query(F.data.startswith("q4:"))
 async def quiz_q4(callback: CallbackQuery, locale: str, state: FSMContext) -> None:
     await state.update_data(priority=callback.data.split(":")[1])
-    await state.set_state(QuizState.q5_experience)
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text=t("casino_q5_beginner", locale), callback_data="q5:beginner")],
         [InlineKeyboardButton(text=t("casino_q5_intermediate", locale), callback_data="q5:intermediate")],
@@ -100,7 +87,7 @@ async def quiz_q4(callback: CallbackQuery, locale: str, state: FSMContext) -> No
 
 # --- Result ---
 
-@router.callback_query(QuizState.q5_experience, F.data.startswith("q5:"))
+@router.callback_query(F.data.startswith("q5:"))
 async def quiz_result(
     callback: CallbackQuery, locale: str, db_user: User, state: FSMContext
 ) -> None:
