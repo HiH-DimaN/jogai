@@ -152,3 +152,21 @@ jogai/
 - [x] docker-compose.yml: miniapp service, nginx.conf: /miniapp/ → miniapp:5173
 - [x] Все тексты через t() — ноль хардкода, verdict_key → t(verdict_key)
 - [x] TypeScript чистый (tsc --noEmit), Vite build OK
+
+### Шаг 7 — Mini App: Quiz + Digest + Referrals (all i18n)
+- [x] i18n: +29 ключей pt-BR + es-MX (nav_quiz/digest/referrals, quiz_*, digest_*, referral_*)
+- [x] Types: +QuizOption, QuizQuestion, QuizResult, ReferralStats; +referral_code в UserData
+- [x] CasinoResultCard.tsx: карточка казино (match%, бонус, deposit, withdrawal, affiliate link)
+- [x] Quiz.tsx: 5-step quiz → POST /api/quiz/start + /result → CasinoResultCard list
+- [x] Digest.tsx: GET /api/digest → BonusCard list по geo юзера (auth required)
+- [x] Referrals.tsx: GET /api/referrals/stats → ссылка + монеты + copy + Telegram share
+- [x] App.tsx: +3 routes (/quiz, /digest, /referrals)
+- [x] Layout.tsx: nav 2→5 кнопок (Home/Quiz/Analyze/Digest/Referrals)
+- [x] Backend router_referrals.py: GET /referrals/stats (auth) → code, link, coins, count
+- [x] Backend router_digest.py: переписан из заглушки → top-5 бонусов по user.geo (auth)
+- [x] Backend router_auth.py: +referral_code в UserResponse
+- [x] Bot handlers/referral.py: /referral → ссылка + монеты + reward text
+- [x] Bot polling.py + main.py: +referral_router зарегистрирован
+- [x] Celery digest_builder.py: send_digest() → DM активным юзерам (30d), task_send_digest
+- [x] celery_app.py: +include digest_builder, +beat "send-daily-digest" 08:00 BRT
+- [x] TypeScript чистый (tsc --noEmit), Vite build OK, Python syntax OK

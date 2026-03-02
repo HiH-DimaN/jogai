@@ -3,7 +3,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Layout from './components/Layout';
 import Home from './pages/Home';
+import Quiz from './pages/Quiz';
 import Analyze from './pages/Analyze';
+import Digest from './pages/Digest';
+import Referrals from './pages/Referrals';
 import api from './api/client';
 import { useUserStore } from './stores/user';
 import type { AuthResponse } from './types';
@@ -43,7 +46,10 @@ function AppContent() {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/quiz" element={<Quiz />} />
           <Route path="/analyze" element={<Analyze />} />
+          <Route path="/digest" element={<Digest />} />
+          <Route path="/referrals" element={<Referrals />} />
         </Routes>
       </Layout>
     </BrowserRouter>

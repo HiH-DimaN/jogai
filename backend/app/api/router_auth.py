@@ -33,6 +33,7 @@ class UserResponse(BaseModel):
     geo: str
     jogai_coins: int
     is_pro: bool
+    referral_code: str | None = None
 
 
 class AuthResponse(BaseModel):
@@ -149,6 +150,7 @@ async def auth_telegram(
             geo=user.geo,
             jogai_coins=user.jogai_coins,
             is_pro=user.is_pro,
+            referral_code=user.referral_code,
         ),
     )
 
@@ -165,4 +167,5 @@ async def get_me(
         geo=user.geo,
         jogai_coins=user.jogai_coins,
         is_pro=user.is_pro,
+        referral_code=user.referral_code,
     )

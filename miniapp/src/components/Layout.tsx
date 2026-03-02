@@ -7,7 +7,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const navItems = [
     { path: '/', label: t('nav_home'), icon: '🏠' },
+    { path: '/quiz', label: t('nav_quiz'), icon: '🎰' },
     { path: '/analyze', label: t('nav_analyze'), icon: '🔍' },
+    { path: '/digest', label: t('nav_digest'), icon: '📋' },
+    { path: '/referrals', label: t('nav_referrals'), icon: '👥' },
   ];
 
   return (

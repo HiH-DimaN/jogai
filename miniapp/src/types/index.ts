@@ -63,9 +63,38 @@ export interface UserData {
   geo: string;
   jogai_coins: number;
   is_pro: boolean;
+  referral_code: string | null;
 }
 
 export interface AuthResponse {
   access_token: string;
   user: UserData;
+}
+
+export interface QuizOption {
+  value: string;
+  label: string;
+}
+
+export interface QuizQuestion {
+  question: string;
+  options: QuizOption[];
+}
+
+export interface QuizResult {
+  name: string;
+  slug: string;
+  match_percent: number;
+  description: string;
+  min_deposit_formatted: string;
+  withdrawal_time: string;
+  best_bonus: string | null;
+  affiliate_link: string | null;
+}
+
+export interface ReferralStats {
+  referral_code: string;
+  referral_link: string;
+  jogai_coins: number;
+  referral_count: number;
 }

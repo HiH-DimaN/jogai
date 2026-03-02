@@ -19,7 +19,7 @@ celery.conf.update(
     task_default_queue="jogai",
     worker_concurrency=2,
     worker_prefetch_multiplier=1,
-    include=["app.services.channel_poster"],
+    include=["app.services.channel_poster", "app.services.digest_builder"],
     broker_connection_retry_on_startup=True,
 )
 
@@ -40,5 +40,9 @@ celery.conf.beat_schedule = {
     "deactivate-expired-bonuses": {
         "task": "app.services.channel_poster.task_deactivate_expired",
         "schedule": crontab(minute=0),  # every hour
+    },
+    "send-daily-digest": {
+        "task": "app.services.digest_builder.task_send_digest",
+        "schedule": crontab(hour=8, minute=0),  # 08:00 BRT
     },
 }

@@ -10,11 +10,13 @@ from app.api.router_bonuses import router as bonuses_router
 from app.api.router_casinos import router as casinos_router
 from app.api.router_digest import router as digest_router
 from app.api.router_quiz import router as quiz_router
+from app.api.router_referrals import router as referrals_router
 from app.api.router_tracker import router as tracker_router
 from app.bot.bot import dp, get_bot
 from app.bot.handlers.analyze import router as analyze_handler_router
 from app.bot.handlers.bonus import router as bonus_handler_router
 from app.bot.handlers.casino import router as casino_handler_router
+from app.bot.handlers.referral import router as referral_handler_router
 from app.bot.handlers.sport import router as sport_handler_router
 from app.bot.handlers.start import router as start_handler_router
 from app.bot.middlewares import LocaleMiddleware, RateLimitMiddleware, UserMiddleware
@@ -34,6 +36,7 @@ def _setup_bot() -> None:
     dp.include_router(analyze_handler_router)
     dp.include_router(casino_handler_router)
     dp.include_router(sport_handler_router)
+    dp.include_router(referral_handler_router)
 
 
 @asynccontextmanager
@@ -56,6 +59,7 @@ app.include_router(analyze_router, prefix="/api")
 app.include_router(quiz_router, prefix="/api")
 app.include_router(tracker_router, prefix="/api")
 app.include_router(digest_router, prefix="/api")
+app.include_router(referrals_router, prefix="/api")
 app.include_router(auth_router, prefix="/api")
 
 
