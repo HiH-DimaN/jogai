@@ -9,6 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     { path: '/', label: t('nav_home'), icon: '🏠' },
     { path: '/quiz', label: t('nav_quiz'), icon: '🎰' },
     { path: '/analyze', label: t('nav_analyze'), icon: '🔍' },
+    { path: '/tracker', label: t('nav_tracker'), icon: '📊' },
     { path: '/digest', label: t('nav_digest'), icon: '📋' },
     { path: '/referrals', label: t('nav_referrals'), icon: '👥' },
   ];
@@ -29,14 +30,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <Link
               key={item.path}
               to={item.path}
-              className={`flex-1 flex flex-col items-center py-3 text-xs transition-colors ${
+              className={`flex-1 flex flex-col items-center py-2 transition-colors ${
                 location.pathname === item.path
                   ? 'text-jogai-accent'
                   : 'text-jogai-muted'
               }`}
             >
-              <span className="text-lg mb-0.5">{item.icon}</span>
-              <span>{item.label}</span>
+              <span className="text-base mb-0.5">{item.icon}</span>
+              <span className="text-[10px] leading-tight">{item.label}</span>
             </Link>
           ))}
         </div>

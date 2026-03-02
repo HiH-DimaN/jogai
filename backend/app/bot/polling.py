@@ -9,6 +9,7 @@ from app.bot.handlers.casino import router as casino_router
 from app.bot.handlers.referral import router as referral_router
 from app.bot.handlers.sport import router as sport_router
 from app.bot.handlers.start import router as start_router
+from app.bot.handlers.tracker import router as tracker_router
 from app.bot.middlewares import LocaleMiddleware, RateLimitMiddleware, UserMiddleware
 
 logging.basicConfig(level=logging.INFO)
@@ -30,6 +31,7 @@ def setup_bot() -> None:
     dp.include_router(casino_router)
     dp.include_router(sport_router)
     dp.include_router(referral_router)
+    dp.include_router(tracker_router)
 
 
 async def main() -> None:

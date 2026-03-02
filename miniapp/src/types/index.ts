@@ -98,3 +98,34 @@ export interface ReferralStats {
   jogai_coins: number;
   referral_count: number;
 }
+
+export interface BetData {
+  id: number;
+  game_type: string;
+  game_name: string;
+  bet_amount: number;
+  bet_currency: string;
+  result_amount: number;
+  profit: number;
+  note: string | null;
+  created_at: string;
+}
+
+export interface BetCreateData {
+  game_type: string;
+  game_name: string;
+  bet_amount: number;
+  result_amount: number;
+  note?: string;
+}
+
+export interface BetStats {
+  total_bets: number;
+  total_wagered: number;
+  total_profit: number;
+  roi: number;
+  win_rate: number;
+  best_game: string | null;
+  worst_game: string | null;
+  currency: string;
+}

@@ -170,3 +170,15 @@ jogai/
 - [x] Celery digest_builder.py: send_digest() → DM активным юзерам (30d), task_send_digest
 - [x] celery_app.py: +include digest_builder, +beat "send-daily-digest" 08:00 BRT
 - [x] TypeScript чистый (tsc --noEmit), Vite build OK, Python syntax OK
+
+### Шаг 8 — Трекер ставок (мультивалюта)
+- [x] i18n: +30 ключей pt-BR + es-MX (nav_tracker, tracker_*)
+- [x] Types: +BetData, BetCreateData, BetStats
+- [x] Backend router_tracker.py: GET /tracker/bets, POST /tracker/bets, GET /tracker/stats (auth, bet_currency по user.geo)
+- [x] Bot handlers/tracker.py: /bet (FSM ввод) + /stats (ROI, win rate, bankroll recommendation)
+- [x] Bot polling.py + main.py: +tracker_router зарегистрирован
+- [x] Tracker.tsx: форма новой ставки (game_type, name, amount, result), карточки статистики (profit, ROI, win rate, best/worst game), список последних ставок
+- [x] App.tsx: +route /tracker
+- [x] Layout.tsx: nav 5→6 кнопок (Home/Quiz/Analyze/Tracker/Digest/Referrals), компактный стиль
+- [x] Валюта через formatCurrency() — BRL для BR, MXN для MX
+- [x] TypeScript чистый (tsc --noEmit), Vite build OK (133 модуля), Python syntax OK
