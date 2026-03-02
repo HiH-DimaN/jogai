@@ -11,3 +11,5 @@ backend/.env
 .idea/
 .DS_Store
 *.log
+celerybeat-schedule
+celerybeat-schedule.db
