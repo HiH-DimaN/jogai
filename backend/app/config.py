@@ -28,7 +28,8 @@ class Settings(BaseSettings):
     # Affiliate
     pinup_ref_id: str = ""
     onewin_ref_id: str = ""
-    starda_ref_id: str = ""
+    bet365_ref_id: str = ""
+    rivalo_ref_id: str = ""
 
     # Auth
     secret_key: str = "change-me-in-production"

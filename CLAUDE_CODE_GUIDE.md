@@ -20,17 +20,11 @@ git remote add origin git@github.com:YOUR_USERNAME/jogai.git
 ### 2. Кладём документы в корень
 
 ```
-CLAUDE.md                              # ★ Системный файл — Claude Code читает автоматически
 PROJECT_ARCHITECTURE.md
 IMPLEMENTATION_PLAN.md
 PRD.md
 README.md
-CLAUDE_CODE_GUIDE.md
-JOGAI_Полный_Стратегический_План.md    # Стратегический план
-.gitignore
 ```
-
-> **Важно:** CLAUDE.md — ключевой файл. Claude Code автоматически читает его при запуске каждой новой сессии. Это «рабочая память» агента.
 
 ### 3. Создаём .gitignore
 
@@ -52,24 +46,13 @@ backend/.env
 EOF
 ```
 
-### 4. Первый коммит
-
-```bash
-git add -A
-git commit -m "Initial: project documentation"
-git push -u origin main
-```
-
-### 5. Запускаем Claude Code
+### 4. Запускаем Claude Code
 
 ```bash
 code ~/projects/jogai
 # В терминале VS Code:
 claude
 ```
-
-> **Совет:** Claude Code автоматически прочитает CLAUDE.md при старте.
-> При каждой НОВОЙ сессии начинайте с: «Прочитай CLAUDE.md и PROJECT_ARCHITECTURE.md. Мы на шаге N.»
 
 ---
 
@@ -228,7 +211,7 @@ api/deps.py:
    → Должно быть 9 таблиц
 
 8. Создай backend/app/database/seed.py:
-   - 3 казино (PIN-UP, 1WIN, STARDA) с description_pt, description_es (заглушка), geo=[BR,MX], pix_supported
+   - 4 казино (PIN-UP, 1WIN, BET365, RIVALO) с description_pt, description_es (заглушка), geo=[BR,MX], pix_supported
    - 5-6 бонусов с title_pt, title_es (заглушка), max_bonus_currency=BRL, verdict_key, jogai_score, geo=[BR]
    - 1 sport_pick с pick_description_pt, analysis_pt, geo=[BR]
 
