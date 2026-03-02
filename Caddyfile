@@ -1,0 +1,13 @@
+jogai.fun {
+    handle /api/* {
+        reverse_proxy backend:8000
+    }
+
+    handle /bot/* {
+        reverse_proxy backend:8000
+    }
+
+    handle {
+        reverse_proxy landing:3000
+    }
+}
