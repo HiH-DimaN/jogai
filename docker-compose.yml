@@ -3,7 +3,7 @@ services:
     image: postgres:15
     environment:
       POSTGRES_USER: jogai
-      POSTGRES_PASSWORD: jogai_password
+      POSTGRES_PASSWORD: jogai_secure_2026
       POSTGRES_DB: jogai
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -23,13 +23,22 @@ services:
 
   backend:
     build: ./backend
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
     env_file:
       - ./backend/.env
     ports:
       - "8001:8000"
-    volumes:
-      - ./backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  bot:
+    build: ./backend
+    command: python -m app.bot.polling
+    env_file:
+      - ./backend/.env
     depends_on:
       postgres:
         condition: service_healthy
@@ -41,8 +50,6 @@ services:
     command: celery -A app.celery_app:celery worker --loglevel=info -Q jogai --concurrency=2
     env_file:
       - ./backend/.env
-    volumes:
-      - ./backend:/app
     depends_on:
       postgres:
         condition: service_healthy
@@ -54,25 +61,25 @@ services:
     command: celery -A app.celery_app:celery beat --loglevel=info
     env_file:
       - ./backend/.env
-    volumes:
-      - ./backend:/app
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
 
-  miniapp:
-    build: ./miniapp
-    depends_on:
-      - backend
+  # Mini App (phase 2 — uncomment when needed)
+  # miniapp:
+  #   build: ./miniapp
+  #   depends_on:
+  #     - backend
 
-  landing:
-    build: ./landing
-    environment:
-      - NODE_ENV=production
-    depends_on:
-      - backend
+  # Landing (phase 2 — uncomment when needed)
+  # landing:
+  #   build: ./landing
+  #   environment:
+  #     - NODE_ENV=production
+  #   depends_on:
+  #     - backend
 
   nginx:
     image: nginx:alpine
@@ -82,8 +89,6 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - backend
-      - landing
-      - miniapp
 
 volumes:
   postgres_data:
