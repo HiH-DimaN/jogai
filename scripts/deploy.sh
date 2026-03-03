@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-SERVER="root@155.212.185.216"
+SERVER="root@155.212.230.139"
 PROJECT_DIR="/root/jogai"
 
 echo "=== Jogai Deploy ==="

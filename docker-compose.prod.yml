@@ -176,9 +176,6 @@ services:
       - ./Caddyfile.prod:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
-    networks:
-      - default
-      - shared
     depends_on:
       - backend
       - landing
@@ -192,11 +189,6 @@ services:
       resources:
         limits:
           memory: 128M
-
-networks:
-  shared:
-    name: shared_proxy
-    driver: bridge
 
 volumes:
   postgres_data:

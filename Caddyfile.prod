@@ -16,7 +16,3 @@ jogai.fun {
         reverse_proxy landing:3000
     }
 }
-
-:80 {
-    reverse_proxy skutr-nginx:80
-}
