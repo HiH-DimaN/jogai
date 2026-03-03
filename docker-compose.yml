@@ -75,8 +75,11 @@ services:
 
   landing:
     build: ./landing
+    ports:
+      - "3001:3000"
     environment:
       - NODE_ENV=production
+      - INTERNAL_API_URL=http://backend:8000/api
     depends_on:
       - backend
 
@@ -89,9 +92,17 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
+    networks:
+      - default
+      - shared
     depends_on:
       - backend
       - landing
+
+networks:
+  shared:
+    name: shared_proxy
+    driver: bridge
 
 volumes:
   postgres_data:

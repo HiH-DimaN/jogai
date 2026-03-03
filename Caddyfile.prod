@@ -1,10 +1,15 @@
-http://jogai.fun {
+jogai.fun {
     handle /api/* {
         reverse_proxy backend:8000
     }
 
     handle /bot/* {
         reverse_proxy backend:8000
+    }
+
+    handle /miniapp/* {
+        uri strip_prefix /miniapp
+        reverse_proxy miniapp:5173
     }
 
     handle {

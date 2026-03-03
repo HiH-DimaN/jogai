@@ -3,62 +3,33 @@
 import {useTranslations} from 'next-intl';
 import JogaiScoreBadge from './JogaiScoreBadge';
 
-type VerdictKey = 'verdict_excellent' | 'verdict_good' | 'verdict_caution' | 'verdict_bad';
+export type BonusRow = {
+  id: number;
+  casino_name: string;
+  casino_slug: string;
+  title: string;
+  wagering_multiplier: number;
+  wagering_deadline_days: number;
+  jogai_score: number;
+  verdict_key: string;
+  affiliate_link: string | null;
+};
 
-const BONUSES = [
-  {
-    casino: 'PIN-UP',
-    bonus: '150% + 250 FS',
-    wagering: '40x',
-    deadline: 7,
-    score: 8.5,
-    verdictKey: 'verdict_excellent' as VerdictKey,
-    url: '#',
-  },
-  {
-    casino: '1WIN',
-    bonus: '500% até R$15.000',
-    wagering: '50x',
-    deadline: 30,
-    score: 7.8,
-    verdictKey: 'verdict_good' as VerdictKey,
-    url: '#',
-  },
-  {
-    casino: 'BET365',
-    bonus: 'R$200 Free Bet',
-    wagering: '1x',
-    deadline: 30,
-    score: 8.9,
-    verdictKey: 'verdict_excellent' as VerdictKey,
-    url: '#',
-  },
-  {
-    casino: 'RIVALO',
-    bonus: '100% até R$500 + 50 FS',
-    wagering: '35x',
-    deadline: 14,
-    score: 8.2,
-    verdictKey: 'verdict_excellent' as VerdictKey,
-    url: '#',
-  },
-];
-
-function VerdictBadge({verdictKey, label}: {verdictKey: VerdictKey; label: string}) {
-  const colorMap: Record<VerdictKey, string> = {
+function VerdictBadge({verdictKey, label}: {verdictKey: string; label: string}) {
+  const colorMap: Record<string, string> = {
     verdict_excellent: 'bg-jogai-green/20 text-jogai-green',
     verdict_good: 'bg-jogai-accent/20 text-jogai-accent',
     verdict_caution: 'bg-yellow-500/20 text-yellow-400',
     verdict_bad: 'bg-jogai-red/20 text-jogai-red',
   };
   return (
-    <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${colorMap[verdictKey]}`}>
+    <span className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${colorMap[verdictKey] || colorMap.verdict_caution}`}>
       {label}
     </span>
   );
 }
 
-export default function BonusTable() {
+export default function BonusTable({bonuses}: {bonuses: BonusRow[]}) {
   const t = useTranslations('bonuses');
 
   return (
@@ -76,27 +47,33 @@ export default function BonusTable() {
           </tr>
         </thead>
         <tbody>
-          {BONUSES.map((bonus) => (
-            <tr key={bonus.casino} className="border-b border-jogai-border transition hover:bg-jogai-card">
-              <td className="px-4 py-4 font-bold text-jogai-text">{bonus.casino}</td>
-              <td className="px-4 py-4 text-jogai-accent">{bonus.bonus}</td>
-              <td className="px-4 py-4">{bonus.wagering}</td>
+          {bonuses.map((bonus) => (
+            <tr key={bonus.id} className="border-b border-jogai-border transition hover:bg-jogai-card">
+              <td className="px-4 py-4 font-bold text-jogai-text">{bonus.casino_name}</td>
+              <td className="px-4 py-4 text-jogai-accent">{bonus.title}</td>
+              <td className="px-4 py-4">{bonus.wagering_multiplier}x</td>
               <td className="px-4 py-4">
-                {bonus.deadline} {t('days')}
+                {bonus.wagering_deadline_days} {t('days')}
               </td>
               <td className="px-4 py-4">
-                <JogaiScoreBadge score={bonus.score} />
+                <JogaiScoreBadge score={bonus.jogai_score} />
               </td>
               <td className="px-4 py-4">
-                <VerdictBadge verdictKey={bonus.verdictKey} label={t(bonus.verdictKey)} />
+                <VerdictBadge verdictKey={bonus.verdict_key} label={t(bonus.verdict_key)} />
               </td>
               <td className="px-4 py-4">
-                <a
-                  href={bonus.url}
-                  className="rounded-lg bg-jogai-accent px-4 py-2 text-xs font-bold text-jogai-bg transition hover:bg-jogai-accent/90"
-                >
-                  {t('get_bonus')}
-                </a>
+                {bonus.affiliate_link ? (
+                  <a
+                    href={bonus.affiliate_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-lg bg-jogai-accent px-4 py-2 text-xs font-bold text-jogai-bg transition hover:bg-jogai-accent/90"
+                  >
+                    {t('get_bonus')}
+                  </a>
+                ) : (
+                  <span className="text-jogai-muted">—</span>
+                )}
               </td>
             </tr>
           ))}

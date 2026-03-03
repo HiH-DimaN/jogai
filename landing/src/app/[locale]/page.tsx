@@ -1,10 +1,25 @@
-import {useTranslations} from 'next-intl';
+import {getTranslations} from 'next-intl/server';
+import {fetchCasinos, fetchBonuses} from '@/lib/api';
 import CasinoTable from '@/components/CasinoTable';
 import BonusTable from '@/components/BonusTable';
 import TelegramCTA from '@/components/TelegramCTA';
+import {Link} from '@/navigation';
 
-export default function HomePage() {
-  const t = useTranslations();
+type Props = {
+  params: {locale: string};
+};
+
+export default async function HomePage({params: {locale}}: Props) {
+  const t = await getTranslations({locale});
+
+  const [casinos, bonuses] = await Promise.all([
+    fetchCasinos(locale),
+    fetchBonuses(locale),
+  ]);
+
+  const topCasinos = casinos.slice(0, 4);
+  const topBonuses = bonuses.slice(0, 4);
+
   return (
     <>
       {/* Hero */}
@@ -27,12 +42,12 @@ export default function HomePage() {
             >
               {t('hero.cta')}
             </a>
-            <a
-              href="#bonuses"
+            <Link
+              href="/bonuses"
               className="rounded-lg border border-jogai-border px-8 py-3 font-bold text-jogai-text transition hover:border-jogai-accent"
             >
               {t('hero.cta_secondary')}
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -58,14 +73,30 @@ export default function HomePage() {
       <section className="mx-auto max-w-6xl px-4 py-16" id="casinos">
         <h2 className="mb-2 text-center text-3xl font-bold">{t('casinos.title')}</h2>
         <p className="mb-8 text-center text-jogai-muted">{t('casinos.subtitle')}</p>
-        <CasinoTable />
+        <CasinoTable casinos={topCasinos} />
+        <div className="mt-6 text-center">
+          <Link
+            href="/casinos"
+            className="rounded-lg border border-jogai-border px-6 py-2 text-sm font-bold text-jogai-text transition hover:border-jogai-accent"
+          >
+            {t('casinos.view_all')}
+          </Link>
+        </div>
       </section>
 
       {/* Bonus Table */}
       <section className="mx-auto max-w-6xl px-4 py-16" id="bonuses">
         <h2 className="mb-2 text-center text-3xl font-bold">{t('bonuses.title')}</h2>
         <p className="mb-8 text-center text-jogai-muted">{t('bonuses.subtitle')}</p>
-        <BonusTable />
+        <BonusTable bonuses={topBonuses} />
+        <div className="mt-6 text-center">
+          <Link
+            href="/bonuses"
+            className="rounded-lg border border-jogai-border px-6 py-2 text-sm font-bold text-jogai-text transition hover:border-jogai-accent"
+          >
+            {t('bonuses.view_all')}
+          </Link>
+        </div>
       </section>
 
       {/* Telegram CTA */}

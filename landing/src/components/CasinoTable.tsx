@@ -3,70 +3,29 @@
 import {useTranslations} from 'next-intl';
 import JogaiScoreBadge from './JogaiScoreBadge';
 
-const CASINOS = [
-  {
-    name: 'PIN-UP',
-    bonus: '150% + 250 FS',
-    wagering: '40x',
-    score: 8.5,
-    deposit: 'R$30 / MX$100',
-    withdraw: '~2h',
-    pix: true,
-    crypto: true,
-    card: true,
-    url: '#',
-  },
-  {
-    name: '1WIN',
-    bonus: '500% até R$15.000',
-    wagering: '50x',
-    score: 7.8,
-    deposit: 'R$20 / MX$50',
-    withdraw: '~1h',
-    pix: true,
-    crypto: true,
-    card: false,
-    url: '#',
-  },
-  {
-    name: 'BET365',
-    bonus: 'R$200 Free Bet',
-    wagering: '1x',
-    score: 8.9,
-    deposit: 'R$20 / MX$50',
-    withdraw: '~4h',
-    pix: true,
-    crypto: false,
-    card: true,
-    url: '#',
-  },
-  {
-    name: 'RIVALO',
-    bonus: '100% até R$500 + 50 FS',
-    wagering: '35x',
-    score: 8.2,
-    deposit: 'R$20 / MX$100',
-    withdraw: '~3h',
-    pix: true,
-    crypto: false,
-    card: true,
-    url: '#',
-  },
-];
+export type CasinoRow = {
+  name: string;
+  slug: string;
+  best_bonus: string | null;
+  best_jogai_score: number | null;
+  min_deposit_formatted: string | null;
+  withdrawal_time: string | null;
+  pix_supported: boolean;
+  crypto_supported: boolean;
+  spei_supported: boolean;
+  affiliate_link: string | null;
+};
 
 function PaymentBadge({available, label}: {available: boolean; label: string}) {
+  if (!available) return null;
   return (
-    <span
-      className={`rounded px-1.5 py-0.5 text-xs font-medium ${
-        available ? 'bg-jogai-green/20 text-jogai-green' : 'bg-jogai-border text-jogai-muted'
-      }`}
-    >
+    <span className="rounded bg-jogai-green/20 px-1.5 py-0.5 text-xs font-medium text-jogai-green">
       {label}
     </span>
   );
 }
 
-export default function CasinoTable() {
+export default function CasinoTable({casinos}: {casinos: CasinoRow[]}) {
   const t = useTranslations('casinos');
 
   return (
@@ -76,7 +35,6 @@ export default function CasinoTable() {
           <tr className="border-b border-jogai-border text-jogai-muted">
             <th className="px-4 py-3 font-medium">{t('name')}</th>
             <th className="px-4 py-3 font-medium">{t('bonus')}</th>
-            <th className="px-4 py-3 font-medium">{t('wagering')}</th>
             <th className="px-4 py-3 font-medium">{t('score')}</th>
             <th className="px-4 py-3 font-medium">{t('deposit')}</th>
             <th className="px-4 py-3 font-medium">{t('withdraw')}</th>
@@ -85,30 +43,39 @@ export default function CasinoTable() {
           </tr>
         </thead>
         <tbody>
-          {CASINOS.map((casino) => (
-            <tr key={casino.name} className="border-b border-jogai-border transition hover:bg-jogai-card">
+          {casinos.map((casino) => (
+            <tr key={casino.slug} className="border-b border-jogai-border transition hover:bg-jogai-card">
               <td className="px-4 py-4 font-bold text-jogai-text">{casino.name}</td>
-              <td className="px-4 py-4 text-jogai-accent">{casino.bonus}</td>
-              <td className="px-4 py-4">{casino.wagering}</td>
+              <td className="px-4 py-4 text-jogai-accent">{casino.best_bonus || '—'}</td>
               <td className="px-4 py-4">
-                <JogaiScoreBadge score={casino.score} />
+                {casino.best_jogai_score !== null ? (
+                  <JogaiScoreBadge score={casino.best_jogai_score} />
+                ) : (
+                  '—'
+                )}
               </td>
-              <td className="px-4 py-4">{casino.deposit}</td>
-              <td className="px-4 py-4">{casino.withdraw}</td>
+              <td className="px-4 py-4">{casino.min_deposit_formatted || '—'}</td>
+              <td className="px-4 py-4">{casino.withdrawal_time || '—'}</td>
               <td className="px-4 py-4">
                 <div className="flex gap-1">
-                  <PaymentBadge available={casino.pix} label={t('pix')} />
-                  <PaymentBadge available={casino.crypto} label={t('crypto')} />
-                  <PaymentBadge available={casino.card} label={t('card')} />
+                  <PaymentBadge available={casino.pix_supported} label={t('pix')} />
+                  <PaymentBadge available={casino.crypto_supported} label={t('crypto')} />
+                  <PaymentBadge available={casino.spei_supported} label="SPEI" />
                 </div>
               </td>
               <td className="px-4 py-4">
-                <a
-                  href={casino.url}
-                  className="rounded-lg bg-jogai-accent px-4 py-2 text-xs font-bold text-jogai-bg transition hover:bg-jogai-accent/90"
-                >
-                  {t('register')}
-                </a>
+                {casino.affiliate_link ? (
+                  <a
+                    href={casino.affiliate_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-lg bg-jogai-accent px-4 py-2 text-xs font-bold text-jogai-bg transition hover:bg-jogai-accent/90"
+                  >
+                    {t('register')}
+                  </a>
+                ) : (
+                  <span className="text-jogai-muted">—</span>
+                )}
               </td>
             </tr>
           ))}

@@ -19,7 +19,7 @@ celery.conf.update(
     task_default_queue="jogai",
     worker_concurrency=2,
     worker_prefetch_multiplier=1,
-    include=["app.services.channel_poster", "app.services.digest_builder"],
+    include=["app.services.channel_poster", "app.services.digest_builder", "app.services.bonus_parser"],
     broker_connection_retry_on_startup=True,
 )
 
@@ -44,5 +44,9 @@ celery.conf.beat_schedule = {
     "send-daily-digest": {
         "task": "app.services.digest_builder.task_send_digest",
         "schedule": crontab(hour=8, minute=0),  # 08:00 BRT
+    },
+    "parse-bonuses": {
+        "task": "app.services.bonus_parser.task_parse_bonuses",
+        "schedule": crontab(minute=0, hour="*/6"),  # every 6 hours
     },
 }

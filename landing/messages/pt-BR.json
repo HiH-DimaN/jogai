@@ -23,7 +23,9 @@
     "register": "Criar conta",
     "pix": "PIX",
     "crypto": "Cripto",
-    "card": "Cartão"
+    "card": "Cartão",
+    "view_all": "Ver todos os cassinos",
+    "view_details": "Ver detalhes"
   },
   "bonuses": {
     "title": "Melhores Bônus de Hoje",
@@ -39,7 +41,9 @@
     "verdict_excellent": "EXCELENTE",
     "verdict_good": "BOM NEGÓCIO",
     "verdict_caution": "CUIDADO",
-    "verdict_bad": "NÃO RECOMENDADO"
+    "verdict_bad": "NÃO RECOMENDADO",
+    "view_all": "Ver todos os bônus",
+    "view_casino": "Ver cassino"
   },
   "features": {
     "title": "Por que usar o Jogai?",
@@ -69,5 +73,76 @@
     "copyright": "© 2026 Jogai. Todos os direitos reservados.",
     "privacy": "Privacidade",
     "terms": "Termos"
+  },
+  "casinos_page": {
+    "title": "Melhores Cassinos do Brasil",
+    "subtitle": "Rankings atualizados com análise de IA e Jogai Score",
+    "meta_title": "Melhores Cassinos Online do Brasil 2026 — Jogai",
+    "meta_description": "Ranking dos melhores cassinos online do Brasil com Jogai Score, análise de bônus por IA, métodos de pagamento e tempo de saque.",
+    "bonus_count": "{count} bônus",
+    "best_bonus": "Melhor bônus",
+    "min_deposit": "Depósito mín.",
+    "withdrawal": "Tempo de saque",
+    "payments": "Pagamentos",
+    "view_details": "Ver detalhes",
+    "all_bonuses": "Todos os bônus",
+    "create_account": "Criar conta"
+  },
+  "bonuses_page": {
+    "title": "Melhores Bônus de Cassino",
+    "subtitle": "Todos os bônus analisados pela IA do Jogai",
+    "meta_title": "Melhores Bônus de Cassino Online 2026 — Jogai",
+    "meta_description": "Lista completa de bônus de cassino analisados por IA com Jogai Score, wagering, prazo e veredicto. Encontre o melhor bônus para você.",
+    "no_deposit_label": "Sem depósito",
+    "free_spins_label": "Giros grátis",
+    "view_casino": "Ver cassino"
+  },
+  "casino_detail": {
+    "meta_title": "{name} — Análise Completa — Jogai",
+    "meta_description": "Análise completa do cassino {name}: bônus, Jogai Score, métodos de pagamento, depósito mínimo e tempo de saque.",
+    "bonuses_title": "Bônus disponíveis",
+    "overview": "Visão geral",
+    "payments": "Métodos de pagamento",
+    "deposit": "Depósito mínimo",
+    "withdrawal": "Tempo de saque",
+    "no_bonuses": "Nenhum bônus ativo no momento",
+    "create_account": "Criar conta no {name}"
+  },
+  "guides_page": {
+    "title": "Guias sobre Cassinos e Bônus",
+    "subtitle": "Aprenda tudo sobre bônus, wagering e como usar o Jogai Score",
+    "meta_title": "Guias de Cassino e Bônus — Jogai",
+    "meta_description": "Guias completos sobre bônus de cassino, wagering, Jogai Score e como escolher o melhor cassino online."
+  },
+  "guide": {
+    "back": "Voltar aos guias",
+    "read_time": "{minutes} min de leitura",
+    "related": "Guias relacionados"
+  },
+  "breadcrumb": {
+    "home": "Início",
+    "casinos": "Cassinos",
+    "bonuses": "Bônus",
+    "guides": "Guias"
+  },
+  "guides_content": {
+    "como-funcionam-bonus": {
+      "title": "Como Funcionam os Bônus de Cassino",
+      "description": "Entenda como funcionam os bônus de cassino online, tipos de bônus, como usar e o que observar antes de aceitar.",
+      "read_time": 8,
+      "content": "## O que são bônus de cassino?\n\nBônus de cassino são ofertas promocionais que os cassinos online oferecem para atrair novos jogadores e manter os existentes. Eles podem vir em várias formas, desde dinheiro extra até giros grátis.\n\n## Tipos de bônus\n\n### Bônus de boas-vindas\nO tipo mais comum. Geralmente é um match do seu primeiro depósito. Por exemplo, um bônus de 100% até R$1.000 significa que se você depositar R$500, receberá mais R$500 em bônus.\n\n### Bônus sem depósito\nÉ o mais raro e desejado. Você recebe crédito sem precisar depositar. Geralmente tem valores menores (R$20-R$100) e wagering mais alto.\n\n### Giros grátis (Free Spins)\nVocê recebe rodadas grátis em slots específicos. Os ganhos geralmente têm wagering aplicado.\n\n### Cashback\nO cassino devolve uma porcentagem das suas perdas. Pode ser diário, semanal ou mensal.\n\n## O que observar\n\n### Wagering (Rollover)\nÉ o número de vezes que você precisa apostar o valor do bônus antes de poder sacar. Um wagering de 40x em um bônus de R$100 significa que você precisa apostar R$4.000 no total.\n\n### Prazo\nTodo bônus tem um prazo para cumprir o wagering. Se não cumprir a tempo, o bônus e os ganhos são cancelados.\n\n### Aposta máxima\nA maioria dos bônus tem um limite de aposta por rodada enquanto o wagering está ativo. Ultrapassar esse limite pode cancelar seu bônus.\n\n### Jogos permitidos\nNem todos os jogos contribuem igualmente para o wagering. Slots geralmente contribuem 100%, enquanto jogos de mesa podem contribuir apenas 10-20%.\n\n## Como o Jogai ajuda\n\nO Jogai analisa todos esses fatores automaticamente com IA e calcula o Jogai Score — uma nota de 0 a 10 que indica a qualidade real do bônus. Quanto maior o score, melhor o bônus para o jogador."
+    },
+    "o-que-e-wagering": {
+      "title": "O que é Wagering (Rollover)?",
+      "description": "Guia completo sobre wagering: como calcular, por que importa e como o Jogai Score avalia o rollover dos bônus.",
+      "read_time": 6,
+      "content": "## O que é Wagering?\n\nWagering (também chamado de rollover) é o número de vezes que você precisa apostar o valor do bônus antes de poder sacar seus ganhos. É a condição mais importante de qualquer bônus de cassino.\n\n## Como calcular\n\n### Exemplo prático\n- Bônus: R$500 com wagering de 35x\n- Total a apostar: R$500 × 35 = R$17.500\n- Isso significa que você precisa fazer R$17.500 em apostas antes de sacar\n\n### Wagering sobre bônus vs depósito+bônus\nAlguns cassinos aplicam o wagering apenas sobre o bônus, outros sobre o depósito + bônus. A diferença é enorme:\n- Depósito R$500 + Bônus R$500 com 35x sobre bônus = R$17.500\n- Depósito R$500 + Bônus R$500 com 35x sobre depósito+bônus = R$35.000\n\n## Por que o wagering importa\n\nQuanto maior o wagering, mais difícil é lucrar com o bônus. Estatisticamente:\n- **1x-10x:** Excelente — alta chance de lucro\n- **11x-25x:** Bom — chance razoável com sorte\n- **26x-40x:** Médio — precisa de boa sorte\n- **41x-60x:** Difícil — chances baixas\n- **60x+:** Muito difícil — praticamente impossível lucrar\n\n## Outros fatores que afetam\n\n### Prazo\nUm wagering de 30x em 7 dias é muito mais difícil que 30x em 30 dias.\n\n### Aposta máxima\nSe a aposta máxima é R$5 e você precisa apostar R$15.000, são 3.000 apostas mínimas.\n\n### Contribuição dos jogos\nSe slots contribuem 100% e blackjack contribui 10%, jogar blackjack torna o wagering 10x mais difícil.\n\n## Como o Jogai Score avalia\n\nO Jogai Score combina wagering, prazo, aposta máxima e contribuição dos jogos em uma nota de 0 a 10. Um bônus com wagering baixo e prazo longo terá um score mais alto. Nossa IA calcula a perda esperada e a probabilidade real de lucro."
+    },
+    "jogai-score-como-funciona": {
+      "title": "Jogai Score: Como Funciona",
+      "description": "Entenda como o Jogai Score é calculado, quais fatores são analisados e como usar para escolher os melhores bônus.",
+      "read_time": 5,
+      "content": "## O que é o Jogai Score?\n\nO Jogai Score é o sistema exclusivo de avaliação do Jogai. É uma nota de 0 a 10 que indica a qualidade real de um bônus de cassino para o jogador.\n\n## Como é calculado\n\nNossa IA analisa vários fatores para calcular o score:\n\n### 1. Wagering (Rollover)\nO fator mais importante. Quanto menor o wagering, maior o score.\n- 1x-10x → contribui para score 8-10\n- 11x-25x → contribui para score 6-8\n- 26x-40x → contribui para score 4-6\n- 40x+ → contribui para score 2-4\n\n### 2. Prazo\nQuanto mais tempo para cumprir o wagering, melhor.\n- 30+ dias → bônus positivo no score\n- 14-29 dias → neutro\n- 7 dias ou menos → penalidade no score\n\n### 3. Aposta máxima\nAposta máxima muito baixa dificulta cumprir o wagering a tempo.\n\n### 4. Percentual do bônus\nBônus maiores são mais atrativos, mas precisam ser equilibrados com o wagering.\n\n### 5. Giros grátis e sem depósito\nBônus sem depósito e com giros grátis recebem bônus no score por serem de menor risco.\n\n## Os veredictos\n\nBaseado no Jogai Score, cada bônus recebe um veredicto:\n\n- **EXCELENTE (8.0-10.0):** Bônus excepcional com condições favoráveis ao jogador\n- **BOM NEGÓCIO (6.0-7.9):** Bônus com boas condições, vale a pena considerar\n- **CUIDADO (4.0-5.9):** Condições medianas, analise com cuidado antes de aceitar\n- **NÃO RECOMENDADO (0-3.9):** Condições desfavoráveis, melhor evitar\n\n## Como usar\n\n1. **Compare antes de jogar:** Use o Jogai Score para comparar bônus de diferentes cassinos\n2. **Envie para análise:** Cole qualquer bônus no bot do Telegram para receber o Jogai Score\n3. **Confie na IA:** Nossa inteligência artificial analisa fatores que a maioria dos jogadores ignora\n\n## Limitações\n\nO Jogai Score é uma ferramenta de análise, não uma garantia de lucro. Jogos de cassino sempre têm vantagem da casa. Use o score para tomar decisões mais informadas, mas jogue sempre com responsabilidade."
+    }
   }
 }

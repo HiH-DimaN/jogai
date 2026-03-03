@@ -23,7 +23,9 @@
     "register": "Crear cuenta",
     "pix": "PIX",
     "crypto": "Cripto",
-    "card": "Tarjeta"
+    "card": "Tarjeta",
+    "view_all": "Ver todos los casinos",
+    "view_details": "Ver detalles"
   },
   "bonuses": {
     "title": "Mejores Bonos de Hoy",
@@ -39,7 +41,9 @@
     "verdict_excellent": "EXCELENTE",
     "verdict_good": "BUEN NEGOCIO",
     "verdict_caution": "CUIDADO",
-    "verdict_bad": "NO RECOMENDADO"
+    "verdict_bad": "NO RECOMENDADO",
+    "view_all": "Ver todos los bonos",
+    "view_casino": "Ver casino"
   },
   "features": {
     "title": "¿Por qué usar Jogai?",
@@ -69,5 +73,76 @@
     "copyright": "© 2026 Jogai. Todos los derechos reservados.",
     "privacy": "Privacidad",
     "terms": "Términos"
+  },
+  "casinos_page": {
+    "title": "Mejores Casinos de México",
+    "subtitle": "Rankings actualizados con análisis de IA y Jogai Score",
+    "meta_title": "Mejores Casinos Online de México 2026 — Jogai",
+    "meta_description": "Ranking de los mejores casinos online de México con Jogai Score, análisis de bonos con IA, métodos de pago y tiempo de retiro.",
+    "bonus_count": "{count} bonos",
+    "best_bonus": "Mejor bono",
+    "min_deposit": "Depósito mín.",
+    "withdrawal": "Tiempo de retiro",
+    "payments": "Pagos",
+    "view_details": "Ver detalles",
+    "all_bonuses": "Todos los bonos",
+    "create_account": "Crear cuenta"
+  },
+  "bonuses_page": {
+    "title": "Mejores Bonos de Casino",
+    "subtitle": "Todos los bonos analizados por la IA de Jogai",
+    "meta_title": "Mejores Bonos de Casino Online 2026 — Jogai",
+    "meta_description": "Lista completa de bonos de casino analizados por IA con Jogai Score, wagering, plazo y veredicto. Encuentra el mejor bono para ti.",
+    "no_deposit_label": "Sin depósito",
+    "free_spins_label": "Giros gratis",
+    "view_casino": "Ver casino"
+  },
+  "casino_detail": {
+    "meta_title": "{name} — Análisis Completo — Jogai",
+    "meta_description": "Análisis completo del casino {name}: bonos, Jogai Score, métodos de pago, depósito mínimo y tiempo de retiro.",
+    "bonuses_title": "Bonos disponibles",
+    "overview": "Descripción general",
+    "payments": "Métodos de pago",
+    "deposit": "Depósito mínimo",
+    "withdrawal": "Tiempo de retiro",
+    "no_bonuses": "No hay bonos activos en este momento",
+    "create_account": "Crear cuenta en {name}"
+  },
+  "guides_page": {
+    "title": "Guías sobre Casinos y Bonos",
+    "subtitle": "Aprende todo sobre bonos, wagering y cómo usar el Jogai Score",
+    "meta_title": "Guías de Casino y Bonos — Jogai",
+    "meta_description": "Guías completas sobre bonos de casino, wagering, Jogai Score y cómo elegir el mejor casino online."
+  },
+  "guide": {
+    "back": "Volver a las guías",
+    "read_time": "{minutes} min de lectura",
+    "related": "Guías relacionadas"
+  },
+  "breadcrumb": {
+    "home": "Inicio",
+    "casinos": "Casinos",
+    "bonuses": "Bonos",
+    "guides": "Guías"
+  },
+  "guides_content": {
+    "como-funcionam-bonus": {
+      "title": "Cómo Funcionan los Bonos de Casino",
+      "description": "Entiende cómo funcionan los bonos de casino online, tipos de bonos, cómo usarlos y qué observar antes de aceptar.",
+      "read_time": 8,
+      "content": "## ¿Qué son los bonos de casino?\n\nLos bonos de casino son ofertas promocionales que los casinos online ofrecen para atraer nuevos jugadores y mantener a los existentes. Pueden venir en varias formas, desde dinero extra hasta giros gratis.\n\n## Tipos de bonos\n\n### Bono de bienvenida\nEl tipo más común. Generalmente es un match de tu primer depósito. Por ejemplo, un bono del 100% hasta MX$10.000 significa que si depositas MX$5.000, recibirás MX$5.000 más en bono.\n\n### Bono sin depósito\nEs el más raro y deseado. Recibes crédito sin necesidad de depositar. Generalmente tiene valores menores (MX$200-MX$1.000) y wagering más alto.\n\n### Giros gratis (Free Spins)\nRecibes rondas gratis en slots específicos. Las ganancias generalmente tienen wagering aplicado.\n\n### Cashback\nEl casino devuelve un porcentaje de tus pérdidas. Puede ser diario, semanal o mensual.\n\n## Qué observar\n\n### Wagering (Rollover)\nEs el número de veces que necesitas apostar el valor del bono antes de poder retirar. Un wagering de 40x en un bono de MX$1.000 significa que necesitas apostar MX$40.000 en total.\n\n### Plazo\nTodo bono tiene un plazo para cumplir el wagering. Si no lo cumples a tiempo, el bono y las ganancias se cancelan.\n\n### Apuesta máxima\nLa mayoría de los bonos tienen un límite de apuesta por ronda mientras el wagering está activo. Superar ese límite puede cancelar tu bono.\n\n### Juegos permitidos\nNo todos los juegos contribuyen igualmente al wagering. Los slots generalmente contribuyen 100%, mientras que los juegos de mesa pueden contribuir solo 10-20%.\n\n## Cómo ayuda Jogai\n\nJogai analiza todos estos factores automáticamente con IA y calcula el Jogai Score — una nota de 0 a 10 que indica la calidad real del bono. Cuanto mayor el score, mejor el bono para el jugador."
+    },
+    "o-que-e-wagering": {
+      "title": "¿Qué es el Wagering (Rollover)?",
+      "description": "Guía completa sobre wagering: cómo calcularlo, por qué importa y cómo el Jogai Score evalúa el rollover de los bonos.",
+      "read_time": 6,
+      "content": "## ¿Qué es el Wagering?\n\nWagering (también llamado rollover) es el número de veces que necesitas apostar el valor del bono antes de poder retirar tus ganancias. Es la condición más importante de cualquier bono de casino.\n\n## Cómo calcular\n\n### Ejemplo práctico\n- Bono: MX$5.000 con wagering de 35x\n- Total a apostar: MX$5.000 × 35 = MX$175.000\n- Esto significa que necesitas hacer MX$175.000 en apuestas antes de retirar\n\n### Wagering sobre bono vs depósito+bono\nAlgunos casinos aplican el wagering solo sobre el bono, otros sobre el depósito + bono. La diferencia es enorme:\n- Depósito MX$5.000 + Bono MX$5.000 con 35x sobre bono = MX$175.000\n- Depósito MX$5.000 + Bono MX$5.000 con 35x sobre depósito+bono = MX$350.000\n\n## Por qué importa el wagering\n\nCuanto mayor el wagering, más difícil es lucrar con el bono. Estadísticamente:\n- **1x-10x:** Excelente — alta chance de ganancia\n- **11x-25x:** Bueno — chance razonable con suerte\n- **26x-40x:** Medio — necesitas buena suerte\n- **41x-60x:** Difícil — chances bajas\n- **60x+:** Muy difícil — prácticamente imposible lucrar\n\n## Otros factores que afectan\n\n### Plazo\nUn wagering de 30x en 7 días es mucho más difícil que 30x en 30 días.\n\n### Apuesta máxima\nSi la apuesta máxima es MX$50 y necesitas apostar MX$150.000, son 3.000 apuestas mínimas.\n\n### Contribución de los juegos\nSi los slots contribuyen 100% y el blackjack contribuye 10%, jugar blackjack hace el wagering 10x más difícil.\n\n## Cómo evalúa el Jogai Score\n\nEl Jogai Score combina wagering, plazo, apuesta máxima y contribución de los juegos en una nota de 0 a 10. Un bono con wagering bajo y plazo largo tendrá un score más alto. Nuestra IA calcula la pérdida esperada y la probabilidad real de ganancia."
+    },
+    "jogai-score-como-funciona": {
+      "title": "Jogai Score: Cómo Funciona",
+      "description": "Entiende cómo se calcula el Jogai Score, qué factores se analizan y cómo usarlo para elegir los mejores bonos.",
+      "read_time": 5,
+      "content": "## ¿Qué es el Jogai Score?\n\nEl Jogai Score es el sistema exclusivo de evaluación de Jogai. Es una nota de 0 a 10 que indica la calidad real de un bono de casino para el jugador.\n\n## Cómo se calcula\n\nNuestra IA analiza varios factores para calcular el score:\n\n### 1. Wagering (Rollover)\nEl factor más importante. Cuanto menor el wagering, mayor el score.\n- 1x-10x → contribuye para score 8-10\n- 11x-25x → contribuye para score 6-8\n- 26x-40x → contribuye para score 4-6\n- 40x+ → contribuye para score 2-4\n\n### 2. Plazo\nCuanto más tiempo para cumplir el wagering, mejor.\n- 30+ días → bonificación positiva en el score\n- 14-29 días → neutro\n- 7 días o menos → penalización en el score\n\n### 3. Apuesta máxima\nApuesta máxima muy baja dificulta cumplir el wagering a tiempo.\n\n### 4. Porcentaje del bono\nBonos mayores son más atractivos, pero necesitan ser equilibrados con el wagering.\n\n### 5. Giros gratis y sin depósito\nBonos sin depósito y con giros gratis reciben bonificación en el score por ser de menor riesgo.\n\n## Los veredictos\n\nBasado en el Jogai Score, cada bono recibe un veredicto:\n\n- **EXCELENTE (8.0-10.0):** Bono excepcional con condiciones favorables para el jugador\n- **BUEN NEGOCIO (6.0-7.9):** Bono con buenas condiciones, vale la pena considerar\n- **CUIDADO (4.0-5.9):** Condiciones medianas, analiza con cuidado antes de aceptar\n- **NO RECOMENDADO (0-3.9):** Condiciones desfavorables, mejor evitar\n\n## Cómo usar\n\n1. **Compara antes de jugar:** Usa el Jogai Score para comparar bonos de diferentes casinos\n2. **Envía para análisis:** Pega cualquier bono en el bot de Telegram para recibir el Jogai Score\n3. **Confía en la IA:** Nuestra inteligencia artificial analiza factores que la mayoría de los jugadores ignora\n\n## Limitaciones\n\nEl Jogai Score es una herramienta de análisis, no una garantía de ganancia. Los juegos de casino siempre tienen ventaja de la casa. Usa el score para tomar decisiones más informadas, pero juega siempre con responsabilidad."
+    }
   }
 }
