@@ -19,10 +19,9 @@ from app.services.content_generator import (
 logger = logging.getLogger(__name__)
 
 # Multi-channel config: geo → {id, locale}
-# Phase 3: uncomment MX
 CHANNELS: dict[str, dict] = {
     "BR": {"id": settings.telegram_channel_br_id, "locale": "pt_BR"},
-    # "MX": {"id": settings.telegram_channel_mx_id, "locale": "es_MX"},
+    "MX": {"id": settings.telegram_channel_mx_id, "locale": "es_MX"},
 }
 
 

@@ -6,6 +6,7 @@ from app.bot.bot import dp, get_bot
 from app.bot.handlers.analyze import router as analyze_router
 from app.bot.handlers.bonus import router as bonus_router
 from app.bot.handlers.casino import router as casino_router
+from app.bot.handlers.pro import router as pro_router
 from app.bot.handlers.referral import router as referral_router
 from app.bot.handlers.sport import router as sport_router
 from app.bot.handlers.start import router as start_router
@@ -32,6 +33,7 @@ def setup_bot() -> None:
     dp.include_router(sport_router)
     dp.include_router(referral_router)
     dp.include_router(tracker_router)
+    dp.include_router(pro_router)
 
 
 async def main() -> None:

@@ -261,24 +261,133 @@ async def seed():
         ]
         session.add_all(bonuses)
 
-        # --- Sport Pick ---
-        sport_pick = SportPick(
-            match_name="Flamengo vs Palmeiras",
-            league="Brasileirão Série A",
-            pick_description_pt="Flamengo em casa com elenco completo. Odds com valor no empate. Aposte via Bet365.",
-            pick_description_es="Flamengo en casa con plantel completo. Cuotas con valor en empate. Apuesta vía Bet365.",
-            odds=3.20,
-            analysis_pt="Flamengo domina em casa (78% aproveitamento). Palmeiras sem 2 titulares. Histórico: últimos 5 jogos em casa — 4V 1E 0D. Recomendação: Empate ou Flamengo (Dupla Chance) na Bet365.",
-            analysis_es="Flamengo domina en casa (78% aprovechamiento). Palmeiras sin 2 titulares. Recomendación: Empate o Flamengo (Doble Chance) en Bet365.",
-            casino_id=casinos[2].id,
-            affiliate_link="https://bet365.com/?ref=jogai_11111",
-            match_date=now + timedelta(days=1),
-            geo=["BR"],
-        )
-        session.add(sport_pick)
+        # --- MX Bonuses ---
+        mx_bonuses = [
+            # PIN-UP MX
+            Bonus(
+                casino_id=casinos[0].id,
+                title_pt="PIN-UP: Bônus 150% até MX$30,000",
+                title_es="PIN-UP: Bono de Bienvenida 150% hasta MX$30,000",
+                bonus_percent=150,
+                max_bonus_amount=30000.00,
+                max_bonus_currency="MXN",
+                wagering_multiplier=35.0,
+                wagering_deadline_days=30,
+                max_bet=500.00,
+                free_spins=250,
+                jogai_score=8.5,
+                verdict_key="verdict_excellent",
+                expected_loss=7000.00,
+                profit_probability=32.00,
+                affiliate_link="https://pinup.com/?ref=jogai_12345",
+                is_active=True,
+                starts_at=now,
+                expires_at=now + timedelta(days=30),
+                geo=["MX"],
+            ),
+            # 1WIN MX
+            Bonus(
+                casino_id=casinos[1].id,
+                title_pt="1WIN: 500% no primeiro depósito (MX)",
+                title_es="1WIN: 500% en tu primer depósito",
+                bonus_percent=500,
+                max_bonus_amount=100000.00,
+                max_bonus_currency="MXN",
+                wagering_multiplier=50.0,
+                wagering_deadline_days=30,
+                max_bet=300.00,
+                jogai_score=5.0,
+                verdict_key="verdict_caution",
+                expected_loss=56000.00,
+                profit_probability=12.00,
+                affiliate_link="https://1win.com/?ref=jogai_67890",
+                is_active=True,
+                starts_at=now,
+                expires_at=now + timedelta(days=60),
+                geo=["MX"],
+            ),
+            # BET365 MX
+            Bonus(
+                casino_id=casinos[2].id,
+                title_pt="Bet365: Aposta Grátis MX$1,000",
+                title_es="Bet365: Apuesta Gratis de MX$1,000 en el primer depósito",
+                bonus_percent=100,
+                max_bonus_amount=1000.00,
+                max_bonus_currency="MXN",
+                wagering_multiplier=3.0,
+                wagering_deadline_days=30,
+                max_bet=1000.00,
+                jogai_score=9.0,
+                verdict_key="verdict_excellent",
+                expected_loss=60.00,
+                profit_probability=55.00,
+                affiliate_link="https://bet365.com/?ref=jogai_11111",
+                is_active=True,
+                starts_at=now,
+                expires_at=now + timedelta(days=30),
+                geo=["MX"],
+            ),
+            # RIVALO MX
+            Bonus(
+                casino_id=casinos[3].id,
+                title_pt="Rivalo: 100% até MX$5,000 + 50 Giros",
+                title_es="Rivalo: 100% hasta MX$5,000 + 50 Giros Gratis",
+                bonus_percent=100,
+                max_bonus_amount=5000.00,
+                max_bonus_currency="MXN",
+                wagering_multiplier=30.0,
+                wagering_deadline_days=21,
+                max_bet=500.00,
+                free_spins=50,
+                jogai_score=7.8,
+                verdict_key="verdict_good",
+                expected_loss=3600.00,
+                profit_probability=35.00,
+                affiliate_link="https://rivalo.com/?ref=jogai_22222",
+                is_active=True,
+                starts_at=now,
+                expires_at=now + timedelta(days=30),
+                geo=["MX"],
+            ),
+        ]
+        session.add_all(mx_bonuses)
+
+        # --- Sport Picks ---
+        sport_picks = [
+            # BR pick
+            SportPick(
+                match_name="Flamengo vs Palmeiras",
+                league="Brasileirão Série A",
+                pick_description_pt="Flamengo em casa com elenco completo. Odds com valor no empate. Aposte via Bet365.",
+                pick_description_es="Flamengo en casa con plantel completo. Cuotas con valor en empate. Apuesta vía Bet365.",
+                odds=3.20,
+                analysis_pt="Flamengo domina em casa (78% aproveitamento). Palmeiras sem 2 titulares. Histórico: últimos 5 jogos em casa — 4V 1E 0D. Recomendação: Empate ou Flamengo (Dupla Chance) na Bet365.",
+                analysis_es="Flamengo domina en casa (78% aprovechamiento). Palmeiras sin 2 titulares. Recomendación: Empate o Flamengo (Doble Chance) en Bet365.",
+                casino_id=casinos[2].id,
+                affiliate_link="https://bet365.com/?ref=jogai_11111",
+                match_date=now + timedelta(days=1),
+                geo=["BR"],
+            ),
+            # MX pick — Liga MX
+            SportPick(
+                match_name="Club América vs Guadalajara",
+                league="Liga MX",
+                pick_description_pt="Clássico mexicano. América favorito em casa com odds de valor.",
+                pick_description_es="El Clásico Nacional. América favorito en casa con cuotas de valor. Apuesta vía Bet365.",
+                odds=2.10,
+                analysis_pt="América domina em casa (80% aproveitamento na temporada). Guadalajara sem 3 titulares. Recomendação: América ou Empate (Dupla Chance) na Bet365.",
+                analysis_es="América domina en casa (80% aprovechamiento en la temporada). Guadalajara sin 3 titulares. Historial: últimos 5 juegos en casa — 4V 1E 0D. Recomendación: América o Empate (Doble Chance) en Bet365.",
+                casino_id=casinos[2].id,
+                affiliate_link="https://bet365.com/?ref=jogai_11111",
+                match_date=now + timedelta(days=1),
+                geo=["MX"],
+            ),
+        ]
+        for sp in sport_picks:
+            session.add(sp)
 
         await session.commit()
-        print("Seed complete: 4 casinos, 8 bonuses, 1 sport_pick")
+        print("Seed complete: 4 casinos, 12 bonuses (8 BR + 4 MX), 2 sport_picks (1 BR + 1 MX)")
 
 
 if __name__ == "__main__":

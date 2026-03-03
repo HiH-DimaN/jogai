@@ -104,5 +104,10 @@
   "tracker_recent": "Apuestas recientes",
   "tracker_won": "Gan\u00f3",
   "tracker_lost": "Perdi\u00f3",
-  "tracker_bankroll": "Bankroll recomendado"
+  "tracker_bankroll": "Bankroll recomendado",
+  "pro_badge": "PRO",
+  "pro_title": "Jogai PRO",
+  "pro_description": "Análisis ilimitados, estadísticas avanzadas y bonos exclusivos.",
+  "pro_subscribe": "Suscribirse a PRO",
+  "pro_active_until": "PRO activo hasta {{date}}"
 }

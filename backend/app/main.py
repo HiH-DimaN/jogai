@@ -19,6 +19,7 @@ from app.bot.handlers.casino import router as casino_handler_router
 from app.bot.handlers.referral import router as referral_handler_router
 from app.bot.handlers.sport import router as sport_handler_router
 from app.bot.handlers.tracker import router as tracker_handler_router
+from app.bot.handlers.pro import router as pro_handler_router
 from app.bot.handlers.start import router as start_handler_router
 from app.bot.middlewares import LocaleMiddleware, RateLimitMiddleware, UserMiddleware
 
@@ -39,6 +40,7 @@ def _setup_bot() -> None:
     dp.include_router(sport_handler_router)
     dp.include_router(referral_handler_router)
     dp.include_router(tracker_handler_router)
+    dp.include_router(pro_handler_router)
 
 
 @asynccontextmanager
