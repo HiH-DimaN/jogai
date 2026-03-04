@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_locale, get_session
 from app.database.models import Bonus, Casino
-from app.utils.formatters import format_currency
+from app.utils.formatters import format_currency, get_min_deposit
 
 router = APIRouter(prefix="/casinos", tags=["casinos"])
 
@@ -95,9 +95,8 @@ async def get_casinos(
         elif c.affiliate_link_template:
             affiliate_link = c.affiliate_link_template
 
-        min_deposit_formatted = None
-        if c.min_deposit is not None:
-            min_deposit_formatted = format_currency(float(c.min_deposit), locale)
+        deposit_amount = get_min_deposit(c, locale)
+        min_deposit_formatted = format_currency(deposit_amount, locale)
 
         items.append(
             CasinoResponse(
@@ -105,7 +104,7 @@ async def get_casinos(
                 name=c.name,
                 slug=c.slug,
                 description=description,
-                min_deposit=float(c.min_deposit) if c.min_deposit is not None else None,
+                min_deposit=deposit_amount,
                 min_deposit_formatted=min_deposit_formatted,
                 pix_supported=c.pix_supported,
                 spei_supported=c.spei_supported,
@@ -144,9 +143,8 @@ async def get_casino(
     elif c.affiliate_link_template:
         affiliate_link = c.affiliate_link_template
 
-    min_deposit_formatted = None
-    if c.min_deposit is not None:
-        min_deposit_formatted = format_currency(float(c.min_deposit), locale)
+    deposit_amount = get_min_deposit(c, locale)
+    min_deposit_formatted = format_currency(deposit_amount, locale)
 
     # Build bonus list
     active_bonuses = [b for b in c.bonuses if b.is_active]
@@ -189,7 +187,7 @@ async def get_casino(
         name=c.name,
         slug=c.slug,
         description=description,
-        min_deposit=float(c.min_deposit) if c.min_deposit is not None else None,
+        min_deposit=deposit_amount,
         min_deposit_formatted=min_deposit_formatted,
         pix_supported=c.pix_supported,
         spei_supported=c.spei_supported,

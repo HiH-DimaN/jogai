@@ -12,7 +12,7 @@ from sqlalchemy import (
     Text,
     func,
 )
-from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.dialects.postgresql import ARRAY, JSON
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -66,7 +66,8 @@ class Casino(Base):
     logo_url: Mapped[str | None] = mapped_column(Text)
     description_pt: Mapped[str | None] = mapped_column(Text)
     description_es: Mapped[str | None] = mapped_column(Text)
-    min_deposit: Mapped[float | None] = mapped_column(Numeric(10, 2))
+    min_deposit: Mapped[float | None] = mapped_column(Numeric(10, 2))  # deprecated, use min_deposits
+    min_deposits: Mapped[dict | None] = mapped_column(JSON, nullable=True)  # {"BRL": 20.0, "MXN": 400.0}
     pix_supported: Mapped[bool] = mapped_column(Boolean, default=True)
     spei_supported: Mapped[bool] = mapped_column(Boolean, default=False)
     crypto_supported: Mapped[bool] = mapped_column(Boolean, default=False)

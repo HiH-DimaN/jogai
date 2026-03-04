@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from app.api.deps import get_locale
 from app.i18n import t
 from app.services.casino_matcher import match_casinos
-from app.utils.formatters import format_currency
+from app.utils.formatters import format_currency, get_min_deposit
 
 router = APIRouter(prefix="/quiz", tags=["quiz"])
 
@@ -91,7 +91,7 @@ async def quiz_result(body: QuizAnswers):
             slug=casino.slug,
             match_percent=r["match_percent"],
             description=desc,
-            min_deposit_formatted=format_currency(casino.min_deposit or 0, locale),
+            min_deposit_formatted=format_currency(get_min_deposit(casino, locale), locale),
             withdrawal_time=casino.withdrawal_time or "—",
             best_bonus=best_bonus,
             affiliate_link=link,

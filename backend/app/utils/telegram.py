@@ -1,6 +1,6 @@
 from app.database.models import Bonus, Casino
 from app.i18n import t
-from app.utils.formatters import format_currency
+from app.utils.formatters import format_currency, get_min_deposit
 
 
 def _get_title(obj: Bonus | Casino, locale: str, field_prefix: str = "title") -> str:
@@ -33,7 +33,7 @@ def format_bonus_card(bonus: Bonus, locale: str) -> str:
 
 def format_casino_card(casino: Casino, locale: str) -> str:
     description = _get_description(casino, locale)
-    min_dep = format_currency(casino.min_deposit or 0, locale)
+    min_dep = format_currency(get_min_deposit(casino, locale), locale)
 
     lines = [
         f"<b>{casino.name}</b>",

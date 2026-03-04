@@ -54,6 +54,21 @@ def format_currency(
     return formatted
 
 
+def get_min_deposit(casino, locale: str = DEFAULT_LOCALE) -> float:
+    """Get min deposit amount for casino based on locale currency.
+
+    Returns the amount in the correct currency for the locale.
+    Falls back to casino.min_deposit if min_deposits is not set.
+    """
+    config = LOCALE_CONFIG.get(locale, LOCALE_CONFIG[DEFAULT_LOCALE])
+    currency_code = config["currency_code"]
+
+    if casino.min_deposits and currency_code in casino.min_deposits:
+        return float(casino.min_deposits[currency_code])
+
+    return float(casino.min_deposit or 0)
+
+
 def format_date(dt: datetime, locale: str = DEFAULT_LOCALE) -> str:
     config = LOCALE_CONFIG.get(locale, LOCALE_CONFIG[DEFAULT_LOCALE])
     return dt.strftime(config["date_format"])
