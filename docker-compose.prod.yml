@@ -79,20 +79,12 @@ services:
   #     redis:
   #       condition: service_healthy
 
-  slotopol:
-    build:
-      context: .
-      dockerfile: Dockerfile.slotopol
-    restart: unless-stopped
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-    deploy:
-      resources:
-        limits:
-          memory: 128M
+  # slotopol: temporarily disabled — repo structure changed, slots already in seed
+  # slotopol:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.slotopol
+  #   restart: unless-stopped
 
   celery-worker:
     build: ./backend
@@ -107,8 +99,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      slotopol:
-        condition: service_started
     logging:
       driver: json-file
       options:
