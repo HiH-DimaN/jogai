@@ -159,6 +159,7 @@ jogai/
 │   │   │   ├── router_quiz.py
 │   │   │   ├── router_tracker.py
 │   │   │   ├── router_digest.py
+│   │   │   ├── router_slots.py
 │   │   │   └── router_auth.py
 │   │   ├── services/
 │   │   │   ├── __init__.py
@@ -167,6 +168,7 @@ jogai/
 │   │   │   ├── casino_matcher.py
 │   │   │   ├── content_generator.py   # ★ генерация на нужном языке
 │   │   │   ├── bonus_parser.py
+│   │   │   ├── slot_parser.py         # AI-парсер слотов + генератор tips
 │   │   │   ├── sport_analyzer.py
 │   │   │   ├── digest_builder.py
 │   │   │   └── affiliate.py
@@ -178,7 +180,9 @@ jogai/
 │   │       ├── bonus_analysis.md
 │   │       ├── casino_matching.md
 │   │       ├── content_post.md
-│   │       └── sport_analysis.md
+│   │       ├── sport_analysis.md
+│   │       ├── slot_parsing.md
+│   │       └── slot_tip.md
 │   ├── alembic/
 │   │   ├── env.py
 │   │   └── versions/
@@ -242,7 +246,7 @@ jogai/
 │   │   │   └── layout.tsx
 │   │   └── components/
 │   │       ├── CasinoTable.tsx
-│   │       ├── BonusTable.tsx
+│   │       ├── HowItWorks.tsx
 │   │       ├── JogaiScoreBadge.tsx
 │   │       ├── TelegramCTA.tsx
 │   │       ├── Header.tsx
@@ -628,6 +632,28 @@ CREATE TABLE sport_picks (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
+CREATE TABLE slots (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(100) UNIQUE NOT NULL,
+    provider VARCHAR(100),
+    rtp DECIMAL(5,2),                          -- верифицированный RTP
+    volatility VARCHAR(20),                    -- low/medium/high
+    max_win VARCHAR(50),
+    reels INTEGER,
+    lines INTEGER,
+    features TEXT[],
+    tip_pt TEXT,                                -- ★ PT-BR
+    tip_es TEXT,                                -- ★ ES-MX
+    best_casino_id INTEGER REFERENCES casinos(id),
+    is_active BOOLEAN DEFAULT TRUE,
+    geo TEXT[] DEFAULT '{BR,MX}',
+    source VARCHAR(50) DEFAULT 'manual',       -- manual/parsed
+    source_id VARCHAR(100),
+    last_posted_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
 CREATE TABLE referrals (
     id SERIAL PRIMARY KEY,
     referrer_id BIGINT REFERENCES users(id),
@@ -664,6 +690,7 @@ CREATE INDEX idx_sport_picks_geo ON sport_picks(geo);
 | GET | `/api/bonuses/{id}?locale=pt_BR` | Детали бонуса |
 | GET | `/api/casinos?geo=BR&locale=pt_BR` | Казино |
 | GET | `/api/casinos/{slug}?locale=pt_BR` | Детали казино |
+| GET | `/api/slots?geo=BR&locale=pt_BR` | Слоты с RTP и tips |
 | POST | `/api/analyze` | AI-анализ (locale в body) |
 | POST | `/api/quiz/start` | Квиз |
 | POST | `/api/quiz/answer` | Ответ квиза |
@@ -732,9 +759,10 @@ def calculate_jogai_score(...) -> dict:
 
 | Задача | Расписание | Описание |
 |--------|-----------|----------|
-| `post_bonus_day` | 09:00 по ТЗ каждого ГЕО | Бонус дня → канал(ы) |
-| `post_slot_review` | 14:00 | Обзор слота |
-| `post_sport_pick` | 18:00 | Ставка дня |
+| `post_bonus_day` | 09:00 (12:00 UTC) | Бонус дня → канал(ы), скипает если нет бонусов |
+| `post_slot_review` | 18:00 (21:00 UTC) | Обзор слота (12 слотов по ротации, 7-дневный cooldown) |
+| `post_sport_pick` | 14:00 (17:00 UTC) | Ставка дня, скипает если нет sport picks |
+| `post_weekly_top` | суббота 10:00 | Еженедельный топ-5 слотов + лучший бонус |
 | `send_digest` | 08:00 | Дайджест (на locale каждого юзера) |
 | `parse_bonuses` | каждые 6ч | Парсинг бонусов |
 | `deactivate_expired` | каждый час | Деактивация |
@@ -760,4 +788,16 @@ for geo, channel_id, locale in get_active_channels():
 
 ---
 
-*Версия 2.0 | Февраль 2026*
+## 12. ДАННЫЕ В БД (seed)
+
+Seed содержит только верифицированные данные:
+- **4 казино:** PIN-UP, 1WIN, BET365, RIVALO (реальные площадки, проверяемые факты)
+- **12 слотов:** Gates of Olympus, Sweet Bonanza, Big Bass Bonanza, Wolf Gold, The Dog House Megaways, Starburst, Gonzo's Quest, Dead or Alive 2, Book of Dead, Reactoonz, Fire Joker, Wanted Dead or a Wild (RTP из документации провайдеров)
+- **0 бонусов:** фейковые удалены, реальные будут добавлены через bonus_parser или вручную
+- **0 sport picks:** фейковые удалены, реальные будут добавлены через sport API
+
+**Принцип: реальное или ничего.** Все данные, показываемые пользователю, должны быть верифицированы.
+
+---
+
+*Версия 3.0 | Март 2026*

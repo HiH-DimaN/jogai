@@ -1,7 +1,7 @@
 # JOGAI — IMPLEMENTATION PLAN
 
 **Проект:** Jogai — AI Gambling Assistant для LATAM
-**Версия:** 2.0 | Февраль 2026
+**Версия:** 3.0 | Март 2026
 
 ---
 
@@ -36,9 +36,8 @@
 ШАГ 6:  Mini App — дашборд + анализатор (react-i18next)        ~6-8 часов
 ШАГ 7:  Mini App — квиз + дайджест + рефералы                  ~5-6 часов
 ШАГ 8:  Трекер ставок + банкролл (мультивалюта)                ~5-6 часов
-ШАГ 9:  Мексика (es_MX.json + seed MX) + PRO                   ~4-5 часов
-ШАГ 10: Веб-платформа + SEO                                    ~5-7 часов
-ШАГ 11: Автоматизация + деплой                                  ~4-5 часов
+ШАГ 9:  Слоты + удаление фейков                                 ✅ выполнено
+ШАГ 10: PRO + масштабирование                                   ~после запуска
 ИТОГО: ~53-67 часов
 ```
 
@@ -84,7 +83,7 @@
 4. **bot/handlers/bonus.py** — `/bonus` → топ-3 из БД WHERE geo, текст `title_pt`/`title_es` по locale, вердикт `t(verdict_key, locale)`, валюта `format_currency(amount, locale)`
 5. **services/affiliate.py** — `get_affiliate_link(casino_slug, user_id)`
 6. **utils/telegram.py** — `format_bonus_card(bonus, locale)`, `format_casino_card(casino, locale)`
-7. **database/seed.py** — 3 казино + 5-6 бонусов с title_pt, description_pt, verdict_key, geo
+7. **database/seed.py** — 4 казино + 12 слотов (только верифицированные данные, без фейковых бонусов)
 
 ### Ключевое правило
 
@@ -268,81 +267,67 @@ async def post_bonus_day():
 
 ---
 
-## ШАГ 9: МЕКСИКА (ES-MX) + PRO
+## ШАГ 9: СЛОТЫ + УДАЛЕНИЕ ФЕЙКОВЫХ ДАННЫХ ✅
 
-**Цель:** Перевести es_MX.json, добавить MX seed, запустить канал. Ноль изменений кода.
+**Цель:** Добавить инфраструктуру слотов с верифицированным RTP. Удалить все фейковые данные. Подготовить к запуску.
 
-### Что делаем
+### Что сделано
 
-1. **Перевод backend/app/locales/es_MX.json** — перевести ВСЕ строки на испанский
-2. **Перевод miniapp/public/locales/es-MX/translation.json** — перевести
-3. **Перевод landing/messages/es-MX.json** — перевести
-4. **Обновить landing/next.config.js** — `locales: ['pt-BR', 'es-MX']`
-5. **Seed MX данные** — казино с geo={MX}, бонусы с title_es, max_bonus_currency=MXN, geo={MX}
-6. **Sport picks** — Liga MX, geo={MX}, pick_description_es
-7. **Telegram канал** — создать @jogai_mx, добавить TELEGRAM_CHANNEL_MX_ID
-8. **Раскомментировать MX в channel_poster.py** — `"MX": {"id": ..., "locale": "es_MX"}`
-9. **PRO подписка** — bot/handlers/pro.py, services/pro.py, цена через locales
-
-### Проверки (критически важно!)
-
-- [ ] Бот: пользователь с language_code='es' → ВСЕ ответы на ES
-- [ ] Бот: /bonus → казино geo=MX, title_es, MX$ валюта
-- [ ] Mini App: определяет ES-MX, все тексты на испанском
-- [ ] Лендинг: jogai.fun/es-MX/ работает
-- [ ] Канал @jogai_mx: посты на ES
-- [ ] PRO: цена MX$99/мес для MX
-- [ ] Ноль сломанных PT-BR функций (регрессия!)
-
----
-
-## ШАГ 10: ВЕБ-ПЛАТФОРМА + SEO
-
-**Цель:** Полные SEO-страницы с hreflang для двух локалей.
-
-### Что создаём
-
-1. **[locale]/casinos/page.tsx** — рейтинг с фильтрами
-2. **[locale]/casinos/[slug]/page.tsx** — обзор: description_{lang}
-3. **[locale]/bonuses/page.tsx** — таблица с сортировкой
-4. **[locale]/guides/** — статьи
-5. **JSON-LD** — локализованный для каждого locale
-6. **Sitemap.xml** — с hreflang alternates
-7. **`<link rel="alternate" hreflang="pt-BR">`, `<link hreflang="es-MX">`**
-8. **LocaleSwitcher** — видимый (теперь 2 локали)
+1. **Slot модель** — name, provider, rtp, volatility, max_win, features, tip_pt/es, best_casino_id, geo, source
+2. **Alembic миграция** — таблица slots
+3. **API router_slots.py** — GET /slots?geo → слоты с RTP, tip, casino name
+4. **services/slot_parser.py** — AI-парсер описаний слотов + генератор tips
+5. **prompts/slot_parsing.md, slot_tip.md** — AI-промпты для парсинга и tips
+6. **Celery** — task_post_slot_review (ежедневно 18:00), task_post_weekly_top (суббота)
+7. **Seed** — 12 слотов (Pragmatic Play, NetEnt, Play'n GO, Hacksaw) — верифицированный RTP
+8. **Удалены фейковые данные** — 12 бонусов (BR+MX), 2 sport picks
+9. **Лендинг** — BonusTable → HowItWorks, CasinoTable без фейковых score/bonus колонок
+10. **Лендинг** — /bonuses и /casinos/[slug] — пустое состояние с CTA на Telegram-бота
+11. **Бот** — /bonus и /sport — пустое состояние с кнопкой /analyze
+12. **Каналы** — BR (@jogai_br) и MX (@jogai_mx) настроены
 
 ### Проверки
 
-- [ ] /pt-BR/casinos и /es-MX/casinos — разный контент
-- [ ] hreflang корректен
-- [ ] JSON-LD на нужном языке
-- [ ] Sitemap с alternates
+- [x] `cd landing && npm run build` — проект собирается
+- [x] GET /api/slots?geo=BR → 12 слотов с реальным RTP
+- [x] Лендинг: нет фейковых таблиц с бонусами
+- [x] Бот: /bonus → нормальное пустое состояние + CTA на /analyze
+- [x] Python syntax OK
 
 ---
 
-## ШАГ 11: АВТОМАТИЗАЦИЯ + ДЕПЛОЙ
+## ШАГ 10: PRO + МАСШТАБИРОВАНИЕ (в будущем)
 
-**Цель:** Парсинг бонусов, деплой на VPS.
+**Цель:** PRO подписка, веб-платформа, дополнительные ГЕО.
 
-### Что создаём
+### Что нужно сделать
 
-1. **services/bonus_parser.py** — парсинг → AI → seed для нужного ГЕО + обоих языков
-2. **docker-compose.prod.yml**, **Caddyfile**, **scripts/**
-3. Финальный чеклист
+1. **PRO подписка** — bot/handlers/pro.py, services/pro.py, Telegram Stars оплата
+2. **Реальные бонусы** — bonus_parser заполняет БД из реальных источников
+3. **Sport picks** — подключение API для реальных матчей (odds API / football API)
+4. **Дополнительные ГЕО** — Эквадор, Чили, Перу
+5. **Веб-платформа** — полные SEO-страницы с hreflang
+
+### Блокеры запуска
+
+- [ ] Получить реальные affiliate ref_id от партнёрских программ
+- [ ] Загрузить логотипы казино на сервер
+
+---
 
 ### Чеклист перед деплоем
 
-- [ ] Все env заполнены production значениями
-- [ ] BOT_TOKEN, ANTHROPIC_API_KEY production
-- [ ] Партнёрские ссылки production
-- [ ] SSL для jogai.fun
-- [ ] Webhook: https://jogai.fun/bot/webhook
+- [x] Docker контейнеры настроены (docker-compose.prod.yml)
+- [x] Webhook с retry для multi-worker
+- [x] SSL для jogai.fun (Nginx + Certbot)
+- [x] Все фейковые данные удалены
+- [x] Каналы BR и MX настроены
+- [x] Rate limiting
+- [ ] Реальные affiliate ref_id от партнёрок
+- [ ] BOT_TOKEN, ANTHROPIC_API_KEY в production .env
+- [ ] SECRET_KEY сгенерирован
 - [ ] pg_dump backup (cron daily)
-- [ ] Uptime Kuma: /api/health
-- [ ] Rate limiting
-- [ ] locales/pt_BR.json — финальная вычитка нативным спикером
-- [ ] locales/es_MX.json — финальная вычитка нативным спикером
-- [ ] Seed данные заменены на реальные (оба ГЕО)
+- [ ] locales — финальная вычитка нативным спикером
 
 ---
 
@@ -359,4 +344,4 @@ async def post_bonus_day():
 
 ---
 
-*Версия 2.0 | Февраль 2026*
+*Версия 3.0 | Март 2026*
