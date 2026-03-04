@@ -21,8 +21,9 @@ export async function generateMetadata({params: {locale, slug}}: Props): Promise
     description,
     alternates: {
       languages: {
-        'pt-BR': `/pt-BR/guides/${slug}`,
-        'es-MX': `/es-MX/guides/${slug}`,
+        'pt-BR': `https://jogai.fun/pt-BR/guides/${slug}`,
+        'es-MX': `https://jogai.fun/es-MX/guides/${slug}`,
+        'x-default': `https://jogai.fun/pt-BR/guides/${slug}`,
       },
     },
     openGraph: {

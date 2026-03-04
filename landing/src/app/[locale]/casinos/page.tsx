@@ -16,8 +16,9 @@ export async function generateMetadata({params: {locale}}: Props): Promise<Metad
     description: t('meta_description'),
     alternates: {
       languages: {
-        'pt-BR': '/pt-BR/casinos',
-        'es-MX': '/es-MX/casinos',
+        'pt-BR': 'https://jogai.fun/pt-BR/casinos',
+        'es-MX': 'https://jogai.fun/es-MX/casinos',
+        'x-default': 'https://jogai.fun/pt-BR/casinos',
       },
     },
     openGraph: {

@@ -14,8 +14,9 @@ export async function generateMetadata({params: {locale}}: Props): Promise<Metad
     description: t('meta_description'),
     alternates: {
       languages: {
-        'pt-BR': '/pt-BR/guides',
-        'es-MX': '/es-MX/guides',
+        'pt-BR': 'https://jogai.fun/pt-BR/guides',
+        'es-MX': 'https://jogai.fun/es-MX/guides',
+        'x-default': 'https://jogai.fun/pt-BR/guides',
       },
     },
     openGraph: {
