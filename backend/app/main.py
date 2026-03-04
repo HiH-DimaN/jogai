@@ -1,8 +1,13 @@
+import logging
 from contextlib import asynccontextmanager
 
 from aiogram.types import Update
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+
+from app.config import settings
+
+logger = logging.getLogger(__name__)
 
 from app.api.router_analyze import router as analyze_router
 from app.api.router_auth import router as auth_router
@@ -46,7 +51,16 @@ def _setup_bot() -> None:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     _setup_bot()
+    if settings.environment == "production":
+        bot = get_bot()
+        webhook_url = f"{settings.app_url}/bot/webhook"
+        await bot.set_webhook(webhook_url)
+        logger.info("Webhook set: %s", webhook_url)
     yield
+    if settings.environment == "production":
+        bot = get_bot()
+        await bot.delete_webhook()
+        logger.info("Webhook deleted")
 
 
 app = FastAPI(

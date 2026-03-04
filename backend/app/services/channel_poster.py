@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import random
 from datetime import datetime
 
 from sqlalchemy import select, update
@@ -13,6 +14,7 @@ from app.database.models import Bonus, Post, SportPick
 from app.i18n import t
 from app.services.content_generator import (
     generate_bonus_post,
+    generate_slot_review,
     generate_sport_post,
 )
 
@@ -23,6 +25,21 @@ CHANNELS: dict[str, dict] = {
     "BR": {"id": settings.telegram_channel_br_id, "locale": "pt_BR"},
     "MX": {"id": settings.telegram_channel_mx_id, "locale": "es_MX"},
 }
+
+
+# Slot catalog — popular slots with real RTP data
+SLOT_CATALOG = [
+    {"name": "Gates of Olympus", "rtp": 96.5, "volatility": "high", "provider": "Pragmatic Play", "tip": "slot_tip_gates", "casino": "PIN-UP"},
+    {"name": "Sweet Bonanza", "rtp": 96.48, "volatility": "high", "provider": "Pragmatic Play", "tip": "slot_tip_sweet", "casino": "PIN-UP"},
+    {"name": "Big Bass Bonanza", "rtp": 96.71, "volatility": "high", "provider": "Pragmatic Play", "tip": "slot_tip_bigbass", "casino": "BET365"},
+    {"name": "Book of Dead", "rtp": 96.21, "volatility": "high", "provider": "Play'n GO", "tip": "slot_tip_bookdead", "casino": "BET365"},
+    {"name": "Starburst", "rtp": 96.09, "volatility": "low", "provider": "NetEnt", "tip": "slot_tip_starburst", "casino": "RIVALO"},
+    {"name": "Gonzo's Quest", "rtp": 95.97, "volatility": "medium", "provider": "NetEnt", "tip": "slot_tip_gonzo", "casino": "RIVALO"},
+    {"name": "The Dog House", "rtp": 96.51, "volatility": "high", "provider": "Pragmatic Play", "tip": "slot_tip_doghouse", "casino": "1WIN"},
+    {"name": "Wolf Gold", "rtp": 96.01, "volatility": "medium", "provider": "Pragmatic Play", "tip": "slot_tip_wolfgold", "casino": "1WIN"},
+    {"name": "Aviator", "rtp": 97.0, "volatility": "medium", "provider": "Spribe", "tip": "slot_tip_aviator", "casino": "PIN-UP"},
+    {"name": "Fortune Tiger", "rtp": 96.81, "volatility": "medium", "provider": "PG Soft", "tip": "slot_tip_fortunetiger", "casino": "PIN-UP"},
+]
 
 
 async def _get_best_bonus(geo: str) -> Bonus | None:
@@ -158,6 +175,38 @@ async def post_sport_pick() -> None:
         logger.info("Posted sport_pick for geo=%s: %s", geo, pick.match_name)
 
 
+async def post_slot_review() -> None:
+    """Post a slot review of the day to each active channel."""
+    # Pick a slot based on day of year for variety (cycles through catalog)
+    day_index = datetime.utcnow().timetuple().tm_yday % len(SLOT_CATALOG)
+    slot = SLOT_CATALOG[day_index]
+
+    for geo, ch in CHANNELS.items():
+        locale = ch["locale"]
+        channel_id = ch["id"]
+
+        text = await generate_slot_review(
+            slot_name=slot["name"],
+            rtp=slot["rtp"],
+            volatility=slot["volatility"],
+            tip=slot["tip"],
+            casino_name=slot["casino"],
+            locale=locale,
+        )
+        msg_id = await _send_to_channel(channel_id, text)
+
+        await _save_post(
+            post_type="slot_review",
+            title=slot["name"],
+            content=text,
+            locale=locale,
+            geo=geo,
+            telegram_message_id=msg_id,
+            telegram_channel=channel_id,
+        )
+        logger.info("Posted slot_review for geo=%s: %s", geo, slot["name"])
+
+
 async def deactivate_expired() -> None:
     """Deactivate bonuses past their expiration date."""
     async with async_session() as session:
@@ -192,9 +241,7 @@ def task_post_bonus_day() -> None:
 
 @celery.task(name="app.services.channel_poster.task_post_slot_review")
 def task_post_slot_review() -> None:
-    # Slot review requires external data (slot catalog)
-    # Placeholder — will be implemented with slot parser in step 11
-    logger.info("Slot review task: not yet implemented (requires slot catalog)")
+    asyncio.run(_dispose_and_run(post_slot_review()))
 
 
 @celery.task(name="app.services.channel_poster.task_post_sport_pick")

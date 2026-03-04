@@ -66,13 +66,17 @@ async def generate_slot_review(
     locale: str,
 ) -> str:
     """Generate a slot review post for the channel."""
+    lang_suffix = "pt" if locale.startswith("pt") else "es"
+    vol_key = f"slot_volatility_{volatility}"
+    volatility_text = t(vol_key, locale)
+    tip_text = t(tip, locale) if tip.startswith("slot_tip_") else tip
     return t(
         "channel_slot_review",
         locale,
         name=slot_name,
         rtp=rtp,
-        volatility=volatility,
-        tip=tip,
+        volatility=volatility_text,
+        tip=tip_text,
         casino=casino_name,
     )
 

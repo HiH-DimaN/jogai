@@ -97,5 +97,18 @@
   "channel_slot_review": "🎰 SLOT DO DIA: {name} — RTP {rtp}%, volatilidade {volatility}\n💡 {tip}\nMelhor cassino: [{casino}]",
   "channel_sport": "⚽ APOSTA DO DIA: {match}\n📊 {analysis}\n💡 Jogai AI recomenda: {pick} (odd {odds})",
   "channel_win": "🏆 RESULTADO: {text}",
-  "miniapp_coming_soon": "📊 O App será liberado em breve! Por enquanto, use o bot."
+  "miniapp_coming_soon": "📊 O App será liberado em breve! Por enquanto, use o bot.",
+  "slot_volatility_high": "alta",
+  "slot_volatility_medium": "média",
+  "slot_volatility_low": "baixa",
+  "slot_tip_gates": "Aposte no modo Buy Bonus para ativar rodadas grátis direto. Melhor com depósito médio.",
+  "slot_tip_sweet": "Multipliers empilham nas rodadas grátis. Paciência é a chave — espere o bonus round.",
+  "slot_tip_bigbass": "Fisherman com multiplier é a chave. Ative free spins e espere os peixes grandes.",
+  "slot_tip_bookdead": "Escolha um símbolo de alto valor antes das rodadas grátis. Book expande para cobrir o reel.",
+  "slot_tip_starburst": "Slot clássico de baixa volatilidade. Ideal para cumprir wagering de bônus com risco baixo.",
+  "slot_tip_gonzo": "Multipliers aumentam a cada cascata consecutiva. Jogue com paciência para acumular.",
+  "slot_tip_doghouse": "Wilds com multiplier x2 e x3 empilham nas rodadas grátis. Potencial explosivo!",
+  "slot_tip_wolfgold": "Jackpot progressivo + respins com moedas. Jogue com aposta fixa para chance de jackpot.",
+  "slot_tip_aviator": "Crash game — saque antes que o avião voe! Estratégia: auto-cashout em x1.5 para consistência.",
+  "slot_tip_fortunetiger": "Mega popular no Brasil! Respin com símbolo expandido. Melhor em apostas médias."
 }
