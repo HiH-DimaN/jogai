@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SERVER="root@155.212.230.139"
-PROJECT_DIR="/root/jogai"
+PROJECT_DIR="/opt/jogai"
 
 echo "=== Jogai Deploy ==="
 
