@@ -28,7 +28,12 @@ async def cmd_sport(message: Message, locale: str, db_user: User) -> None:
         pick = result.scalar_one_or_none()
 
     if not pick:
-        await message.answer(t("sport_no_match", locale))
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text=t("btn_analyze", locale), callback_data="analyze")],
+            ]
+        )
+        await message.answer(t("sport_no_match", locale), reply_markup=keyboard)
         return
 
     # Parse match name for home/away

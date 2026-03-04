@@ -71,7 +71,12 @@ async def cmd_bonus(message: Message, locale: str, db_user: User) -> None:
     bonuses = await _get_bonuses(geo=db_user.geo, limit=3)
 
     if not bonuses:
-        await message.answer(t("error_generic", locale))
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text=t("btn_analyze", locale), callback_data="analyze")],
+            ]
+        )
+        await message.answer(t("bonus_empty", locale), reply_markup=keyboard)
         return
 
     text, keyboard = _build_bonus_message(bonuses, locale)
@@ -83,7 +88,12 @@ async def cb_bonuses(callback: CallbackQuery, locale: str, db_user: User) -> Non
     bonuses = await _get_bonuses(geo=db_user.geo, limit=3)
 
     if not bonuses:
-        await callback.message.answer(t("error_generic", locale))
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text=t("btn_analyze", locale), callback_data="analyze")],
+            ]
+        )
+        await callback.message.answer(t("bonus_empty", locale), reply_markup=keyboard)
         await callback.answer()
         return
 
@@ -97,7 +107,12 @@ async def cb_bonuses_all(callback: CallbackQuery, locale: str, db_user: User) ->
     bonuses = await _get_bonuses(geo=db_user.geo)
 
     if not bonuses:
-        await callback.message.answer(t("error_generic", locale))
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text=t("btn_analyze", locale), callback_data="analyze")],
+            ]
+        )
+        await callback.message.answer(t("bonus_empty", locale), reply_markup=keyboard)
         await callback.answer()
         return
 

@@ -79,6 +79,21 @@ services:
   #     redis:
   #       condition: service_healthy
 
+  slotopol:
+    build:
+      context: .
+      dockerfile: Dockerfile.slotopol
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+
   celery-worker:
     build: ./backend
     restart: unless-stopped
@@ -92,6 +107,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      slotopol:
+        condition: service_started
     logging:
       driver: json-file
       options:

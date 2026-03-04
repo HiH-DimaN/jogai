@@ -6,7 +6,9 @@ node_modules/
 dist/
 .next/
 .env
+.env.prod
 backend/.env
+backend/.env.prod
 .vscode/
 .idea/
 .DS_Store

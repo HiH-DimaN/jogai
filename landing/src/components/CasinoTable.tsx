@@ -1,7 +1,6 @@
 'use client';
 
 import {useTranslations} from 'next-intl';
-import JogaiScoreBadge from './JogaiScoreBadge';
 
 export type CasinoRow = {
   name: string;
@@ -34,8 +33,6 @@ export default function CasinoTable({casinos}: {casinos: CasinoRow[]}) {
         <thead>
           <tr className="border-b border-jogai-border text-jogai-muted">
             <th className="px-4 py-3 font-medium">{t('name')}</th>
-            <th className="px-4 py-3 font-medium">{t('bonus')}</th>
-            <th className="px-4 py-3 font-medium">{t('score')}</th>
             <th className="px-4 py-3 font-medium">{t('deposit')}</th>
             <th className="px-4 py-3 font-medium">{t('withdraw')}</th>
             <th className="px-4 py-3 font-medium">{t('payment')}</th>
@@ -46,14 +43,6 @@ export default function CasinoTable({casinos}: {casinos: CasinoRow[]}) {
           {casinos.map((casino) => (
             <tr key={casino.slug} className="border-b border-jogai-border transition hover:bg-jogai-card">
               <td className="px-4 py-4 font-bold text-jogai-text">{casino.name}</td>
-              <td className="px-4 py-4 text-jogai-accent">{casino.best_bonus || '—'}</td>
-              <td className="px-4 py-4">
-                {casino.best_jogai_score !== null ? (
-                  <JogaiScoreBadge score={casino.best_jogai_score} />
-                ) : (
-                  '—'
-                )}
-              </td>
               <td className="px-4 py-4">{casino.min_deposit_formatted || '—'}</td>
               <td className="px-4 py-4">{casino.withdrawal_time || '—'}</td>
               <td className="px-4 py-4">

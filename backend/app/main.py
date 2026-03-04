@@ -17,6 +17,7 @@ from app.api.router_casinos import router as casinos_router
 from app.api.router_digest import router as digest_router
 from app.api.router_quiz import router as quiz_router
 from app.api.router_referrals import router as referrals_router
+from app.api.router_slots import router as slots_router
 from app.api.router_tracker import router as tracker_router
 from app.bot.bot import dp, get_bot
 from app.bot.handlers.analyze import router as analyze_handler_router
@@ -88,6 +89,7 @@ app.include_router(quiz_router, prefix="/api")
 app.include_router(tracker_router, prefix="/api")
 app.include_router(digest_router, prefix="/api")
 app.include_router(referrals_router, prefix="/api")
+app.include_router(slots_router, prefix="/api")
 app.include_router(auth_router, prefix="/api")
 
 

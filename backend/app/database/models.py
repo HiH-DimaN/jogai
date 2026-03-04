@@ -250,6 +250,52 @@ class SportPick(Base):
     __table_args__ = (Index("idx_sport_picks_geo", "geo"),)
 
 
+class Slot(Base):
+    __tablename__ = "slots"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    slug: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
+    provider: Mapped[str | None] = mapped_column(String(255))
+    rtp: Mapped[float | None] = mapped_column(Numeric(5, 2))
+    volatility: Mapped[str | None] = mapped_column(String(20))  # high/medium/low
+    max_win: Mapped[str | None] = mapped_column(String(50))  # e.g. "5000x"
+    reels: Mapped[int | None] = mapped_column(Integer)
+    lines: Mapped[int | None] = mapped_column(Integer)
+    features: Mapped[list[str] | None] = mapped_column(ARRAY(Text))
+    tip_pt: Mapped[str | None] = mapped_column(Text)
+    tip_es: Mapped[str | None] = mapped_column(Text)
+    best_casino_id: Mapped[int | None] = mapped_column(
+        Integer, ForeignKey("casinos.id")
+    )
+    geo: Mapped[list[str]] = mapped_column(ARRAY(Text), default=["BR"])
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    last_posted_at: Mapped[datetime | None] = mapped_column(DateTime)
+    source: Mapped[str | None] = mapped_column(String(50))  # "slotopol", "manual"
+    source_id: Mapped[str | None] = mapped_column(String(255))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, server_default=func.now(), onupdate=func.now()
+    )
+
+    best_casino: Mapped["Casino | None"] = relationship(
+        "Casino", lazy="selectin"
+    )
+
+    __table_args__ = (
+        Index(
+            "idx_slots_active_geo",
+            "is_active",
+            "geo",
+            postgresql_where=(is_active.is_(True)),
+        ),
+        Index("idx_slots_rtp", rtp.desc()),
+        Index("idx_slots_last_posted", "last_posted_at"),
+    )
+
+
 class Referral(Base):
     __tablename__ = "referrals"
 

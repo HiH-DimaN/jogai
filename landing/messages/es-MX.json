@@ -8,7 +8,7 @@
     "subtitle": "Tu asistente inteligente de casinos y bonos",
     "description": "Análisis de bonos con IA, rankings de casinos con Jogai Score, apuestas deportivas y mucho más.",
     "cta": "Abrir en Telegram",
-    "cta_secondary": "Ver mejores bonos"
+    "cta_secondary": "Ver casinos"
   },
   "casinos": {
     "title": "Mejores Casinos",
@@ -105,8 +105,23 @@
     "payments": "Métodos de pago",
     "deposit": "Depósito mínimo",
     "withdrawal": "Tiempo de retiro",
-    "no_bonuses": "No hay bonos activos en este momento",
+    "no_bonuses": "Los bonos se agregarán pronto. Mientras tanto, analiza cualquier bono en nuestro bot!",
+    "no_bonuses_cta": "Analizar bonos en Telegram",
     "create_account": "Crear cuenta en {name}"
+  },
+  "how_it_works": {
+    "title": "Cómo funciona",
+    "step1_title": "Envía el bono",
+    "step1_desc": "Pega las condiciones del bono en el bot de Telegram — texto o screenshot.",
+    "step2_title": "La IA analiza",
+    "step2_desc": "Nuestra IA calcula wagering, plazo, pérdida esperada y probabilidad real de ganancia.",
+    "step3_title": "Recibe el Jogai Score",
+    "step3_desc": "Ve la nota de 0 a 10 y un veredicto honesto: vale la pena o no."
+  },
+  "bonuses_empty": {
+    "title": "Bonos analizados próximamente",
+    "description": "Estamos verificando cada bono con IA antes de publicar. Mientras tanto, analiza cualquier bono directamente en nuestro bot.",
+    "cta": "Analizar bonos en Telegram"
   },
   "guides_page": {
     "title": "Guías sobre Casinos y Bonos",

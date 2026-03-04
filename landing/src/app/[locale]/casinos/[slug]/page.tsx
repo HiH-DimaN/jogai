@@ -119,11 +119,6 @@ export default async function CasinoDetailPage({params: {locale, slug}}: Props) 
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
             <h1 className="text-4xl font-extrabold">{casino.name}</h1>
-            {casino.best_jogai_score !== null && (
-              <div className="mt-2">
-                <JogaiScoreBadge score={casino.best_jogai_score} />
-              </div>
-            )}
           </div>
           {casino.affiliate_link && (
             <a
@@ -244,9 +239,17 @@ export default async function CasinoDetailPage({params: {locale, slug}}: Props) 
             </table>
           </div>
         ) : (
-          <p className="py-8 text-center text-jogai-muted">
-            {t('casino_detail.no_bonuses')}
-          </p>
+          <div className="rounded-xl border border-jogai-border bg-jogai-card px-6 py-12 text-center">
+            <p className="mb-4 text-jogai-muted">
+              {t('casino_detail.no_bonuses')}
+            </p>
+            <a
+              href="https://t.me/jogai_bot"
+              className="inline-block rounded-lg bg-jogai-accent px-6 py-2 font-bold text-jogai-bg transition hover:bg-jogai-accent/90"
+            >
+              {t('casino_detail.no_bonuses_cta')}
+            </a>
+          </div>
         )}
       </section>
     </>

@@ -8,7 +8,7 @@
     "subtitle": "Seu assistente inteligente de cassinos e bônus",
     "description": "Análise de bônus com IA, rankings de cassinos com Jogai Score, apostas esportivas e muito mais.",
     "cta": "Abrir no Telegram",
-    "cta_secondary": "Ver melhores bônus"
+    "cta_secondary": "Ver cassinos"
   },
   "casinos": {
     "title": "Melhores Cassinos",
@@ -105,8 +105,23 @@
     "payments": "Métodos de pagamento",
     "deposit": "Depósito mínimo",
     "withdrawal": "Tempo de saque",
-    "no_bonuses": "Nenhum bônus ativo no momento",
+    "no_bonuses": "Bônus serão adicionados em breve. Enquanto isso, analise qualquer bônus no nosso bot!",
+    "no_bonuses_cta": "Analisar bônus no Telegram",
     "create_account": "Criar conta no {name}"
+  },
+  "how_it_works": {
+    "title": "Como funciona",
+    "step1_title": "Envie o bônus",
+    "step1_desc": "Cole as condições do bônus no bot do Telegram — texto ou screenshot.",
+    "step2_title": "IA analisa",
+    "step2_desc": "Nossa IA calcula wagering, prazo, perda esperada e probabilidade real de lucro.",
+    "step3_title": "Receba o Jogai Score",
+    "step3_desc": "Veja a nota de 0 a 10 e um veredicto honesto: vale a pena ou não."
+  },
+  "bonuses_empty": {
+    "title": "Bônus analisados em breve",
+    "description": "Estamos verificando cada bônus com IA antes de publicar. Enquanto isso, analise qualquer bônus diretamente no nosso bot.",
+    "cta": "Analisar bônus no Telegram"
   },
   "guides_page": {
     "title": "Guias sobre Cassinos e Bônus",
