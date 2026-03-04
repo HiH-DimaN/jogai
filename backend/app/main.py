@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from contextlib import asynccontextmanager
 
@@ -54,13 +55,22 @@ async def lifespan(app: FastAPI):
     if settings.environment == "production":
         bot = get_bot()
         webhook_url = f"{settings.app_url}/bot/webhook"
-        await bot.set_webhook(webhook_url)
-        logger.info("Webhook set: %s", webhook_url)
+        for attempt in range(3):
+            try:
+                await bot.set_webhook(webhook_url)
+                logger.info("Webhook set: %s", webhook_url)
+                break
+            except Exception:
+                logger.warning("set_webhook attempt %d failed, retrying...", attempt + 1)
+                await asyncio.sleep(2)
     yield
     if settings.environment == "production":
-        bot = get_bot()
-        await bot.delete_webhook()
-        logger.info("Webhook deleted")
+        try:
+            bot = get_bot()
+            await bot.delete_webhook()
+            logger.info("Webhook deleted")
+        except Exception:
+            logger.warning("delete_webhook failed", exc_info=True)
 
 
 app = FastAPI(
