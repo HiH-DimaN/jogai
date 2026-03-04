@@ -87,7 +87,7 @@ jogai/
 - [x] **0.4** — БД: models.py (9 таблиц, i18n-поля, индексы), engine.py, alembic
 - [x] **0.5** — main.py, deps.py, 7 роутеров-заглушек
 - [x] **0.6** — docker-compose.yml, nginx.conf, Justfile, .env (порты: backend=8001, nginx=8080)
-- [x] **0.8** — Alembic migration (9 таблиц), seed (3 казино, 6 бонусов, 1 sport_pick)
+- [x] **0.8** — Alembic migration (9 таблиц), seed (4 казино, 12 слотов — только верифицированные данные)
 
 ### Шаг 1 — Telegram-бот (все строки через t())
 - [x] bot.py, middlewares (User/Locale/RateLimit), handlers (start, bonus)
@@ -117,8 +117,8 @@ jogai/
 - [x] navigation.ts: createSharedPathnamesNavigation (Link, useRouter, usePathname)
 - [x] messages/pt-BR.json, messages/es-MX.json — полные переводы (meta, hero, casinos, bonuses, features, telegram, header, footer)
 - [x] layout.tsx: <html lang={locale}>, meta/OG теги, hreflang alternates, NextIntlClientProvider
-- [x] page.tsx: Hero + Features (4 карточки) + CasinoTable + BonusTable + TelegramCTA
-- [x] Компоненты: CasinoTable, BonusTable, JogaiScoreBadge, TelegramCTA, Header, Footer, LocaleSwitcher
+- [x] page.tsx: Hero + Features (4 карточки) + CasinoTable + HowItWorks + TelegramCTA
+- [x] Компоненты: CasinoTable, HowItWorks, JogaiScoreBadge, TelegramCTA, Header, Footer, LocaleSwitcher
 - [x] verdict_key через t() → "EXCELENTE" / "BOM NEGÓCIO" — не хардкод!
 - [x] Dockerfile (node:20-slim, multi-stage), docker-compose.yml + nginx.conf обновлены
 - [x] Проверено: /pt-BR → lang="pt-BR", /es-MX → lang="es-MX", /api/health → 200
@@ -126,8 +126,8 @@ jogai/
 ### Шаг 5 — Автопостинг Celery (мульти-канал)
 - [x] celery_app.py: Redis broker, beat schedule (09:00 bonus, 14:00 slot, 18:00 sport, hourly expire)
 - [x] services/content_generator.py: AI generate_bonus_post + fallback шаблон, generate_sport_post
-- [x] services/channel_poster.py: CHANNELS dict {BR: {id, locale}}, MX закомментирован для фазы 3
-- [x] Задачи: task_post_bonus_day, task_post_sport_pick, task_deactivate_expired + slot placeholder
+- [x] services/channel_poster.py: CHANNELS dict {BR: {id, locale}, MX: {id, locale}} — оба канала активны
+- [x] Задачи: task_post_bonus_day, task_post_sport_pick, task_post_slot_review, task_post_weekly_top, task_deactivate_expired
 - [x] prompts/content_post.md: шаблон с {language} и {currency_symbol}
 - [x] docker-compose.yml: celery-worker + celery-beat контейнеры
 - [x] Все тексты через t() + format_currency(), вердикт через t(verdict_key, locale)
@@ -182,3 +182,25 @@ jogai/
 - [x] Layout.tsx: nav 5→6 кнопок (Home/Quiz/Analyze/Tracker/Digest/Referrals), компактный стиль
 - [x] Валюта через formatCurrency() — BRL для BR, MXN для MX
 - [x] TypeScript чистый (tsc --noEmit), Vite build OK (133 модуля), Python syntax OK
+
+### Шаг 9 — Слоты + удаление фейковых данных
+- [x] Slot модель: name, provider, rtp, volatility, max_win, features, tip_pt/es, best_casino_id, geo, source
+- [x] Alembic миграция: таблица slots
+- [x] API router_slots.py: GET /slots?geo → слоты с RTP, tip, casino name
+- [x] services/slot_parser.py: AI-парсер описаний слотов + генератор tips
+- [x] prompts/slot_parsing.md, slot_tip.md: AI-промпты для парсинга и tips
+- [x] Celery: task_post_slot_review (ежедневно 18:00), task_post_weekly_top (суббота)
+- [x] Seed: 12 слотов (Pragmatic Play, NetEnt, Play'n GO, Hacksaw) — верифицированный RTP
+- [x] **Удалены все фейковые данные:** 12 бонусов (BR+MX), 2 sport picks
+- [x] Лендинг: BonusTable → HowItWorks, CasinoTable без фейковых score/bonus колонок
+- [x] Лендинг: /bonuses и /casinos/[slug] — пустое состояние с CTA на Telegram-бота
+- [x] Бот: /bonus и /sport — нормальное пустое состояние с кнопкой /analyze
+- [x] Каналы: BR (-1003872325982) и MX (-1003704249294) настроены
+- [x] .env.prod добавлен в .gitignore
+
+### Статус готовности к запуску
+- [x] Лендинг: показывает только реальные данные (4 казино, HowItWorks)
+- [x] Бот: /analyze работает (AI-анализ), /quiz работает (4 казино), /tracker работает
+- [x] Каналы: слоты постятся по расписанию, бонусы/спорт скипаются (нет данных)
+- [ ] **Блокер:** affiliate ref_id — нужны реальные коды от партнёрских программ
+- [ ] **Блокер:** логотипы казино — URL в seed не ведут на реальные файлы
