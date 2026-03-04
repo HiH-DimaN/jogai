@@ -29,10 +29,8 @@ celery.conf.beat_schedule = {
         "task": "app.services.channel_poster.task_post_bonus_day",
         "schedule": crontab(hour=9, minute=0),  # 09:00 BRT
     },
-    "post-slot-review": {
-        "task": "app.services.channel_poster.task_post_slot_review",
-        "schedule": crontab(hour=14, minute=0),  # 14:00 BRT
-    },
+    # "post-slot-review" — disabled until real slot data source is integrated
+    # Static RTP data is dangerous for users making financial decisions
     "post-sport-pick": {
         "task": "app.services.channel_poster.task_post_sport_pick",
         "schedule": crontab(hour=18, minute=0),  # 18:00 BRT
