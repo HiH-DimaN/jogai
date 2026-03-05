@@ -30,6 +30,8 @@ class Settings(BaseSettings):
     onewin_ref_id: str = ""
     bet365_ref_id: str = ""
     rivalo_ref_id: str = ""
+    caliente_ref_id: str = ""
+    codere_ref_id: str = ""
 
     # Auth
     secret_key: str = "change-me-in-production"

@@ -51,8 +51,15 @@ def score_casino(
     else:
         score += 10  # card is universal
 
-    # Deposit range vs min_deposit
+    # Deposit range vs min_deposit (use min_deposits dict if available)
     min_dep = float(casino.min_deposit or 0)
+    if casino.min_deposits and isinstance(casino.min_deposits, dict):
+        # Pick currency based on geo context (BRL for BR, MXN for MX)
+        for currency in ("BRL", "MXN"):
+            if currency in casino.min_deposits:
+                min_dep = float(casino.min_deposits[currency])
+                break
+
     deposit_limits = {
         "low": 50,
         "medium": 200,

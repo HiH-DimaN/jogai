@@ -1,6 +1,7 @@
 import {getTranslations} from 'next-intl/server';
-import {fetchCasinos} from '@/lib/api';
+import {fetchCasinos, fetchBonuses} from '@/lib/api';
 import CasinoTable from '@/components/CasinoTable';
+import BonusTable from '@/components/BonusTable';
 import HowItWorks from '@/components/HowItWorks';
 import TelegramCTA from '@/components/TelegramCTA';
 import {Link} from '@/navigation';
@@ -14,6 +15,8 @@ export default async function HomePage({params: {locale}}: Props) {
 
   const casinos = await fetchCasinos(locale);
   const topCasinos = casinos.slice(0, 4);
+  const bonuses = await fetchBonuses(locale);
+  const topBonuses = bonuses.slice(0, 5);
 
   return (
     <>
@@ -78,6 +81,23 @@ export default async function HomePage({params: {locale}}: Props) {
           </Link>
         </div>
       </section>
+
+      {/* Bonuses */}
+      {topBonuses.length > 0 && (
+        <section className="mx-auto max-w-6xl px-4 py-16" id="bonuses">
+          <h2 className="mb-2 text-center text-3xl font-bold">{t('bonuses.title')}</h2>
+          <p className="mb-8 text-center text-jogai-muted">{t('bonuses.subtitle')}</p>
+          <BonusTable bonuses={topBonuses} />
+          <div className="mt-6 text-center">
+            <Link
+              href="/bonuses"
+              className="rounded-lg border border-jogai-border px-6 py-2 text-sm font-bold text-jogai-text transition hover:border-jogai-accent"
+            >
+              {t('bonuses.view_all')}
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* How It Works */}
       <HowItWorks />
