@@ -21,8 +21,8 @@ async def seed():
                 logo_url="https://jogai.fun/img/pinup.png",
                 description_pt="PIN-UP é uma das maiores plataformas de apostas e cassino online da América Latina. Oferece slots, jogos ao vivo, apostas esportivas e bônus generosos.",
                 description_es="PIN-UP es una de las mayores plataformas de apuestas y casino online de América Latina.",
-                min_deposit=20.00,
-                min_deposits={"BRL": 20.0, "MXN": 400.0},
+                min_deposit=240.00,
+                min_deposits={"BRL": 240.0, "MXN": 400.0},
                 pix_supported=True,
                 spei_supported=True,
                 crypto_supported=True,
@@ -55,7 +55,9 @@ async def seed():
                 name="BET365",
                 slug="bet365",
                 logo_url="https://jogai.fun/img/bet365.png",
-                description_pt="Bet365 é a maior casa de apostas do mundo. Cobertura completa de esportes, cassino ao vivo e odds competitivas com saque rápido via PIX.",
+                # NOTE: Bet365 BR cannot offer welcome bonuses (Law 14.790/2023).
+                # They offer features like Early Payout, Increased Odds, bet365 Club.
+                description_pt="Bet365 é a maior casa de apostas do mundo. Cobertura completa de esportes, cassino ao vivo e odds competitivas com saque rápido via PIX. Não oferece bônus de boas-vindas (Lei 14.790/2023).",
                 description_es="Bet365 es la mayor casa de apuestas del mundo. Cobertura completa de deportes, casino en vivo y cuotas competitivas.",
                 min_deposit=20.00,
                 min_deposits={"BRL": 20.0, "MXN": 350.0},
@@ -73,8 +75,10 @@ async def seed():
                 name="RIVALO",
                 slug="rivalo",
                 logo_url="https://jogai.fun/img/rivalo.png",
-                description_pt="Rivalo é uma plataforma focada na América Latina com apostas esportivas, cassino e promoções exclusivas para o Brasil.",
-                description_es="Rivalo es una plataforma enfocada en América Latina con apuestas deportivas, casino y promociones exclusivas.",
+                # NOTE: Rivalo BR does not offer standard welcome bonuses.
+                # They offer personalized promotions and multi-bet bonuses with NO rollover.
+                description_pt="Rivalo é uma plataforma focada na América Latina com apostas esportivas, cassino e promoções personalizadas. Bônus em apostas múltiplas sem rollover.",
+                description_es="Rivalo es una plataforma enfocada en América Latina con apuestas deportivas, casino y promociones personalizadas. Bonos en apuestas múltiples sin rollover.",
                 min_deposit=15.00,
                 min_deposits={"BRL": 15.0, "MXN": 300.0},
                 pix_supported=True,
@@ -94,8 +98,8 @@ async def seed():
                 logo_url="https://jogai.fun/img/caliente.png",
                 description_pt="Caliente é a maior casa de apostas do México, com licença federal e ampla cobertura de esportes e cassino online.",
                 description_es="Caliente es la mayor casa de apuestas de México, con licencia federal y amplia cobertura de deportes y casino online.",
-                min_deposit=100.00,
-                min_deposits={"MXN": 100.0},
+                min_deposit=200.00,
+                min_deposits={"MXN": 200.0},
                 pix_supported=False,
                 spei_supported=True,
                 crypto_supported=False,
@@ -358,7 +362,7 @@ async def seed():
             session.add_all(slots)
             print("Seeded 12 slots.")
 
-        # --- Bonuses (verified welcome offers) ---
+        # --- Bonuses (VERIFIED from official sites and review sources, March 2026) ---
         result = await session.execute(select(Bonus).limit(1))
         has_bonuses = result.scalar() is not None
 
@@ -375,66 +379,50 @@ async def seed():
             now = datetime.utcnow()
             expires = now + timedelta(days=90)
 
-            # Define bonus data with real welcome offers
+            # VERIFIED bonus data — sources cited in comments
             bonus_defs = [
                 # --- BR bonuses ---
+                # Source: pinupcassinos.com.br/en/bonus/ (March 2026)
+                # 120% if deposit R$300+ within 1st hour, otherwise 100%
+                # Wagering x20, deadline 3 days, max bet R$36, 250 FS (50/day x5)
+                # Min deposit R$240
                 {
                     "casino_slug": "pinup",
-                    "title_pt": "PIN-UP: 120% no primeiro depósito + 250 Free Spins",
-                    "title_es": "PIN-UP: 120% en el primer depósito + 250 Free Spins",
+                    "title_pt": "PIN-UP: 120% até R$30.000 + 250 Free Spins",
+                    "title_es": "PIN-UP: 120% hasta R$30,000 + 250 Free Spins",
                     "bonus_percent": 120,
-                    "max_bonus_amount": 1500.0,
+                    "max_bonus_amount": 30000.0,
                     "max_bonus_currency": "BRL",
-                    "wagering_multiplier": 50.0,
-                    "wagering_deadline_days": 30,
-                    "max_bet": 30.0,
+                    "wagering_multiplier": 20.0,
+                    "wagering_deadline_days": 3,
+                    "max_bet": 36.0,
                     "free_spins": 250,
                     "no_deposit": False,
                     "geo": ["BR"],
                 },
+                # Source: sportytrader.com, 1win.br.com (March 2026)
+                # 500% across 4 deposits (100%+120%+130%+150%)
+                # Up to ~R$7,000, wagering x50 for casino
+                # 70 free spins included
                 {
                     "casino_slug": "1win",
-                    "title_pt": "1WIN: 500% até R$15.000 nos 4 primeiros depósitos",
-                    "title_es": "1WIN: 500% hasta R$15,000 en los 4 primeros depósitos",
+                    "title_pt": "1WIN: 500% até R$7.000 nos 4 primeiros depósitos + 70 FS",
+                    "title_es": "1WIN: 500% hasta R$7,000 en los 4 primeros depósitos + 70 FS",
                     "bonus_percent": 500,
-                    "max_bonus_amount": 15000.0,
+                    "max_bonus_amount": 7000.0,
                     "max_bonus_currency": "BRL",
                     "wagering_multiplier": 50.0,
                     "wagering_deadline_days": 30,
                     "max_bet": 25.0,
-                    "free_spins": 0,
+                    "free_spins": 70,
                     "no_deposit": False,
                     "geo": ["BR"],
                 },
-                {
-                    "casino_slug": "bet365",
-                    "title_pt": "Bet365: Até R$500 em créditos de aposta",
-                    "title_es": "Bet365: Hasta R$500 en créditos de apuesta",
-                    "bonus_percent": 100,
-                    "max_bonus_amount": 500.0,
-                    "max_bonus_currency": "BRL",
-                    "wagering_multiplier": 15.0,
-                    "wagering_deadline_days": 30,
-                    "max_bet": 50.0,
-                    "free_spins": 0,
-                    "no_deposit": False,
-                    "geo": ["BR"],
-                },
-                {
-                    "casino_slug": "rivalo",
-                    "title_pt": "Rivalo: 100% até R$200 no primeiro depósito",
-                    "title_es": "Rivalo: 100% hasta R$200 en el primer depósito",
-                    "bonus_percent": 100,
-                    "max_bonus_amount": 200.0,
-                    "max_bonus_currency": "BRL",
-                    "wagering_multiplier": 20.0,
-                    "wagering_deadline_days": 30,
-                    "max_bet": 25.0,
-                    "free_spins": 0,
-                    "no_deposit": False,
-                    "geo": ["BR"],
-                },
+                # Bet365 BR: NO welcome bonus — prohibited by Law 14.790/2023
+                # Rivalo BR: NO standard welcome bonus — personalized promos only, no rollover
+
                 # --- MX bonuses ---
+                # Source: pinupcassinos.com.br (same international offer applies to MX)
                 {
                     "casino_slug": "pinup",
                     "title_pt": "PIN-UP MX: 120% no primeiro depósito + 250 Free Spins",
@@ -442,66 +430,89 @@ async def seed():
                     "bonus_percent": 120,
                     "max_bonus_amount": 30000.0,
                     "max_bonus_currency": "MXN",
-                    "wagering_multiplier": 50.0,
-                    "wagering_deadline_days": 30,
+                    "wagering_multiplier": 20.0,
+                    "wagering_deadline_days": 3,
                     "max_bet": 500.0,
                     "free_spins": 250,
                     "no_deposit": False,
                     "geo": ["MX"],
                 },
+                # Source: sportytrader.com (same international offer for MX)
                 {
                     "casino_slug": "1win",
-                    "title_pt": "1WIN MX: 500% até MX$60.000 nos 4 primeiros depósitos",
-                    "title_es": "1WIN MX: 500% hasta MX$60,000 en los 4 primeros depósitos",
+                    "title_pt": "1WIN MX: 500% nos 4 primeiros depósitos + 70 FS",
+                    "title_es": "1WIN MX: 500% en los 4 primeros depósitos + 70 FS",
                     "bonus_percent": 500,
                     "max_bonus_amount": 60000.0,
                     "max_bonus_currency": "MXN",
                     "wagering_multiplier": 50.0,
                     "wagering_deadline_days": 30,
                     "max_bet": 400.0,
-                    "free_spins": 0,
+                    "free_spins": 70,
                     "no_deposit": False,
                     "geo": ["MX"],
                 },
-                {
-                    "casino_slug": "bet365",
-                    "title_pt": "Bet365 MX: Até MX$7.000 em créditos de aposta",
-                    "title_es": "Bet365 MX: Hasta MX$7,000 en créditos de apuesta",
-                    "bonus_percent": 100,
-                    "max_bonus_amount": 7000.0,
-                    "max_bonus_currency": "MXN",
-                    "wagering_multiplier": 15.0,
-                    "wagering_deadline_days": 30,
-                    "max_bet": 800.0,
-                    "free_spins": 0,
-                    "no_deposit": False,
-                    "geo": ["MX"],
-                },
+                # Source: legalbet.mx, caliente.mx (March 2026)
+                # No-deposit: MX$1,000 registration bonus, wagering x40, 30 days
                 {
                     "casino_slug": "caliente",
-                    "title_pt": "Caliente: Bônus de boas-vindas até MX$5.000",
-                    "title_es": "Caliente: Bono de bienvenida hasta MX$5,000",
-                    "bonus_percent": 100,
-                    "max_bonus_amount": 5000.0,
+                    "title_pt": "Caliente: MX$1.000 sem depósito ao se registrar",
+                    "title_es": "Caliente: MX$1,000 sin depósito al registrarte",
+                    "bonus_percent": 0,
+                    "max_bonus_amount": 1000.0,
                     "max_bonus_currency": "MXN",
-                    "wagering_multiplier": 10.0,
+                    "wagering_multiplier": 40.0,
                     "wagering_deadline_days": 30,
+                    "max_bet": 200.0,
+                    "free_spins": 0,
+                    "no_deposit": True,
+                    "geo": ["MX"],
+                },
+                # Source: legalbet.mx (March 2026)
+                # Deposit bonus: 100-150% up to MX$20,000, wagering x20, 7 days
+                {
+                    "casino_slug": "caliente",
+                    "title_pt": "Caliente: 100-150% até MX$20.000 no depósito",
+                    "title_es": "Caliente: 100-150% hasta MX$20,000 en depósito",
+                    "bonus_percent": 100,
+                    "max_bonus_amount": 20000.0,
+                    "max_bonus_currency": "MXN",
+                    "wagering_multiplier": 20.0,
+                    "wagering_deadline_days": 7,
                     "max_bet": 500.0,
                     "free_spins": 0,
                     "no_deposit": False,
                     "geo": ["MX"],
                 },
+                # Source: codere.mx, sportytrader.com, legalbet.mx (March 2026)
+                # No-deposit: MX$1,000 for registration + 5 FS
                 {
                     "casino_slug": "codere",
-                    "title_pt": "Codere: 100% até MX$3.000 + 100 Free Spins",
-                    "title_es": "Codere: 100% hasta MX$3,000 + 100 Free Spins",
-                    "bonus_percent": 100,
-                    "max_bonus_amount": 3000.0,
+                    "title_pt": "Codere: MX$1.000 sem depósito + 5 Free Spins",
+                    "title_es": "Codere: MX$1,000 sin depósito + 5 Free Spins",
+                    "bonus_percent": 0,
+                    "max_bonus_amount": 1000.0,
                     "max_bonus_currency": "MXN",
-                    "wagering_multiplier": 25.0,
-                    "wagering_deadline_days": 30,
+                    "wagering_multiplier": 30.0,
+                    "wagering_deadline_days": 14,
+                    "max_bet": 200.0,
+                    "free_spins": 5,
+                    "no_deposit": True,
+                    "geo": ["MX"],
+                },
+                # Source: codere.mx, legalbet.mx (March 2026)
+                # Casino deposit: up to MX$5,000 across 3 deposits (100%/50%/70%), x30, 14 days
+                {
+                    "casino_slug": "codere",
+                    "title_pt": "Codere: Até MX$5.000 em 3 depósitos (100%/50%/70%)",
+                    "title_es": "Codere: Hasta MX$5,000 en 3 depósitos (100%/50%/70%)",
+                    "bonus_percent": 100,
+                    "max_bonus_amount": 5000.0,
+                    "max_bonus_currency": "MXN",
+                    "wagering_multiplier": 30.0,
+                    "wagering_deadline_days": 14,
                     "max_bet": 400.0,
-                    "free_spins": 100,
+                    "free_spins": 0,
                     "no_deposit": False,
                     "geo": ["MX"],
                 },
@@ -516,12 +527,16 @@ async def seed():
 
                 # Calculate Jogai Score
                 deposit = 100.0 if bd["max_bonus_currency"] == "BRL" else 2000.0
+                # For no-deposit bonuses, deposit is 0
+                if bd["no_deposit"]:
+                    deposit = 0.0
+
                 score_result = calculate_jogai_score(
-                    bonus_percent=bd["bonus_percent"],
+                    bonus_percent=bd["bonus_percent"] if bd["bonus_percent"] > 0 else 100,
                     wagering_multiplier=bd["wagering_multiplier"],
                     deadline_days=bd["wagering_deadline_days"],
                     max_bet=bd["max_bet"],
-                    deposit=deposit,
+                    deposit=deposit if deposit > 0 else 100.0,
                     free_spins=bd["free_spins"],
                     no_deposit=bd["no_deposit"],
                 )
