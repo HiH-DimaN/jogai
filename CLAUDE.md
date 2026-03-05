@@ -227,11 +227,46 @@ jogai/
 - [x] Каналы: bonus_day теперь имеет данные для постинга (BR + MX)
 - [x] Задеплоено и проверено на проде
 
-### Статус готовности к запуску
-- [x] Лендинг: показывает реальные данные (6 казино, 9 бонусов, Jogai Score)
-- [x] Бот: /analyze работает (AI-анализ), /quiz работает (6 казино), /tracker работает
-- [x] Бот: /bonus показывает реальные бонусы для BR и MX
-- [x] Каналы: слоты + бонусы постятся по расписанию для обоих гео
-- [x] Парсер бонусов: каждые 6ч обновляет данные из review-сайтов
-- [ ] **Блокер:** affiliate ref_id — нужны реальные коды от партнёрских программ
-- [ ] **Блокер:** логотипы казино — URL в seed не ведут на реальные файлы
+### Шаг 11 — Контент-автоматизация + двухмодельный AI
+- [x] services/sport_odds_parser.py: The Odds API → AI-анализ (gpt-4o) → sport_picks в БД
+- [x] services/education_poster.py: 16 тем, AI-генерация, автоматическая ротация
+- [x] services/comparison_poster.py: автоподбор пар казино из БД, AI-сравнение
+- [x] services/dm_alerts.py: алерты в личку (новый бонус score>=8, экспирация по кликам)
+- [x] prompts/sport_odds_analysis.md, education_post.md, casino_comparison.md
+- [x] i18n: +dm_new_bonus, +dm_expiring_bonus (pt_BR + es_MX)
+- [x] Celery: +5 задач (fetch-sport-picks, post-education, post-comparison, alert-new-bonuses, alert-expiring-bonuses)
+- [x] Двухмодельный AI: gpt-4o-mini (посты, анализ) + gpt-4o (парсинг HTML, образование, спорт, сравнения)
+- [x] llm.py: параметр heavy=True для сложных задач, timeout 60s
+- [x] config.py: llm_model + llm_model_heavy
+- [x] engine.py: pool_pre_ping=True (защита от stale DB connections)
+- [x] DM rate limit: max 2 алерта/юзер/день
+- [x] Всего 13 Celery-задач, worker ready, задеплоено
+
+## Чек-лист запуска
+
+### Блокеры (без них НЕ запускаем)
+- [ ] **Affiliate ref_id** — получить реальные коды от партнёрских программ:
+  - [ ] PIN-UP (BR + MX)
+  - [ ] 1WIN (BR + MX)
+  - [ ] Bet365 (MX)
+  - [ ] Rivalo (MX)
+  - [ ] Caliente (MX)
+  - [ ] Codere (MX)
+  - После получения: вставить в .env на сервере, обновить seed.py → restart backend
+- [ ] **Логотипы казино** — загрузить реальные лого (сейчас URL-заглушки)
+
+### Желательно до запуска
+- [ ] Telegram каналы @jogai_br / @jogai_mx — описание, аватар, закреплённый пост
+- [ ] Bot description + /setcommands в @BotFather
+- [ ] Privacy Policy / Terms на лендинге (требование Telegram для Mini App)
+- [ ] Google Search Console + sitemap.xml (SEO-индексация)
+
+### Работает (проверено на проде)
+- [x] Сервер: 8 контейнеров, всё healthy
+- [x] Landing: /pt-BR (200), /es-MX (200), SSL (Caddy)
+- [x] API: casinos BR=4, MX=6 | bonuses BR=2, MX=6 | slots=12
+- [x] Bot: @jogai_bot — webhook активен
+- [x] Celery: 13 задач, beat + worker running
+- [x] AI: gpt-4o-mini + gpt-4o (OpenAI key OK)
+- [x] Odds API: ключ подключён
+- [x] DB: pool_pre_ping=True, защита от stale connections
