@@ -19,7 +19,16 @@ celery.conf.update(
     task_default_queue="jogai",
     worker_concurrency=2,
     worker_prefetch_multiplier=1,
-    include=["app.services.channel_poster", "app.services.digest_builder", "app.services.bonus_parser", "app.services.slot_parser"],
+    include=[
+        "app.services.channel_poster",
+        "app.services.digest_builder",
+        "app.services.bonus_parser",
+        "app.services.slot_parser",
+        "app.services.sport_odds_parser",
+        "app.services.education_poster",
+        "app.services.comparison_poster",
+        "app.services.dm_alerts",
+    ],
     broker_connection_retry_on_startup=True,
 )
 
@@ -56,5 +65,29 @@ celery.conf.beat_schedule = {
     "parse-slots": {
         "task": "app.services.slot_parser.task_parse_slots",
         "schedule": crontab(hour=3, minute=0, day_of_week=1),  # Monday 03:00 BRT
+    },
+    # --- Sport picks from Odds API ---
+    "fetch-sport-picks": {
+        "task": "app.services.sport_odds_parser.task_fetch_sport_picks",
+        "schedule": crontab(hour="7,15", minute=0),  # 07:00 + 15:00 BRT (before sport post at 18:00)
+    },
+    # --- Education posts (Mon + Fri 12:00) ---
+    "post-education": {
+        "task": "app.services.education_poster.task_post_education",
+        "schedule": crontab(hour=12, minute=0, day_of_week="1,5"),  # Mon + Fri 12:00 BRT
+    },
+    # --- Casino comparison (Wed 12:00) ---
+    "post-comparison": {
+        "task": "app.services.comparison_poster.task_post_comparison",
+        "schedule": crontab(hour=12, minute=0, day_of_week=3),  # Wed 12:00 BRT
+    },
+    # --- DM Alerts ---
+    "alert-new-bonuses": {
+        "task": "app.services.dm_alerts.task_alert_new_bonuses",
+        "schedule": crontab(minute=30, hour="*/6"),  # 30 min after bonus parsing
+    },
+    "alert-expiring-bonuses": {
+        "task": "app.services.dm_alerts.task_alert_expiring_bonuses",
+        "schedule": crontab(hour=10, minute=0),  # 10:00 BRT daily
     },
 }

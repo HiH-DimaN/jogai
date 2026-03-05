@@ -115,5 +115,7 @@
   "slot_tip_doghouse": "Wilds con multiplicador x2 y x3 se apilan en giros gratis. ¡Potencial explosivo!",
   "slot_tip_wolfgold": "Jackpot progresivo + respins con monedas. Juega con apuesta fija para chance de jackpot.",
   "slot_tip_aviator": "Crash game — ¡retira antes de que el avión vuele! Estrategia: auto-cashout en x1.5 para consistencia.",
-  "slot_tip_fortunetiger": "¡Mega popular en LATAM! Respin con símbolo expandido. Mejor en apuestas medias."
+  "slot_tip_fortunetiger": "¡Mega popular en LATAM! Respin con símbolo expandido. Mejor en apuestas medias.",
+  "dm_new_bonus": "🔔 ¡NUEVO BONO TOP!\n\n🏆 [{casino}] — {title}\n⭐ Jogai Score: {score}/10 — {verdict}\n\n👉 ¡Envía /bonus para ver todos los bonos activos!",
+  "dm_expiring_bonus": "⏰ ¡BONO POR EXPIRAR!\n\n[{casino}] — {title}\n⏳ Válido hasta: {expires}\n\n👉 ¡Aprovecha antes de que termine! Envía /bonus"
 }
