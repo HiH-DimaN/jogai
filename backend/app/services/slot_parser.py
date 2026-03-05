@@ -146,7 +146,7 @@ async def parse_casino_slots(source: dict) -> list[str]:
     prompt = load_prompt("slot_parsing", language, currency_symbol)
 
     try:
-        result = await chat_json(prompt, text, language, currency_symbol)
+        result = await chat_json(prompt, text, language, currency_symbol, heavy=True)
     except Exception:
         logger.error("AI slot parsing failed for %s", source["slug"], exc_info=True)
         return []

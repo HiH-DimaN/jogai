@@ -125,7 +125,7 @@ async def post_education() -> None:
         try:
             prompt = load_prompt("education_post", language, currency_symbol)
             user_message = f"Topic: {topic['description']}"
-            text = await chat(prompt, user_message, language, currency_symbol)
+            text = await chat(prompt, user_message, language, currency_symbol, heavy=True)
         except Exception:
             logger.warning("AI education post failed for %s", topic["key"], exc_info=True)
             continue

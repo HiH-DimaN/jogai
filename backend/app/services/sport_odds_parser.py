@@ -122,7 +122,7 @@ async def _generate_analysis(
     )
 
     try:
-        result = await chat_json(prompt, user_message, language, currency_symbol)
+        result = await chat_json(prompt, user_message, language, currency_symbol, heavy=True)
         return result
     except Exception:
         logger.warning("AI sport analysis failed for %s", match_name, exc_info=True)

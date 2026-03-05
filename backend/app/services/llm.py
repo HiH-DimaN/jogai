@@ -32,23 +32,30 @@ async def chat(
     message: str,
     language: str = "português brasileiro",
     currency_symbol: str = "R$",
+    heavy: bool = False,
 ) -> str:
     """Send a chat request to the configured LLM provider.
 
     Substitutes {language} and {currency_symbol} in the prompt if present.
     Retries up to 3 times with 30s timeout.
+
+    Args:
+        heavy: Use the heavy model (gpt-4o) for complex tasks like
+               HTML parsing, education content, sport analysis.
     """
     # Substitute variables in prompt
     prompt = prompt.replace("{language}", language).replace("{currency_symbol}", currency_symbol)
 
+    model = settings.llm_model_heavy if heavy else settings.llm_model
+
     for attempt in range(3):
         try:
             if settings.llm_provider == "anthropic":
-                return await _chat_anthropic(prompt, message)
+                return await _chat_anthropic(prompt, message, model)
             else:
-                return await _chat_openai(prompt, message)
+                return await _chat_openai(prompt, message, model)
         except Exception:
-            logger.warning("LLM attempt %d failed", attempt + 1, exc_info=True)
+            logger.warning("LLM attempt %d failed (model=%s)", attempt + 1, model, exc_info=True)
             if attempt == 2:
                 raise
 
@@ -60,9 +67,10 @@ async def chat_json(
     message: str,
     language: str = "português brasileiro",
     currency_symbol: str = "R$",
+    heavy: bool = False,
 ) -> dict:
     """Chat and parse the response as JSON."""
-    response = await chat(prompt, message, language, currency_symbol)
+    response = await chat(prompt, message, language, currency_symbol, heavy=heavy)
 
     # Extract JSON from response (may be wrapped in markdown code block)
     text = response.strip()
@@ -78,8 +86,8 @@ async def chat_json(
         return {}
 
 
-async def _chat_anthropic(system_prompt: str, user_message: str) -> str:
-    async with httpx.AsyncClient(timeout=30.0) as client:
+async def _chat_anthropic(system_prompt: str, user_message: str, model: str) -> str:
+    async with httpx.AsyncClient(timeout=60.0) as client:
         response = await client.post(
             "https://api.anthropic.com/v1/messages",
             headers={
@@ -88,7 +96,7 @@ async def _chat_anthropic(system_prompt: str, user_message: str) -> str:
                 "content-type": "application/json",
             },
             json={
-                "model": settings.llm_model,
+                "model": model,
                 "max_tokens": 2048,
                 "system": system_prompt,
                 "messages": [{"role": "user", "content": user_message}],
@@ -99,8 +107,8 @@ async def _chat_anthropic(system_prompt: str, user_message: str) -> str:
         return data["content"][0]["text"]
 
 
-async def _chat_openai(system_prompt: str, user_message: str) -> str:
-    async with httpx.AsyncClient(timeout=30.0) as client:
+async def _chat_openai(system_prompt: str, user_message: str, model: str) -> str:
+    async with httpx.AsyncClient(timeout=60.0) as client:
         response = await client.post(
             "https://api.openai.com/v1/chat/completions",
             headers={
@@ -108,7 +116,7 @@ async def _chat_openai(system_prompt: str, user_message: str) -> str:
                 "Content-Type": "application/json",
             },
             json={
-                "model": "gpt-4o-mini",
+                "model": model,
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_message},

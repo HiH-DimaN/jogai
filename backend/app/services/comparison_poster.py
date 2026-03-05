@@ -131,7 +131,7 @@ async def post_comparison() -> None:
                 f"Casino A:\n{casino1_data}\n\n"
                 f"Casino B:\n{casino2_data}"
             )
-            text = await chat(prompt, user_message, language, currency_symbol)
+            text = await chat(prompt, user_message, language, currency_symbol, heavy=True)
         except Exception:
             logger.warning(
                 "AI comparison failed for %s vs %s",

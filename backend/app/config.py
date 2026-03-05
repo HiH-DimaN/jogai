@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     openai_api_key: str = ""
     llm_provider: str = "anthropic"
     llm_model: str = "claude-sonnet-4-20250514"
+    llm_model_heavy: str = "gpt-4o"
 
     # Affiliate
     pinup_ref_id: str = ""

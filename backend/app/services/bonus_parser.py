@@ -150,7 +150,7 @@ async def parse_review_source(source: dict, casino_slugs: list[str]) -> list[dic
     prompt = load_prompt("bonus_parsing", language, currency_symbol)
 
     try:
-        result = await chat_json(prompt, text, language, currency_symbol)
+        result = await chat_json(prompt, text, language, currency_symbol, heavy=True)
     except Exception:
         logger.error("AI parsing failed for %s", source["url"], exc_info=True)
         return []
