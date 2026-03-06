@@ -329,7 +329,9 @@ async def deactivate_expired() -> None:
 
 
 async def _dispose_and_run(coro):
-    """Dispose stale connections from prefork, then run the coroutine."""
+    """Dispose stale connections from prefork, reset bot session, then run."""
+    from app.bot.bot import reset_bot
+    reset_bot()
     await engine.dispose()
     await coro
 

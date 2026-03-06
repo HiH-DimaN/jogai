@@ -230,6 +230,8 @@ async def fetch_and_save_picks() -> int:
 
 
 async def _dispose_and_run(coro):
+    from app.bot.bot import reset_bot
+    reset_bot()
     await engine.dispose()
     return await coro
 

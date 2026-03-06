@@ -108,6 +108,8 @@ async def send_digest() -> None:
 
 
 async def _dispose_and_run(coro):
+    from app.bot.bot import reset_bot
+    reset_bot()
     await engine.dispose()
     await coro
 
