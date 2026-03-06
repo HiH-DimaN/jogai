@@ -116,8 +116,6 @@ def _match_casino_slug(casino_name: str, casino_slugs: list[str]) -> str | None:
         "pin up": "pinup",
         "pinup": "pinup",
         "1win": "1win",
-        "bet365": "bet365",
-        "rivalo": "rivalo",
         "caliente": "caliente",
         "codere": "codere",
     }

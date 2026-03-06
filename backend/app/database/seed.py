@@ -15,30 +15,34 @@ async def seed():
         if not has_casinos:
             # --- Casinos ---
             casinos = [
+            # PIN-UP: MX only (no Brazil in PIN-UP Partners program)
+            # RevShare 40%, waiting for tracking link from manager Nikita
             Casino(
                 name="PIN-UP",
                 slug="pinup",
                 logo_url="https://jogai.fun/img/pinup.png",
                 description_pt="PIN-UP é uma das maiores plataformas de apostas e cassino online da América Latina. Oferece slots, jogos ao vivo, apostas esportivas e bônus generosos.",
-                description_es="PIN-UP es una de las mayores plataformas de apuestas y casino online de América Latina.",
-                min_deposit=240.00,
-                min_deposits={"BRL": 240.0, "MXN": 400.0},
-                pix_supported=True,
+                description_es="PIN-UP es una de las mayores plataformas de apuestas y casino online de América Latina. Ofrece slots, juegos en vivo, apuestas deportivas y bonos generosos.",
+                min_deposit=400.00,
+                min_deposits={"MXN": 400.0},
+                pix_supported=False,
                 spei_supported=True,
                 crypto_supported=True,
                 withdrawal_time="1-24h",
                 affiliate_program="PIN-UP Partners",
-                affiliate_link_template="https://pinup.com/?ref={ref_id}&uid={user_id}",
-                ref_id="jogai_12345",
+                affiliate_link_template="",  # Waiting for tracking link from manager
+                ref_id="",
                 is_active=True,
-                geo=["BR", "MX"],
+                geo=["MX"],
             ),
+            # 1WIN: BR + MX — real tracking links received
+            # Promo code: JOGAI
             Casino(
                 name="1WIN",
                 slug="1win",
                 logo_url="https://jogai.fun/img/1win.png",
-                description_pt="1WIN oferece mais de 10.000 slots, cassino ao vivo e apostas esportivas com odds competitivas. Saque rápido via PIX.",
-                description_es="1WIN ofrece más de 10,000 slots, casino en vivo y apuestas deportivas con cuotas competitivas.",
+                description_pt="1WIN oferece mais de 10.000 slots, cassino ao vivo e apostas esportivas com odds competitivas. Saque rápido via PIX. Código promocional: JOGAI",
+                description_es="1WIN ofrece más de 10,000 slots, casino en vivo y apuestas deportivas con cuotas competitivas. Código promocional: JOGAI",
                 min_deposit=10.00,
                 min_deposits={"BRL": 10.0, "MXN": 200.0},
                 pix_supported=True,
@@ -46,51 +50,14 @@ async def seed():
                 crypto_supported=True,
                 withdrawal_time="1-12h",
                 affiliate_program="1WIN Partners",
-                affiliate_link_template="https://1win.com/?ref={ref_id}&uid={user_id}",
-                ref_id="jogai_67890",
+                # BR link: https://lkwn.cc/fd8e81, MX link: https://lkbz.cc/42546f
+                affiliate_link_template="",  # Using direct links per geo on bonuses
+                ref_id="",
                 is_active=True,
                 geo=["BR", "MX"],
             ),
-            Casino(
-                name="BET365",
-                slug="bet365",
-                logo_url="https://jogai.fun/img/bet365.png",
-                # NOTE: Bet365 BR cannot offer welcome bonuses (Law 14.790/2023).
-                # They offer features like Early Payout, Increased Odds, bet365 Club.
-                description_pt="Bet365 é a maior casa de apostas do mundo. Cobertura completa de esportes, cassino ao vivo e odds competitivas com saque rápido via PIX. Não oferece bônus de boas-vindas (Lei 14.790/2023).",
-                description_es="Bet365 es la mayor casa de apuestas del mundo. Cobertura completa de deportes, casino en vivo y cuotas competitivas.",
-                min_deposit=20.00,
-                min_deposits={"BRL": 20.0, "MXN": 350.0},
-                pix_supported=True,
-                spei_supported=True,
-                crypto_supported=False,
-                withdrawal_time="1-24h",
-                affiliate_program="Bet365 Affiliates",
-                affiliate_link_template="https://bet365.com/?ref={ref_id}&uid={user_id}",
-                ref_id="jogai_11111",
-                is_active=True,
-                geo=["BR", "MX"],
-            ),
-            Casino(
-                name="RIVALO",
-                slug="rivalo",
-                logo_url="https://jogai.fun/img/rivalo.png",
-                # NOTE: Rivalo BR does not offer standard welcome bonuses.
-                # They offer personalized promotions and multi-bet bonuses with NO rollover.
-                description_pt="Rivalo é uma plataforma focada na América Latina com apostas esportivas, cassino e promoções personalizadas. Bônus em apostas múltiplas sem rollover.",
-                description_es="Rivalo es una plataforma enfocada en América Latina con apuestas deportivas, casino y promociones personalizadas. Bonos en apuestas múltiples sin rollover.",
-                min_deposit=15.00,
-                min_deposits={"BRL": 15.0, "MXN": 300.0},
-                pix_supported=True,
-                spei_supported=True,
-                crypto_supported=False,
-                withdrawal_time="1-24h",
-                affiliate_program="Rivalo Affiliates",
-                affiliate_link_template="https://rivalo.com/?ref={ref_id}&uid={user_id}",
-                ref_id="jogai_22222",
-                is_active=True,
-                geo=["BR", "MX"],
-            ),
+            # Bet365: REMOVED — affiliate program rejected our application
+            # Rivalo: REMOVED — DNS/Cloudflare broken, affiliate site unreachable
             # MX-specific casinos
             Casino(
                 name="CALIENTE",
@@ -131,7 +98,7 @@ async def seed():
             ]
             session.add_all(casinos)
             await session.flush()
-            print("Seeded 6 casinos.")
+            print(f"Seeded {len(casinos)} casinos.")
 
         # Check if slots already seeded
         result = await session.execute(select(Slot).limit(1))
@@ -214,7 +181,7 @@ async def seed():
                     features=["free spins", "money respin", "jackpot"],
                     tip_pt="Money Respin é a feature principal — 3 moons ativam respins com jackpots. Volatilidade média, sessões mais equilibradas.",
                     tip_es="Money Respin es la feature principal — 3 lunas activan respins con jackpots. Volatilidad media, sesiones más equilibradas.",
-                    best_casino_id=casino_map["bet365"].id,
+                    best_casino_id=casino_map["pinup"].id,
                     geo=["BR", "MX"],
                     source="manual",
                     source_id="pragmatic-wolf-gold",
@@ -249,7 +216,7 @@ async def seed():
                     features=["expanding wilds", "respins", "win both ways"],
                     tip_pt="Clássico de baixa volatilidade — ideal para cumprir wagering de bônus. Wilds expandem e dão respins. Ganhos frequentes mas pequenos.",
                     tip_es="Clásico de baja volatilidad — ideal para cumplir wagering de bonos. Wilds se expanden y dan respins. Ganancias frecuentes pero pequeñas.",
-                    best_casino_id=casino_map["bet365"].id,
+                    best_casino_id=casino_map["1win"].id,
                     geo=["BR", "MX"],
                     source="manual",
                     source_id="netent-starburst",
@@ -266,7 +233,7 @@ async def seed():
                     features=["avalanche", "multipliers", "free falls"],
                     tip_pt="Sistema Avalanche: vitórias consecutivas aumentam o multiplicador (até 5x, 15x nos Free Falls). Volatilidade média-alta.",
                     tip_es="Sistema Avalanche: victorias consecutivas aumentan el multiplicador (hasta 5x, 15x en Free Falls). Volatilidad media-alta.",
-                    best_casino_id=casino_map["rivalo"].id,
+                    best_casino_id=casino_map["pinup"].id,
                     geo=["BR", "MX"],
                     source="manual",
                     source_id="netent-gonzos-quest",
@@ -335,7 +302,7 @@ async def seed():
                     features=["respin", "multiplier wheel"],
                     tip_pt="Slot clássico 3x3 simples. Respin de Fogo quando 2 colunas são iguais. Wheel of Multipliers com até 10x. Baixa volatilidade, bom para iniciantes.",
                     tip_es="Slot clásico 3x3 simple. Respin de Fuego cuando 2 columnas son iguales. Wheel of Multipliers con hasta 10x. Baja volatilidad, bueno para principiantes.",
-                    best_casino_id=casino_map["rivalo"].id,
+                    best_casino_id=casino_map["1win"].id,
                     geo=["BR", "MX"],
                     source="manual",
                     source_id="playngo-fire-joker",
@@ -382,32 +349,18 @@ async def seed():
             # VERIFIED bonus data — sources cited in comments
             bonus_defs = [
                 # --- BR bonuses ---
-                # Source: pinupcassinos.com.br/en/bonus/ (March 2026)
-                # 120% if deposit R$300+ within 1st hour, otherwise 100%
-                # Wagering x20, deadline 3 days, max bet R$36, 250 FS (50/day x5)
-                # Min deposit R$240
-                {
-                    "casino_slug": "pinup",
-                    "title_pt": "PIN-UP: 120% até R$30.000 + 250 Free Spins",
-                    "title_es": "PIN-UP: 120% hasta R$30,000 + 250 Free Spins",
-                    "bonus_percent": 120,
-                    "max_bonus_amount": 30000.0,
-                    "max_bonus_currency": "BRL",
-                    "wagering_multiplier": 20.0,
-                    "wagering_deadline_days": 3,
-                    "max_bet": 36.0,
-                    "free_spins": 250,
-                    "no_deposit": False,
-                    "geo": ["BR"],
-                },
+                # PIN-UP BR: REMOVED — PIN-UP Partners has no Brazil geo
+                # Bet365 BR: REMOVED — affiliate program rejected
+                # Rivalo BR: REMOVED — DNS broken, affiliate unreachable
+
                 # Source: sportytrader.com, 1win.br.com (March 2026)
                 # 500% across 4 deposits (100%+120%+130%+150%)
                 # Up to ~R$7,000, wagering x50 for casino
-                # 70 free spins included
+                # 70 free spins, promo code: JOGAI
                 {
                     "casino_slug": "1win",
-                    "title_pt": "1WIN: 500% até R$7.000 nos 4 primeiros depósitos + 70 FS",
-                    "title_es": "1WIN: 500% hasta R$7,000 en los 4 primeros depósitos + 70 FS",
+                    "title_pt": "1WIN: 500% até R$7.000 nos 4 primeiros depósitos + 70 FS (código: JOGAI)",
+                    "title_es": "1WIN: 500% hasta R$7,000 en los 4 primeros depósitos + 70 FS (código: JOGAI)",
                     "bonus_percent": 500,
                     "max_bonus_amount": 7000.0,
                     "max_bonus_currency": "BRL",
@@ -417,12 +370,12 @@ async def seed():
                     "free_spins": 70,
                     "no_deposit": False,
                     "geo": ["BR"],
+                    "affiliate_link": "https://lkwn.cc/fd8e81",
                 },
-                # Bet365 BR: NO welcome bonus — prohibited by Law 14.790/2023
-                # Rivalo BR: NO standard welcome bonus — personalized promos only, no rollover
 
                 # --- MX bonuses ---
                 # Source: pinupcassinos.com.br (same international offer applies to MX)
+                # PIN-UP MX: RevShare 40%, waiting for tracking link from manager
                 {
                     "casino_slug": "pinup",
                     "title_pt": "PIN-UP MX: 120% no primeiro depósito + 250 Free Spins",
@@ -436,12 +389,14 @@ async def seed():
                     "free_spins": 250,
                     "no_deposit": False,
                     "geo": ["MX"],
+                    "affiliate_link": "",  # Waiting for PIN-UP Partners tracking link
                 },
                 # Source: sportytrader.com (same international offer for MX)
+                # Promo code: JOGAI
                 {
                     "casino_slug": "1win",
-                    "title_pt": "1WIN MX: 500% nos 4 primeiros depósitos + 70 FS",
-                    "title_es": "1WIN MX: 500% en los 4 primeros depósitos + 70 FS",
+                    "title_pt": "1WIN MX: 500% nos 4 primeiros depósitos + 70 FS (código: JOGAI)",
+                    "title_es": "1WIN MX: 500% en los 4 primeros depósitos + 70 FS (código: JOGAI)",
                     "bonus_percent": 500,
                     "max_bonus_amount": 60000.0,
                     "max_bonus_currency": "MXN",
@@ -451,6 +406,7 @@ async def seed():
                     "free_spins": 70,
                     "no_deposit": False,
                     "geo": ["MX"],
+                    "affiliate_link": "https://lkbz.cc/42546f",
                 },
                 # Source: legalbet.mx, caliente.mx (March 2026)
                 # No-deposit: MX$1,000 registration bonus, wagering x40, 30 days
@@ -541,8 +497,9 @@ async def seed():
                     no_deposit=bd["no_deposit"],
                 )
 
-                affiliate_link = None
-                if casino.affiliate_link_template:
+                # Use direct affiliate link from bonus def, or generate from template
+                affiliate_link = bd.get("affiliate_link")
+                if affiliate_link is None and casino.affiliate_link_template:
                     affiliate_link = casino.affiliate_link_template.format(
                         ref_id=casino.ref_id or "", user_id=""
                     )

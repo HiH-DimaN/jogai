@@ -25,22 +25,12 @@ CASINO_SLOT_SOURCES: list[dict] = [
     {
         "slug": "pinup",
         "catalog_url": "https://pin-up.casino/slots",
-        "geo": ["BR", "MX"],
+        "geo": ["MX"],
     },
     {
         "slug": "1win",
         "catalog_url": "https://1win.com/casino/slots",
         "geo": ["BR", "MX"],
-    },
-    {
-        "slug": "bet365",
-        "catalog_url": "https://www.bet365.com/casino/slots",
-        "geo": ["BR"],
-    },
-    {
-        "slug": "rivalo",
-        "catalog_url": "https://www.rivalo.com/pt/casino/slots",
-        "geo": ["BR"],
     },
 ]
 

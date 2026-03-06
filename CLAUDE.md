@@ -214,7 +214,8 @@ jogai/
 
 ### Шаг 10 — Парсер бонусов + данные MX + лендинг с бонусами
 - [x] Seed: +2 MX казино (Caliente, Codere) — SPEI, без PIX, geo=["MX"]
-- [x] Seed: +9 welcome-бонусов (4 BR + 5 MX) с Jogai Score — верифицированные офферы
+- [x] Seed: welcome-бонусы (1 BR + 5 MX) с Jogai Score — верифицированные офферы
+- [x] Bet365 и Rivalo удалены (отказ + DNS сломан), PIN-UP только MX
 - [x] bonus_parser.py: полный переписан — парсинг review/affiliate сайтов (askgamblers, casino.org, oddschecker) вместо casino-сайтов (были 403)
 - [x] bonus_parsing.md: +casino_name, фокус на наших казино
 - [x] casino_matcher.py: fix min_deposits (мультивалюта) для MX
@@ -245,14 +246,15 @@ jogai/
 ## Чек-лист запуска
 
 ### Блокеры (без них НЕ запускаем)
-- [ ] **Affiliate ref_id** — получить реальные коды от партнёрских программ:
-  - [ ] PIN-UP (BR + MX)
-  - [ ] 1WIN (BR + MX)
-  - [ ] Bet365 (MX)
-  - [ ] Rivalo (MX)
+- [ ] **Affiliate ссылки** — получить реальные трекинг-ссылки:
+  - [x] 1WIN (BR): https://lkwn.cc/fd8e81 — промокод JOGAI
+  - [x] 1WIN (MX): https://lkbz.cc/42546f — промокод JOGAI
+  - [ ] PIN-UP (MX only, нет BR): ждём ссылку от менеджера Никиты, RevShare 40%
+  - [x] ~~Bet365~~ — отказ партнёрской программы
+  - [x] ~~Rivalo~~ — DNS сломан, партнёрка недоступна
   - [ ] Caliente (MX)
   - [ ] Codere (MX)
-  - После получения: вставить в .env на сервере, обновить seed.py → restart backend
+  - После получения PIN-UP ссылки: обновить seed.py → re-seed → restart backend
 - [ ] **Логотипы казино** — загрузить реальные лого (сейчас URL-заглушки)
 
 ### Желательно до запуска
@@ -264,7 +266,7 @@ jogai/
 ### Работает (проверено на проде)
 - [x] Сервер: 8 контейнеров, всё healthy
 - [x] Landing: /pt-BR (200), /es-MX (200), SSL (Caddy)
-- [x] API: casinos BR=4, MX=6 | bonuses BR=2, MX=6 | slots=12
+- [x] API: casinos BR=2, MX=4 | bonuses BR=1, MX=5 | slots=12
 - [x] Bot: @jogai_bot — webhook активен
 - [x] Celery: 13 задач, beat + worker running
 - [x] AI: gpt-4o-mini + gpt-4o (OpenAI key OK)

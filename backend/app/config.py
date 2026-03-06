@@ -27,10 +27,9 @@ class Settings(BaseSettings):
     llm_model_heavy: str = "gpt-4o"
 
     # Affiliate
-    pinup_ref_id: str = ""
-    onewin_ref_id: str = ""
-    bet365_ref_id: str = ""
-    rivalo_ref_id: str = ""
+    pinup_ref_id: str = ""  # Waiting for PIN-UP Partners MX link
+    onewin_ref_br: str = ""  # 1WIN BR tracking link
+    onewin_ref_mx: str = ""  # 1WIN MX tracking link
     caliente_ref_id: str = ""
     codere_ref_id: str = ""
 
