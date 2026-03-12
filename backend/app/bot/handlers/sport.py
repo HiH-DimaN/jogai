@@ -30,7 +30,8 @@ async def cmd_sport(message: Message, locale: str, db_user: User) -> None:
     if not pick:
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
-                [InlineKeyboardButton(text=t("btn_analyze", locale), callback_data="analyze")],
+                [InlineKeyboardButton(text=t("btn_bonuses", locale), callback_data="bonuses")],
+                [InlineKeyboardButton(text=t("btn_casino", locale), callback_data="casino_quiz")],
             ]
         )
         await message.answer(t("sport_no_match", locale), reply_markup=keyboard)

@@ -68,6 +68,7 @@
   "referral_your_link": "🔗 Tu link de invitación:",
   "referral_coins_balance": "💰 Tus Jogai Coins: {coins}",
   "referral_reward": "¡Invita a un amigo → +5 Jogai Coins!",
+  "tracker_prompt": "Registra tu apuesta:",
   "tracker_added": "✅ ¡Apuesta registrada!",
   "tracker_stats_title": "📊 TUS ESTADÍSTICAS:",
   "tracker_roi": "ROI: {value}%",

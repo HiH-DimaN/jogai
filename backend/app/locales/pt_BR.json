@@ -68,6 +68,7 @@
   "referral_your_link": "🔗 Seu link de convite:",
   "referral_coins_balance": "💰 Seus Jogai Coins: {coins}",
   "referral_reward": "Convide um amigo → +5 Jogai Coins!",
+  "tracker_prompt": "Registre sua aposta:",
   "tracker_added": "✅ Aposta registrada!",
   "tracker_stats_title": "📊 SUAS ESTATÍSTICAS:",
   "tracker_roi": "ROI: {value}%",

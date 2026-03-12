@@ -24,6 +24,7 @@ async def _get_bonuses(geo: str, limit: int | None = None) -> list[Bonus]:
     async with async_session() as session:
         query = (
             select(Bonus)
+            .options(selectinload(Bonus.casino))
             .where(Bonus.is_active.is_(True))
             .where(Bonus.geo.any(geo))
             .order_by(Bonus.jogai_score.desc())
@@ -46,12 +47,17 @@ def _build_bonus_message(
 
     buttons = []
     for bonus in bonuses:
+        link = bonus.affiliate_link
+        if not link:
+            continue
         casino_name = bonus.casino.name if bonus.casino else "Casino"
+        promo_code = bonus.casino.promo_code if bonus.casino else None
+        promo_text = f" ({t('promo_code_label', locale)}: {promo_code})" if promo_code else ""
         buttons.append(
             [
                 InlineKeyboardButton(
-                    text=f"{t('btn_get_bonus', locale)} [{casino_name}]",
-                    callback_data=f"click:{bonus.id}",
+                    text=f"{t('btn_get_bonus', locale)} [{casino_name}]{promo_text}",
+                    url=link,
                 )
             ]
         )

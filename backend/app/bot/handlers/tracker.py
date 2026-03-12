@@ -23,7 +23,7 @@ class BetState(StatesGroup):
 async def cmd_bet(message: Message, locale: str, state: FSMContext) -> None:
     await state.set_state(BetState.waiting_for_input)
     text = (
-        t("analyze_prompt", locale).split("—")[0].strip()
+        t("tracker_prompt", locale)
         + "\n\n"
         + t("tracker_format", locale)
         + "\n"
