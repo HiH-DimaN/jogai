@@ -28,8 +28,8 @@ CHANNELS: dict[str, dict] = {
 
 
 
-async def _get_best_bonus(geo: str) -> Bonus | None:
-    """Get a random active bonus from top-scoring ones for a geo (rotation)."""
+async def _get_active_bonuses(geo: str) -> list[Bonus]:
+    """Get all active bonuses for a geo, sorted by jogai_score desc."""
     async with async_session() as session:
         result = await session.execute(
             select(Bonus)
@@ -40,12 +40,8 @@ async def _get_best_bonus(geo: str) -> Bonus | None:
                 (Bonus.expires_at.is_(None)) | (Bonus.expires_at > datetime.utcnow())
             )
             .order_by(Bonus.jogai_score.desc())
-            .limit(5)
         )
-        bonuses = list(result.scalars().all())
-        if not bonuses:
-            return None
-        return random.choice(bonuses)
+        return list(result.scalars().all())
 
 
 async def _get_sport_pick(geo: str) -> SportPick | None:
@@ -115,31 +111,33 @@ async def _send_to_channel(
 
 
 async def post_bonus_day() -> None:
-    """Post the best bonus of the day to each active channel."""
+    """Post all active bonuses for the day to each channel."""
+    from app.services.content_generator import generate_bonus_digest
+
     for geo, ch in CHANNELS.items():
         locale = ch["locale"]
         channel_id = ch["id"]
 
-        bonus = await _get_best_bonus(geo)
-        if not bonus:
-            logger.info("No active bonus for geo=%s, skipping", geo)
+        bonuses = await _get_active_bonuses(geo)
+        if not bonuses:
+            logger.info("No active bonuses for geo=%s, skipping", geo)
             continue
 
-        text = await generate_bonus_post(bonus, locale)
+        text = await generate_bonus_digest(bonuses, locale)
         msg_id = await _send_to_channel(channel_id, text)
 
         await _save_post(
             post_type="bonus_day",
-            title=bonus.title_pt or "",
+            title=f"Bonus digest ({len(bonuses)} bonuses)",
             content=text,
             locale=locale,
             geo=geo,
-            bonus_id=bonus.id,
-            casino_id=bonus.casino_id,
+            bonus_id=bonuses[0].id,
+            casino_id=bonuses[0].casino_id,
             telegram_message_id=msg_id,
             telegram_channel=channel_id,
         )
-        logger.info("Posted bonus_day for geo=%s: %s", geo, bonus.title_pt)
+        logger.info("Posted bonus_day for geo=%s: %d bonuses", geo, len(bonuses))
 
 
 async def post_sport_pick() -> None:
@@ -260,7 +258,8 @@ async def post_weekly_top() -> None:
         channel_id = ch["id"]
 
         slots = await _get_top_slots(geo, limit=5)
-        bonus = await _get_best_bonus(geo)
+        all_bonuses = await _get_active_bonuses(geo)
+        bonus = all_bonuses[0] if all_bonuses else None
 
         if not slots and not bonus:
             logger.info("No data for weekly top geo=%s, skipping", geo)

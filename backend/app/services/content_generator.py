@@ -59,6 +59,44 @@ def _fallback_bonus_post(bonus: Bonus, locale: str) -> str:
     )
 
 
+async def generate_bonus_digest(bonuses: list[Bonus], locale: str) -> str:
+    """Generate a multi-bonus digest post for the Telegram channel."""
+    from datetime import datetime
+
+    lang_suffix = "pt" if locale.startswith("pt") else "es"
+    today = datetime.utcnow().strftime("%d/%m")
+
+    if locale.startswith("pt"):
+        header = f"🔥 <b>MELHORES BÔNUS DE HOJE ({today}):</b>\n"
+        cta_text = "Cadastre-se aqui"
+        footer = "⚡ Analisado por <b>Jogai AI</b> — só bônus verificados!"
+    else:
+        header = f"🔥 <b>MEJORES BONOS DE HOY ({today}):</b>\n"
+        cta_text = "Regístrate aquí"
+        footer = "⚡ Analizado por <b>Jogai AI</b> — ¡solo bonos verificados!"
+
+    lines = [header]
+    for i, bonus in enumerate(bonuses, 1):
+        title = getattr(bonus, f"title_{lang_suffix}") or bonus.title_pt or ""
+        casino_name = bonus.casino.name if bonus.casino else "Casino"
+        verdict = t(bonus.verdict_key, locale) if bonus.verdict_key else ""
+        link = bonus.affiliate_link or ""
+
+        medal = ["🏆", "🥈", "🥉", "🎯", "💎"][i - 1] if i <= 5 else "▪️"
+
+        line = (
+            f"{medal} <b>{casino_name}</b> — {title}\n"
+            f"    ⭐ Score: {bonus.jogai_score}/10 — {verdict}"
+        )
+        if link:
+            line += f'\n    👉 <a href="{link}">{cta_text}</a>'
+        lines.append(line)
+        lines.append("")
+
+    lines.append(footer)
+    return "\n".join(lines)
+
+
 async def generate_slot_review(
     slot_name: str,
     rtp: float,
