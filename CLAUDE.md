@@ -250,7 +250,7 @@ jogai/
 
 ### Блокеры — ВСЕ ЗАКРЫТЫ
 - [x] **Affiliate ссылки:**
-  - [x] 1WIN (BR): https://lkwn.cc/fd8e81 — промокод JOGAI
+  - [x] 1WIN (BR): https://lkwn.cc/ab45ce — промокод JOGAI
   - [x] 1WIN (MX): https://lkbz.cc/42546f — промокод JOGAI
   - [x] PIN-UP (MX, CL, EC): https://onlinepnplnk.com/9euv1TI2/ — RevShare 40%, менеджер Никита (2026-03-10)
   - [x] ~~Bet365~~ — отказ партнёрской программы

@@ -51,7 +51,7 @@ async def seed():
                 crypto_supported=True,
                 withdrawal_time="1-12h",
                 affiliate_program="1WIN Partners",
-                # BR link: https://lkwn.cc/fd8e81, MX link: https://lkbz.cc/42546f
+                # BR link: https://lkwn.cc/ab45ce, MX link: https://lkbz.cc/42546f
                 affiliate_link_template="",  # Using direct links per geo on bonuses
                 ref_id="",
                 is_active=True,
@@ -371,7 +371,7 @@ async def seed():
                     "free_spins": 70,
                     "no_deposit": False,
                     "geo": ["BR"],
-                    "affiliate_link": "https://lkwn.cc/fd8e81",
+                    "affiliate_link": "https://lkwn.cc/ab45ce",
                 },
 
                 # --- MX bonuses ---
