@@ -142,16 +142,23 @@ async def post_comparison() -> None:
         if not text or len(text) < 50:
             continue
 
+        # Add CTA with affiliate links
+        cta_lines = []
+        for c in [c1, c2]:
+            best_b = await _get_best_bonus(c.id, geo)
+            link = best_b.affiliate_link if best_b else None
+            promo = c.promo_code
+            if link:
+                cta = f'👉 <a href="{link}">{c.name}</a>'
+                if promo:
+                    cta += f" (código: <b>{promo}</b>)"
+                cta_lines.append(cta)
+        if cta_lines:
+            text += "\n\n" + "\n".join(cta_lines)
+
         # Send to channel
-        msg_id = None
-        if channel_id and channel_id != "placeholder":
-            try:
-                from app.bot.bot import get_bot
-                bot = get_bot()
-                msg = await bot.send_message(chat_id=channel_id, text=text)
-                msg_id = msg.message_id
-            except Exception:
-                logger.error("Failed to send comparison to %s", channel_id, exc_info=True)
+        from app.services.channel_poster import _send_to_channel
+        msg_id = await _send_to_channel(channel_id, text)
 
         pair_key = f"{c1.slug}_vs_{c2.slug}"
         await _save_post(

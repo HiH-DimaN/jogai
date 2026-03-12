@@ -14,5 +14,6 @@ Rules:
 6. Use emojis for structure (vs, checkmarks, etc.)
 7. Do NOT invent data — use ONLY the provided information
 8. Jogai Score comparison should be prominent
+9. Use HTML formatting for Telegram: <b>bold</b> for key terms, no markdown
 
-Return ONLY the post text, no JSON, no markdown code blocks.
+Return ONLY the post text in HTML format, no JSON, no markdown code blocks.

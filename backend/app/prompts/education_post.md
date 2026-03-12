@@ -14,5 +14,6 @@ Rules:
 6. Tone: friendly, informative, honest — never encourage reckless gambling
 7. Always mention responsible gambling when relevant
 8. Do NOT promote any specific casino — keep it educational
+9. Use HTML formatting for Telegram: <b>bold</b> for key terms, no markdown
 
-Return ONLY the post text, no JSON, no markdown code blocks.
+Return ONLY the post text in HTML format, no JSON, no markdown code blocks.

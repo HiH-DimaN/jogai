@@ -134,16 +134,17 @@ async def post_education() -> None:
             logger.warning("Education post too short, skipping")
             continue
 
+        # Add CTA to bot
+        bot_cta = (
+            '\n\n🤖 <a href="https://t.me/jogai_bot">Analise bônus com Jogai AI</a>'
+            if locale.startswith("pt")
+            else '\n\n🤖 <a href="https://t.me/jogai_bot">Analiza bonos con Jogai AI</a>'
+        )
+        text += bot_cta
+
         # Send to channel
-        msg_id = None
-        if channel_id and channel_id != "placeholder":
-            try:
-                from app.bot.bot import get_bot
-                bot = get_bot()
-                msg = await bot.send_message(chat_id=channel_id, text=text)
-                msg_id = msg.message_id
-            except Exception:
-                logger.error("Failed to send education post to %s", channel_id, exc_info=True)
+        from app.services.channel_poster import _send_to_channel
+        msg_id = await _send_to_channel(channel_id, text)
 
         await _save_post(
             post_type="education",
