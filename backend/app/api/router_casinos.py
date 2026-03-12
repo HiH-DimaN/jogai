@@ -90,15 +90,27 @@ async def get_casinos(
                 best_score = score
                 best_bonus_title = getattr(b, f"title_{lang_suffix}") or b.title_pt or ""
 
-        # Build affiliate link from template
+        # Build affiliate link from template or fallback to best bonus
         affiliate_link = None
         if c.affiliate_link_template and c.ref_id:
             affiliate_link = c.affiliate_link_template.replace("{ref_id}", c.ref_id)
         elif c.affiliate_link_template:
             affiliate_link = c.affiliate_link_template
+        if not affiliate_link:
+            # Fallback: get link from best bonus for this geo
+            geo_bonuses_with_link = [
+                b for b in active_bonuses if b.affiliate_link
+            ]
+            if geo_bonuses_with_link:
+                best_b = max(geo_bonuses_with_link, key=lambda b: float(b.jogai_score or 0))
+                affiliate_link = best_b.affiliate_link
 
         deposit_amount = get_min_deposit(c, locale)
         min_deposit_formatted = format_currency(deposit_amount, locale)
+
+        # Filter payment methods by geo
+        show_pix = c.pix_supported and geo == "BR"
+        show_spei = c.spei_supported and geo == "MX"
 
         items.append(
             CasinoResponse(
@@ -110,8 +122,8 @@ async def get_casinos(
                 description=description,
                 min_deposit=deposit_amount,
                 min_deposit_formatted=min_deposit_formatted,
-                pix_supported=c.pix_supported,
-                spei_supported=c.spei_supported,
+                pix_supported=show_pix,
+                spei_supported=show_spei,
                 crypto_supported=c.crypto_supported,
                 withdrawal_time=c.withdrawal_time,
                 affiliate_link=affiliate_link,
@@ -140,7 +152,7 @@ async def get_casino(
 
     description = getattr(c, f"description_{lang_suffix}") or c.description_pt or ""
 
-    # Build affiliate link
+    # Build affiliate link or fallback to best bonus
     affiliate_link = None
     if c.affiliate_link_template and c.ref_id:
         affiliate_link = c.affiliate_link_template.replace("{ref_id}", c.ref_id)
@@ -152,6 +164,12 @@ async def get_casino(
 
     # Build bonus list
     active_bonuses = [b for b in c.bonuses if b.is_active]
+
+    if not affiliate_link:
+        geo_bonuses_with_link = [b for b in active_bonuses if b.affiliate_link]
+        if geo_bonuses_with_link:
+            best_b = max(geo_bonuses_with_link, key=lambda b: float(b.jogai_score or 0))
+            affiliate_link = best_b.affiliate_link
     bonus_items = []
     best_score: float | None = None
     best_bonus_title: str | None = None
