@@ -54,6 +54,7 @@ async def seed():
                 # BR link: https://lkwn.cc/ab45ce, MX link: https://lkbz.cc/42546f
                 affiliate_link_template="",  # Using direct links per geo on bonuses
                 ref_id="",
+                promo_code="JOGAI",
                 is_active=True,
                 geo=["BR", "MX"],
             ),

@@ -69,16 +69,20 @@ async def generate_bonus_digest(bonuses: list[Bonus], locale: str) -> str:
     if locale.startswith("pt"):
         header = f"🔥 <b>MELHORES BÔNUS DE HOJE ({today}):</b>\n"
         cta_text = "Cadastre-se aqui"
+        promo_label = "Código promocional"
         footer = "⚡ Analisado por <b>Jogai AI</b> — só bônus verificados!"
     else:
         header = f"🔥 <b>MEJORES BONOS DE HOY ({today}):</b>\n"
         cta_text = "Regístrate aquí"
+        promo_label = "Código promocional"
         footer = "⚡ Analizado por <b>Jogai AI</b> — ¡solo bonos verificados!"
 
     lines = [header]
     for i, bonus in enumerate(bonuses, 1):
         title = getattr(bonus, f"title_{lang_suffix}") or bonus.title_pt or ""
         casino_name = bonus.casino.name if bonus.casino else "Casino"
+        casino = bonus.casino
+        promo_code = casino.promo_code if casino else None
         verdict = t(bonus.verdict_key, locale) if bonus.verdict_key else ""
         link = bonus.affiliate_link or ""
 
@@ -88,6 +92,8 @@ async def generate_bonus_digest(bonuses: list[Bonus], locale: str) -> str:
             f"{medal} <b>{casino_name}</b> — {title}\n"
             f"    ⭐ Score: {bonus.jogai_score}/10 — {verdict}"
         )
+        if promo_code:
+            line += f"\n    🎟 {promo_label}: <b>{promo_code}</b>"
         if link:
             line += f'\n    👉 <a href="{link}">{cta_text}</a>'
         lines.append(line)

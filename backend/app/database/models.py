@@ -75,6 +75,7 @@ class Casino(Base):
     affiliate_program: Mapped[str | None] = mapped_column(String(100))
     affiliate_link_template: Mapped[str | None] = mapped_column(Text)
     ref_id: Mapped[str | None] = mapped_column(String(100))
+    promo_code: Mapped[str | None] = mapped_column(String(50))
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     geo: Mapped[list[str]] = mapped_column(ARRAY(Text), default=["BR"])
     created_at: Mapped[datetime] = mapped_column(
