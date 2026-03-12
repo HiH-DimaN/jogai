@@ -272,20 +272,58 @@ jogai/
   - Express бонус +7-15% на 5+ событий, без wagering (score 8.5)
 - [x] API: bonuses BR=4, MX=5 (было BR=1, MX=2)
 
-### После запуска
-- [ ] Bot description + /setcommands в @BotFather
-- [ ] Privacy Policy / Terms на лендинге (требование Telegram для Mini App)
-- [ ] Caliente / Codere — получить партнёрские ссылки и активировать
-- [ ] Guides: slug-и для es-MX на испанском (сейчас португальские)
+### Шаг 13 — Полный аудит бота + лендинга (2026-03-13)
+- [x] **Бот: все хендлеры проверены и исправлены:**
+  - [x] /bonus: кнопки — прямые URL на affiliate-ссылки (один клик → регистрация), промокод в тексте кнопки
+  - [x] /bonus click handler: selectinload(Casino), URL-кнопка вместо raw HTML
+  - [x] Casino quiz: edit_text вместо answer (1 сообщение вместо 6), пустой результат — кнопки навигации
+  - [x] Casino quiz result: локализованный title (title_es/title_pt), промокод через i18n
+  - [x] /bet: собственный prompt (tracker_prompt) вместо analyze_prompt
+  - [x] /sport: пустое состояние — кнопки "Бонусы" + "Квиз" вместо "Анализировать"
+  - [x] /referral: i18n вместо хардкода "convidados/invitados"
+  - [x] /tracker: формат ввода через i18n
+  - [x] parse_mode="HTML" на всех сообщениях с форматированием
+- [x] **Лендинг:**
+  - [x] Кнопки "Pegar bônus" / "Crear cuenta" — whitespace-nowrap (не разбиваются)
+  - [x] Privacy Policy + Terms of Service страницы
+  - [x] Footer: ссылки на /privacy и /terms
+  - [x] Sitemap: 18 URL (было 14)
+- [x] **API casinos:**
+  - [x] Платежные методы фильтруются по geo (PIX только BR, SPEI только MX)
+  - [x] Fallback affiliate_link: если нет template, берётся из лучшего бонуса
+  - [x] 1WIN MX получил кнопку "Crear cuenta" + правильные платёжные методы
+- [x] **Канал автопостинг:**
+  - [x] Все посты — HTML с кликабельными affiliate-ссылками и промокодами
+  - [x] Бонус-дайджест: все активные бонусы с медалями, scores, per-bonus ссылками
+  - [x] Education/comparison посты: HTML + CTA на бота
+- [x] **Mini App:** vite base path /miniapp/ (fix blank screen)
+- [x] **i18n:** +8 новых ключей (promo_code_label, referral_invited_count, tracker_prompt, tracker_format, tracker_format_example, casino_no_results) в pt_BR + es_MX
 
-### Работает (проверено на проде 2026-03-12)
+### Что осталось для заработка
+
+#### Нужно сделать (влияет на доход)
+- [ ] **Bot /setcommands в @BotFather** — без этого пользователи не видят список команд
+- [ ] **Привлечение трафика** — SEO работает, но нужен контент-маркетинг (Reddit, форумы, Telegram-группы)
+- [ ] **Caliente / Codere партнёрки** — получить ссылки и активировать (расширяет MX-монетизацию)
+- [ ] **Мониторинг конверсий** — проверять dashboard 1WIN/PIN-UP на наличие регистраций и FTD
+
+#### Желательно (улучшает конверсию)
+- [ ] Guides: slug-и для es-MX на испанском (сейчас португальские)
+- [ ] Mini App: проверить работу после fix base path
+- [ ] Больше верифицированных бонусов (парсер bonus_parser.py готов)
+- [ ] A/B тестирование текстов CTA на лендинге
+
+### Работает (проверено на проде 2026-03-13)
 - [x] Сервер: 8 контейнеров, всё healthy
 - [x] Landing: /pt-BR (200), /es-MX (200), SSL (Caddy), 308 redirect с /
 - [x] Логотипы: /img/pinup.png (200), /img/1win.png (200) — отображаются в таблицах и карточках
 - [x] API: casinos BR=1 (1WIN), MX=2 (1WIN+PIN-UP) | bonuses BR=4, MX=5 | slots=12
-- [x] Bot: @jogai_bot — webhook активен
-- [x] Celery: 13 задач, beat + worker running, баги пофикшены
+- [x] API: affiliate links + geo-filtered payments работают корректно
+- [x] Bot: @jogai_bot — все команды проверены, ссылки рабочие (1WIN 302→reg, PIN-UP Cloudflare OK)
+- [x] Bot: квиз — 1 сообщение, прямые URL-кнопки, промокоды
+- [x] Celery: 13 задач, beat + worker, HTML посты с affiliate-ссылками
 - [x] AI: gpt-4o-mini + gpt-4o (OpenAI key OK)
 - [x] Odds API: ключ подключён
 - [x] DB: pool_pre_ping=True, защита от stale connections
-- [x] SEO: Google Search Console верифицирован, sitemap.xml (14 URL), индексация запрошена
+- [x] SEO: Google Search Console, sitemap.xml (18 URL), Privacy/Terms pages
+- [x] Лендинг: кнопки не разбиваются, платёжные методы по geo
