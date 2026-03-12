@@ -53,6 +53,7 @@
   "casino_q5_beginner": "Iniciante",
   "casino_q5_intermediate": "Intermediário",
   "casino_q5_advanced": "Experiente",
+  "casino_no_results": "Não encontrei cassinos para o seu perfil. Tente ajustar suas preferências!",
   "casino_result_title": "🎯 SEU CASSINO IDEAL:",
   "casino_match": "{percent}% match!",
   "casino_best_for": "✅ Melhor para: {features}",

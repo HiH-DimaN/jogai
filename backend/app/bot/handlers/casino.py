@@ -26,7 +26,7 @@ async def quiz_start(callback: CallbackQuery, locale: str, state: FSMContext) ->
         [InlineKeyboardButton(text=t("casino_q1_sports", locale), callback_data="q1:sports")],
         [InlineKeyboardButton(text=t("casino_q1_table", locale), callback_data="q1:table")],
     ])
-    await callback.message.answer(t("casino_q1", locale), reply_markup=keyboard)
+    await callback.message.edit_text(t("casino_q1", locale), reply_markup=keyboard)
     await callback.answer()
 
 
@@ -39,7 +39,7 @@ async def quiz_q1(callback: CallbackQuery, locale: str, state: FSMContext) -> No
         [InlineKeyboardButton(text=t("casino_q2_high", locale), callback_data="q2:high")],
         [InlineKeyboardButton(text=t("casino_q2_vip", locale), callback_data="q2:vip")],
     ])
-    await callback.message.answer(t("casino_q2", locale), reply_markup=keyboard)
+    await callback.message.edit_text(t("casino_q2", locale), reply_markup=keyboard)
     await callback.answer()
 
 
@@ -53,7 +53,7 @@ async def quiz_q2(callback: CallbackQuery, locale: str, state: FSMContext) -> No
         [InlineKeyboardButton(text=t("casino_q3_crypto", locale), callback_data="q3:crypto")],
         [InlineKeyboardButton(text=t("casino_q3_card", locale), callback_data="q3:card")],
     ])
-    await callback.message.answer(t("casino_q3", locale), reply_markup=keyboard)
+    await callback.message.edit_text(t("casino_q3", locale), reply_markup=keyboard)
     await callback.answer()
 
 
@@ -67,7 +67,7 @@ async def quiz_q3(callback: CallbackQuery, locale: str, state: FSMContext) -> No
         [InlineKeyboardButton(text=t("casino_q4_wagering", locale), callback_data="q4:wagering")],
         [InlineKeyboardButton(text=t("casino_q4_withdraw", locale), callback_data="q4:withdraw")],
     ])
-    await callback.message.answer(t("casino_q4", locale), reply_markup=keyboard)
+    await callback.message.edit_text(t("casino_q4", locale), reply_markup=keyboard)
     await callback.answer()
 
 
@@ -81,7 +81,7 @@ async def quiz_q4(callback: CallbackQuery, locale: str, state: FSMContext) -> No
         [InlineKeyboardButton(text=t("casino_q5_intermediate", locale), callback_data="q5:intermediate")],
         [InlineKeyboardButton(text=t("casino_q5_advanced", locale), callback_data="q5:advanced")],
     ])
-    await callback.message.answer(t("casino_q5", locale), reply_markup=keyboard)
+    await callback.message.edit_text(t("casino_q5", locale), reply_markup=keyboard)
     await callback.answer()
 
 
@@ -106,7 +106,11 @@ async def quiz_result(
     )
 
     if not results:
-        await callback.message.answer(t("error_generic", locale))
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text=t("btn_bonuses", locale), callback_data="bonuses")],
+            [InlineKeyboardButton(text=t("btn_casino", locale), callback_data="casino_quiz")],
+        ])
+        await callback.message.answer(t("casino_no_results", locale), reply_markup=keyboard)
         await callback.answer()
         return
 
