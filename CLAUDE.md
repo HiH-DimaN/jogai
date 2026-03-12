@@ -248,8 +248,8 @@ jogai/
 
 ## Чек-лист запуска
 
-### Блокеры (без них НЕ запускаем)
-- [ ] **Affiliate ссылки** — получить реальные трекинг-ссылки:
+### Блокеры — ВСЕ ЗАКРЫТЫ
+- [x] **Affiliate ссылки:**
   - [x] 1WIN (BR): https://lkwn.cc/fd8e81 — промокод JOGAI
   - [x] 1WIN (MX): https://lkbz.cc/42546f — промокод JOGAI
   - [x] PIN-UP (MX, CL, EC): https://onlinepnplnk.com/9euv1TI2/ — RevShare 40%, менеджер Никита (2026-03-10)
@@ -257,20 +257,22 @@ jogai/
   - [x] ~~Rivalo~~ — DNS сломан, партнёрка недоступна
   - [ ] Caliente (MX) — деактивировано до получения реальной ссылки
   - [ ] Codere (MX) — деактивировано до получения реальной ссылки
-- [ ] **Логотипы казино** — загрузить реальные лого (сейчас URL-заглушки)
+- [x] **Логотипы казино** — pinup.png + 1win.png в landing/public/img/
+- [x] **Telegram каналы** @jogai_br / @jogai_mx — описание, аватар
 
-### Желательно до запуска
-- [ ] Telegram каналы @jogai_br / @jogai_mx — описание, аватар, закреплённый пост
+### После запуска
 - [ ] Bot description + /setcommands в @BotFather
 - [ ] Privacy Policy / Terms на лендинге (требование Telegram для Mini App)
 - [ ] Google Search Console + sitemap.xml (SEO-индексация)
+- [ ] Caliente / Codere — получить партнёрские ссылки и активировать
 
-### Работает (проверено на проде)
+### Работает (проверено на проде 2026-03-12)
 - [x] Сервер: 8 контейнеров, всё healthy
 - [x] Landing: /pt-BR (200), /es-MX (200), SSL (Caddy)
-- [x] API: casinos BR=2, MX=4 | bonuses BR=1, MX=5 | slots=12
+- [x] Логотипы: /img/pinup.png (200), /img/1win.png (200)
+- [x] API: casinos BR=1 (1WIN), MX=2 (1WIN+PIN-UP) | bonuses BR=1, MX=2 | slots=12
 - [x] Bot: @jogai_bot — webhook активен
-- [x] Celery: 13 задач, beat + worker running
+- [x] Celery: 13 задач, beat + worker running, баги пофикшены
 - [x] AI: gpt-4o-mini + gpt-4o (OpenAI key OK)
 - [x] Odds API: ключ подключён
 - [x] DB: pool_pre_ping=True, защита от stale connections
