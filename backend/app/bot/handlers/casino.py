@@ -127,17 +127,31 @@ async def quiz_result(
 
         text += t("casino_withdraw_line", locale, time=casino.withdrawal_time or "—") + "\n"
 
+        # Get affiliate link: from template or from best bonus
+        link = None
         if casino.affiliate_link_template:
             link = casino.affiliate_link_template.format(
                 ref_id=casino.ref_id or "", user_id=db_user.id
             )
+        if not link:
+            # Fallback: get link from best bonus for user's geo
+            geo_bonuses = [
+                b for b in casino.bonuses
+                if b.is_active and db_user.geo in (b.geo or []) and b.affiliate_link
+            ]
+            if geo_bonuses:
+                best_b = max(geo_bonuses, key=lambda b: float(b.jogai_score or 0))
+                link = best_b.affiliate_link
+
+        if link:
+            promo_text = f" (código: {casino.promo_code})" if casino.promo_code else ""
             buttons.append([
                 InlineKeyboardButton(
-                    text=f"{t('btn_register', locale)} [{casino.name}]",
+                    text=f"{t('btn_register', locale)} {casino.name}{promo_text}",
                     url=link,
                 )
             ])
 
     keyboard = InlineKeyboardMarkup(inline_keyboard=buttons) if buttons else None
-    await callback.message.answer(text, reply_markup=keyboard)
+    await callback.message.answer(text, reply_markup=keyboard, parse_mode="HTML")
     await callback.answer()
