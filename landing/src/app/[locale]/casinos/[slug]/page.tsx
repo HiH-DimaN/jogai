@@ -230,7 +230,7 @@ export default async function CasinoDetailPage({params: {locale, slug}}: Props) 
                           href={bonus.affiliate_link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="rounded-lg bg-jogai-accent px-4 py-2 text-xs font-bold text-jogai-bg transition hover:bg-jogai-accent/90"
+                          className="inline-block whitespace-nowrap rounded-lg bg-jogai-accent px-4 py-2 text-xs font-bold text-jogai-bg transition hover:bg-jogai-accent/90"
                         >
                           {t('bonuses.get_bonus')}
                         </a>
