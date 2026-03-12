@@ -123,7 +123,8 @@ async def quiz_result(
         # Best bonus for this casino
         if casino.bonuses:
             best = max(casino.bonuses, key=lambda b: float(b.jogai_score or 0))
-            text += t("casino_bonus_line", locale, bonus=best.title_pt or "") + "\n"
+            bonus_title = best.title_es if locale.startswith("es") else best.title_pt
+            text += t("casino_bonus_line", locale, bonus=bonus_title or "") + "\n"
 
         text += t("casino_withdraw_line", locale, time=casino.withdrawal_time or "—") + "\n"
 
@@ -144,7 +145,7 @@ async def quiz_result(
                 link = best_b.affiliate_link
 
         if link:
-            promo_text = f" (código: {casino.promo_code})" if casino.promo_code else ""
+            promo_text = f" ({t('promo_code_label', locale)}: {casino.promo_code})" if casino.promo_code else ""
             buttons.append([
                 InlineKeyboardButton(
                     text=f"{t('btn_register', locale)} {casino.name}{promo_text}",

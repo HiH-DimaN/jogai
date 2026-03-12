@@ -9,6 +9,7 @@ from aiogram.types import (
     Message,
 )
 from sqlalchemy import select
+from sqlalchemy.orm import selectinload
 
 from app.database.engine import async_session
 from app.database.models import Bonus, Click, User
@@ -80,7 +81,7 @@ async def cmd_bonus(message: Message, locale: str, db_user: User) -> None:
         return
 
     text, keyboard = _build_bonus_message(bonuses, locale)
-    await message.answer(text, reply_markup=keyboard)
+    await message.answer(text, reply_markup=keyboard, parse_mode="HTML")
 
 
 @router.callback_query(F.data == "bonuses")
@@ -98,7 +99,7 @@ async def cb_bonuses(callback: CallbackQuery, locale: str, db_user: User) -> Non
         return
 
     text, keyboard = _build_bonus_message(bonuses, locale)
-    await callback.message.answer(text, reply_markup=keyboard)
+    await callback.message.answer(text, reply_markup=keyboard, parse_mode="HTML")
     await callback.answer()
 
 
@@ -117,7 +118,7 @@ async def cb_bonuses_all(callback: CallbackQuery, locale: str, db_user: User) ->
         return
 
     text, keyboard = _build_bonus_message(bonuses, locale, show_all=True)
-    await callback.message.answer(text, reply_markup=keyboard)
+    await callback.message.answer(text, reply_markup=keyboard, parse_mode="HTML")
     await callback.answer()
 
 
@@ -127,13 +128,20 @@ async def cb_click(callback: CallbackQuery, locale: str, db_user: User) -> None:
 
     async with async_session() as session:
         result = await session.execute(
-            select(Bonus).where(Bonus.id == bonus_id)
+            select(Bonus)
+            .options(selectinload(Bonus.casino))
+            .where(Bonus.id == bonus_id)
         )
         bonus = result.scalar_one_or_none()
 
         if not bonus:
             await callback.answer(t("error_generic", locale), show_alert=True)
             return
+
+        # Extract data while session is open
+        link = bonus.affiliate_link or None
+        casino_name = bonus.casino.name if bonus.casino else "Casino"
+        promo_code = bonus.casino.promo_code if bonus.casino else None
 
         # Record click with locale
         click = Click(
@@ -146,7 +154,20 @@ async def cb_click(callback: CallbackQuery, locale: str, db_user: User) -> None:
         session.add(click)
         await session.commit()
 
-    # Send affiliate link
-    link = bonus.affiliate_link or "#"
-    await callback.message.answer(f"<a href='{link}'>{t('btn_get_bonus', locale)}</a>")
+    # Send affiliate link as URL button with promo code
+    if link:
+        promo_text = ""
+        if promo_code:
+            promo_text = f" ({t('promo_code_label', locale)}: {promo_code})"
+        keyboard = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(
+                text=f"{t('btn_get_bonus', locale)} [{casino_name}]{promo_text}",
+                url=link,
+            )]
+        ])
+        await callback.message.answer(
+            t("btn_get_bonus", locale), reply_markup=keyboard,
+        )
+    else:
+        await callback.message.answer(t("error_generic", locale))
     await callback.answer()

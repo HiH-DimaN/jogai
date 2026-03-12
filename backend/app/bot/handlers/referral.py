@@ -40,7 +40,7 @@ async def cmd_referral(message: Message, locale: str, db_user: User) -> None:
         + f"\n{referral_link}\n\n"
         + t("referral_coins_balance", locale, coins=db_user.jogai_coins)
         + f"\n({referral_count} "
-        + ("convidados" if locale.startswith("pt") else "invitados")
+        + t("referral_invited_count", locale)
         + ")\n\n"
         + t("referral_reward", locale)
     )

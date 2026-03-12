@@ -25,8 +25,9 @@ async def cmd_bet(message: Message, locale: str, state: FSMContext) -> None:
     text = (
         t("analyze_prompt", locale).split("—")[0].strip()
         + "\n\n"
-        + "Format: game_type | game_name | bet_amount | result_amount\n"
-        + "Ex: slots | Sweet Bonanza | 50 | 120"
+        + t("tracker_format", locale)
+        + "\n"
+        + t("tracker_format_example", locale)
     )
     await message.answer(text)
 

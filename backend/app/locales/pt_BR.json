@@ -116,6 +116,10 @@
   "slot_tip_wolfgold": "Jackpot progressivo + respins com moedas. Jogue com aposta fixa para chance de jackpot.",
   "slot_tip_aviator": "Crash game — saque antes que o avião voe! Estratégia: auto-cashout em x1.5 para consistência.",
   "slot_tip_fortunetiger": "Mega popular no Brasil! Respin com símbolo expandido. Melhor em apostas médias.",
+  "promo_code_label": "código",
+  "referral_invited_count": "convidados",
+  "tracker_format": "Formato: tipo_jogo | nome_jogo | valor_aposta | valor_resultado",
+  "tracker_format_example": "Ex: slots | Sweet Bonanza | 50 | 120",
   "dm_new_bonus": "🔔 NOVO BÔNUS TOP!\n\n🏆 [{casino}] — {title}\n⭐ Jogai Score: {score}/10 — {verdict}\n\n👉 Envie /bonus para ver todos os bônus ativos!",
   "dm_expiring_bonus": "⏰ BÔNUS EXPIRANDO!\n\n[{casino}] — {title}\n⏳ Válido até: {expires}\n\n👉 Aproveite antes que acabe! Envie /bonus"
 }
