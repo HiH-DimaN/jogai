@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import random
 from datetime import datetime
 
 from sqlalchemy import select, update
@@ -28,7 +29,7 @@ CHANNELS: dict[str, dict] = {
 
 
 async def _get_best_bonus(geo: str) -> Bonus | None:
-    """Get the best active bonus for a geo by jogai_score."""
+    """Get a random active bonus from top-scoring ones for a geo (rotation)."""
     async with async_session() as session:
         result = await session.execute(
             select(Bonus)
@@ -39,9 +40,12 @@ async def _get_best_bonus(geo: str) -> Bonus | None:
                 (Bonus.expires_at.is_(None)) | (Bonus.expires_at > datetime.utcnow())
             )
             .order_by(Bonus.jogai_score.desc())
-            .limit(1)
+            .limit(5)
         )
-        return result.scalar_one_or_none()
+        bonuses = list(result.scalars().all())
+        if not bonuses:
+            return None
+        return random.choice(bonuses)
 
 
 async def _get_sport_pick(geo: str) -> SportPick | None:
@@ -90,7 +94,9 @@ async def _save_post(
         await session.commit()
 
 
-async def _send_to_channel(channel_id: str, text: str) -> int | None:
+async def _send_to_channel(
+    channel_id: str, text: str, parse_mode: str = "HTML"
+) -> int | None:
     """Send a message to a Telegram channel. Returns message_id."""
     if not channel_id or channel_id == "placeholder":
         logger.warning("Channel ID not configured, skipping send")
@@ -98,7 +104,10 @@ async def _send_to_channel(channel_id: str, text: str) -> int | None:
 
     try:
         bot = get_bot()
-        msg = await bot.send_message(chat_id=channel_id, text=text)
+        msg = await bot.send_message(
+            chat_id=channel_id, text=text, parse_mode=parse_mode,
+            disable_web_page_preview=True,
+        )
         return msg.message_id
     except Exception:
         logger.error("Failed to send to channel %s", channel_id, exc_info=True)

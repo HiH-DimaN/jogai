@@ -19,6 +19,8 @@ async def generate_bonus_post(bonus: Bonus, locale: str) -> str:
     casino_name = bonus.casino.name if bonus.casino else "Casino"
     verdict = t(bonus.verdict_key, locale) if bonus.verdict_key else ""
 
+    affiliate_link = bonus.affiliate_link or ""
+
     try:
         prompt = load_prompt("content_post", language, currency_symbol)
         user_message = (
@@ -30,7 +32,8 @@ async def generate_bonus_post(bonus: Bonus, locale: str) -> str:
             f"Deadline: {bonus.wagering_deadline_days} days\n"
             f"Free spins: {bonus.free_spins}\n"
             f"Jogai Score: {bonus.jogai_score}/10\n"
-            f"Verdict: {verdict}"
+            f"Verdict: {verdict}\n"
+            f"Affiliate link: {affiliate_link}"
         )
         return await chat(prompt, user_message, language, currency_symbol)
     except Exception:
@@ -44,7 +47,6 @@ def _fallback_bonus_post(bonus: Bonus, locale: str) -> str:
     title = getattr(bonus, f"title_{lang_suffix}") or bonus.title_pt or ""
     casino_name = bonus.casino.name if bonus.casino else "Casino"
     verdict = t(bonus.verdict_key, locale) if bonus.verdict_key else ""
-    expires = bonus.expires_at.strftime("%d/%m") if bonus.expires_at else "—"
 
     return t(
         "channel_bonus_day",
@@ -53,7 +55,7 @@ def _fallback_bonus_post(bonus: Bonus, locale: str) -> str:
         title=title,
         score=bonus.jogai_score,
         verdict=verdict,
-        expires=expires,
+        link=bonus.affiliate_link or "",
     )
 
 

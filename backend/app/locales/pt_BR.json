@@ -94,7 +94,7 @@
   "error_rate_limit": "⏳ Muitas solicitações. Aguarde um momento.",
   "currency_symbol": "R$",
   "currency_code": "BRL",
-  "channel_bonus_day": "🎁 BÔNUS DO DIA: [{casino}] — {title}\n⭐ Jogai Score: {score}/10 — {verdict}\n⏰ Válido até {expires}",
+  "channel_bonus_day": "🎁 <b>BÔNUS DO DIA:</b> {casino} — {title}\n⭐ Jogai Score: <b>{score}/10</b> — {verdict}\n\n👉 <a href=\"{link}\">Cadastre-se e ganhe o bônus</a>",
   "channel_slot_review": "🎰 SLOT DO DIA: {name} — RTP {rtp}%, volatilidade {volatility}\n💡 {tip}\nMelhor cassino: [{casino}]",
   "channel_sport": "⚽ APOSTA DO DIA: {match}\n📊 {analysis}\n💡 Jogai AI recomenda: {pick} (odd {odds})",
   "channel_weekly_top_header": "🏆 TOP DA SEMANA — Melhores Slots & Bônus",

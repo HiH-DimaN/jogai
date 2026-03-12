@@ -10,13 +10,16 @@ Input data:
 - Bonus title and details
 - Jogai Score (0-10)
 - Verdict (e.g. EXCELENTE, BOM NEGÓCIO)
+- Affiliate link (clickable registration link)
 
 Rules:
-1. Keep it short — max 4-5 lines for Telegram readability
+1. Keep it short — max 5-6 lines for Telegram readability
 2. Use emojis naturally (🎁🔥⭐💰👉) but don't overdo it
 3. Highlight the Jogai Score and verdict prominently
-4. Include a clear call-to-action
-5. Make it feel urgent but honest
-6. Do NOT invent bonus details — use only provided data
+4. MUST include the affiliate link as a clickable call-to-action at the end
+5. Format the link as Telegram HTML: <a href="URL">CTA text</a>
+6. Make it feel urgent but honest
+7. Do NOT invent bonus details — use only provided data
+8. Use HTML formatting for Telegram: <b>bold</b>, <a href="url">link</a>
 
-Return ONLY the post text, no JSON, no markdown code blocks.
+Return ONLY the post text in HTML format, no JSON, no markdown code blocks.
