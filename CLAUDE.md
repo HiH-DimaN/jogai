@@ -88,6 +88,9 @@ jogai/
 - AI: промпты с `{language}` и `{currency_symbol}`
 - Jogai Score: возвращает verdict_key → хендлер делает t(verdict_key, locale)
 
+## Сервер
+**Production:** root@155.212.230.139
+
 ## Переменные окружения
 Полный список — в PROJECT_ARCHITECTURE.md раздел 8.
 Ключевые: DATABASE_URL, REDIS_URL, TELEGRAM_BOT_TOKEN, ANTHROPIC_API_KEY, DEFAULT_LOCALE=pt_BR, DEFAULT_GEO=BR.
@@ -249,12 +252,11 @@ jogai/
 - [ ] **Affiliate ссылки** — получить реальные трекинг-ссылки:
   - [x] 1WIN (BR): https://lkwn.cc/fd8e81 — промокод JOGAI
   - [x] 1WIN (MX): https://lkbz.cc/42546f — промокод JOGAI
-  - [ ] PIN-UP (MX only, нет BR): ждём ссылку от менеджера Никиты, RevShare 40%
+  - [x] PIN-UP (MX, CL, EC): https://onlinepnplnk.com/9euv1TI2/ — RevShare 40%, менеджер Никита (2026-03-10)
   - [x] ~~Bet365~~ — отказ партнёрской программы
   - [x] ~~Rivalo~~ — DNS сломан, партнёрка недоступна
-  - [ ] Caliente (MX)
-  - [ ] Codere (MX)
-  - После получения PIN-UP ссылки: обновить seed.py → re-seed → restart backend
+  - [ ] Caliente (MX) — деактивировано до получения реальной ссылки
+  - [ ] Codere (MX) — деактивировано до получения реальной ссылки
 - [ ] **Логотипы казино** — загрузить реальные лого (сейчас URL-заглушки)
 
 ### Желательно до запуска

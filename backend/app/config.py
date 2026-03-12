@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     llm_model_heavy: str = "gpt-4o"
 
     # Affiliate
-    pinup_ref_id: str = ""  # Waiting for PIN-UP Partners MX link
+    pinup_ref_id: str = ""  # PIN-UP Partners direct link: https://onlinepnplnk.com/9euv1TI2/
     onewin_ref_br: str = ""  # 1WIN BR tracking link
     onewin_ref_mx: str = ""  # 1WIN MX tracking link
     caliente_ref_id: str = ""

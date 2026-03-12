@@ -15,25 +15,26 @@ async def seed():
         if not has_casinos:
             # --- Casinos ---
             casinos = [
-            # PIN-UP: MX only (no Brazil in PIN-UP Partners program)
-            # RevShare 40%, waiting for tracking link from manager Nikita
+            # PIN-UP: MX, CL, EC — RevShare 40%, manager Nikita (2026-03-10)
+            # Direct link: https://onlinepnplnk.com/9euv1TI2/
+            # Min deps: CL 2500 CLP, MX 50 MXN, EC $2 USD
             Casino(
                 name="PIN-UP",
                 slug="pinup",
                 logo_url="https://jogai.fun/img/pinup.png",
                 description_pt="PIN-UP é uma das maiores plataformas de apostas e cassino online da América Latina. Oferece slots, jogos ao vivo, apostas esportivas e bônus generosos.",
                 description_es="PIN-UP es una de las mayores plataformas de apuestas y casino online de América Latina. Ofrece slots, juegos en vivo, apuestas deportivas y bonos generosos.",
-                min_deposit=400.00,
-                min_deposits={"MXN": 400.0},
+                min_deposit=50.00,
+                min_deposits={"MXN": 50.0, "CLP": 2500.0, "USD": 2.0},
                 pix_supported=False,
                 spei_supported=True,
                 crypto_supported=True,
                 withdrawal_time="1-24h",
                 affiliate_program="PIN-UP Partners",
-                affiliate_link_template="",  # Waiting for tracking link from manager
+                affiliate_link_template="https://onlinepnplnk.com/9euv1TI2/",
                 ref_id="",
                 is_active=True,
-                geo=["MX"],
+                geo=["MX", "CL", "EC"],
             ),
             # 1WIN: BR + MX — real tracking links received
             # Promo code: JOGAI
@@ -72,9 +73,9 @@ async def seed():
                 crypto_supported=False,
                 withdrawal_time="1-48h",
                 affiliate_program="Caliente Affiliates",
-                affiliate_link_template="https://caliente.mx/?ref={ref_id}&uid={user_id}",
-                ref_id="jogai_33333",
-                is_active=True,
+                affiliate_link_template="",  # Waiting for real affiliate link
+                ref_id="",
+                is_active=False,  # Deactivated until real affiliate link received
                 geo=["MX"],
             ),
             Casino(
@@ -90,9 +91,9 @@ async def seed():
                 crypto_supported=False,
                 withdrawal_time="1-24h",
                 affiliate_program="Codere Affiliates",
-                affiliate_link_template="https://codere.mx/?ref={ref_id}&uid={user_id}",
-                ref_id="jogai_44444",
-                is_active=True,
+                affiliate_link_template="",  # Waiting for real affiliate link
+                ref_id="",
+                is_active=False,  # Deactivated until real affiliate link received
                 geo=["MX"],
             ),
             ]
@@ -375,7 +376,7 @@ async def seed():
 
                 # --- MX bonuses ---
                 # Source: pinupcassinos.com.br (same international offer applies to MX)
-                # PIN-UP MX: RevShare 40%, waiting for tracking link from manager
+                # PIN-UP: RevShare 40%, direct link received 2026-03-10
                 {
                     "casino_slug": "pinup",
                     "title_pt": "PIN-UP MX: 120% no primeiro depósito + 250 Free Spins",
@@ -389,7 +390,7 @@ async def seed():
                     "free_spins": 250,
                     "no_deposit": False,
                     "geo": ["MX"],
-                    "affiliate_link": "",  # Waiting for PIN-UP Partners tracking link
+                    "affiliate_link": "https://onlinepnplnk.com/9euv1TI2/",
                 },
                 # Source: sportytrader.com (same international offer for MX)
                 # Promo code: JOGAI
