@@ -6,7 +6,7 @@ and saves sport picks to the database.
 
 import asyncio
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import httpx
 from sqlalchemy import select
@@ -163,7 +163,8 @@ async def fetch_and_save_picks() -> int:
                 match_date = datetime.fromisoformat(match_date_str.replace("Z", "+00:00"))
 
                 # Only upcoming matches (next 3 days)
-                if match_date < datetime.utcnow() or match_date > datetime.utcnow() + timedelta(days=3):
+                now = datetime.now(timezone.utc)
+                if match_date < now or match_date > now + timedelta(days=3):
                     continue
 
                 home = event.get("home_team", "")

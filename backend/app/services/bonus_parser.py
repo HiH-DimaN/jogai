@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 from sqlalchemy import select
 
 from app.celery_app import celery
-from app.database.engine import async_session
+from app.database.engine import async_session, engine
 from app.database.models import Bonus, Casino
 from app.services.bonus_analyzer import calculate_jogai_score
 from app.services.llm import chat_json, get_locale_params, load_prompt
@@ -327,13 +327,16 @@ async def run_parser() -> dict[str, int]:
     return stats
 
 
+async def _dispose_and_run(coro):
+    from app.bot.bot import reset_bot
+    reset_bot()
+    await engine.dispose()
+    return await coro
+
+
 @celery.task(name="app.services.bonus_parser.task_parse_bonuses")
 def task_parse_bonuses() -> dict[str, int]:
     """Celery task: parse bonus pages from review/affiliate sites."""
-    loop = asyncio.new_event_loop()
-    try:
-        stats = loop.run_until_complete(run_parser())
-        logger.info("Bonus parser completed: %s", stats)
-        return stats
-    finally:
-        loop.close()
+    stats = asyncio.run(_dispose_and_run(run_parser()))
+    logger.info("Bonus parser completed: %s", stats)
+    return stats
