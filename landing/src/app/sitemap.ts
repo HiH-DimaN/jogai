@@ -63,6 +63,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
+  // Privacy & Terms
+  for (const locale of locales) {
+    entries.push(
+      {
+        url: `${BASE_URL}/${locale}/privacy`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.3,
+      },
+      {
+        url: `${BASE_URL}/${locale}/terms`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.3,
+      },
+    );
+  }
+
   // Guide detail pages
   for (const locale of locales) {
     for (const slug of guideSlugs) {

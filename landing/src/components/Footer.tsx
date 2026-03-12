@@ -1,6 +1,7 @@
 'use client';
 
 import {useTranslations} from 'next-intl';
+import {Link} from '@/navigation';
 
 export default function Footer() {
   const t = useTranslations('footer');
@@ -14,12 +15,12 @@ export default function Footer() {
             <p className="mt-1">{t('disclaimer')}</p>
           </div>
           <div className="flex gap-4">
-            <a href="#" className="transition hover:text-jogai-text">
+            <Link href="/privacy" className="transition hover:text-jogai-text">
               {t('privacy')}
-            </a>
-            <a href="#" className="transition hover:text-jogai-text">
+            </Link>
+            <Link href="/terms" className="transition hover:text-jogai-text">
               {t('terms')}
-            </a>
+            </Link>
           </div>
         </div>
         <p className="mt-4 text-center text-xs text-jogai-muted">{t('copyright')}</p>
