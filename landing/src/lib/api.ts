@@ -13,6 +13,7 @@ export type CasinoAPI = {
   id: number;
   name: string;
   slug: string;
+  logo_url: string | null;
   description: string | null;
   min_deposit: number | null;
   min_deposit_formatted: string | null;
@@ -31,6 +32,7 @@ export type BonusAPI = {
   casino_id: number;
   casino_name: string;
   casino_slug: string;
+  casino_logo_url: string | null;
   title: string;
   bonus_percent: number;
   max_bonus_amount: number;

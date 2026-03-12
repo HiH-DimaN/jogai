@@ -7,6 +7,7 @@ export type BonusRow = {
   id: number;
   casino_name: string;
   casino_slug: string;
+  casino_logo_url: string | null;
   title: string;
   wagering_multiplier: number;
   wagering_deadline_days: number;
@@ -49,7 +50,14 @@ export default function BonusTable({bonuses}: {bonuses: BonusRow[]}) {
         <tbody>
           {bonuses.map((bonus) => (
             <tr key={bonus.id} className="border-b border-jogai-border transition hover:bg-jogai-card">
-              <td className="px-4 py-4 font-bold text-jogai-text">{bonus.casino_name}</td>
+              <td className="px-4 py-4">
+                <div className="flex items-center gap-3">
+                  {bonus.casino_logo_url && (
+                    <img src={bonus.casino_logo_url} alt={bonus.casino_name} className="h-8 w-8 rounded object-contain" />
+                  )}
+                  <span className="font-bold text-jogai-text">{bonus.casino_name}</span>
+                </div>
+              </td>
               <td className="px-4 py-4 text-jogai-accent">{bonus.title}</td>
               <td className="px-4 py-4">{bonus.wagering_multiplier}x</td>
               <td className="px-4 py-4">

@@ -82,7 +82,12 @@ export default async function CasinosPage({params: {locale}}: Props) {
             >
               <div className="mb-4 flex items-start justify-between">
                 <div>
-                  <h2 className="text-xl font-bold text-jogai-text">{casino.name}</h2>
+                  <div className="flex items-center gap-3">
+                    {casino.logo_url && (
+                      <img src={casino.logo_url} alt={casino.name} className="h-10 w-10 rounded object-contain" />
+                    )}
+                    <h2 className="text-xl font-bold text-jogai-text">{casino.name}</h2>
+                  </div>
                   {casino.best_jogai_score !== null && (
                     <div className="mt-1">
                       <JogaiScoreBadge score={casino.best_jogai_score} />

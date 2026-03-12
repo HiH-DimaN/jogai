@@ -104,8 +104,11 @@ export default async function BonusesPage({params: {locale}}: Props) {
                     <td className="px-4 py-4">
                       <Link
                         href={`/casinos/${bonus.casino_slug}`}
-                        className="font-bold text-jogai-text hover:text-jogai-accent"
+                        className="flex items-center gap-3 font-bold text-jogai-text hover:text-jogai-accent"
                       >
+                        {bonus.casino_logo_url && (
+                          <img src={bonus.casino_logo_url} alt={bonus.casino_name} className="h-8 w-8 rounded object-contain" />
+                        )}
                         {bonus.casino_name}
                       </Link>
                     </td>

@@ -5,6 +5,7 @@ import {useTranslations} from 'next-intl';
 export type CasinoRow = {
   name: string;
   slug: string;
+  logo_url: string | null;
   best_bonus: string | null;
   best_jogai_score: number | null;
   min_deposit_formatted: string | null;
@@ -42,7 +43,14 @@ export default function CasinoTable({casinos}: {casinos: CasinoRow[]}) {
         <tbody>
           {casinos.map((casino) => (
             <tr key={casino.slug} className="border-b border-jogai-border transition hover:bg-jogai-card">
-              <td className="px-4 py-4 font-bold text-jogai-text">{casino.name}</td>
+              <td className="px-4 py-4">
+                <div className="flex items-center gap-3">
+                  {casino.logo_url && (
+                    <img src={casino.logo_url} alt={casino.name} className="h-8 w-8 rounded object-contain" />
+                  )}
+                  <span className="font-bold text-jogai-text">{casino.name}</span>
+                </div>
+              </td>
               <td className="px-4 py-4">{casino.min_deposit_formatted || '—'}</td>
               <td className="px-4 py-4">{casino.withdrawal_time || '—'}</td>
               <td className="px-4 py-4">

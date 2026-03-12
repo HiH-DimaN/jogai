@@ -117,7 +117,10 @@ export default async function CasinoDetailPage({params: {locale, slug}}: Props) 
       <section className="mx-auto max-w-6xl px-4 py-12">
         {/* Casino header */}
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-          <div>
+          <div className="flex items-center gap-4">
+            {casino.logo_url && (
+              <img src={casino.logo_url} alt={casino.name} className="h-12 w-12 rounded object-contain" />
+            )}
             <h1 className="text-4xl font-extrabold">{casino.name}</h1>
           </div>
           {casino.affiliate_link && (

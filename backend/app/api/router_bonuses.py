@@ -16,6 +16,7 @@ class BonusResponse(BaseModel):
     casino_id: int
     casino_name: str
     casino_slug: str
+    casino_logo_url: str | None
     title: str
     bonus_percent: int
     max_bonus_amount: float
@@ -76,6 +77,7 @@ async def get_bonuses(
                 casino_id=b.casino_id or 0,
                 casino_name=casino_name,
                 casino_slug=casino_slug,
+                casino_logo_url=casino.logo_url if casino else None,
                 title=title,
                 bonus_percent=b.bonus_percent or 0,
                 max_bonus_amount=float(b.max_bonus_amount or 0),

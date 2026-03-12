@@ -32,6 +32,7 @@ class CasinoResponse(BaseModel):
     id: int
     name: str
     slug: str
+    logo_url: str | None
     description: str | None
     min_deposit: float | None
     min_deposit_formatted: str | None
@@ -103,6 +104,7 @@ async def get_casinos(
                 id=c.id,
                 name=c.name,
                 slug=c.slug,
+                logo_url=c.logo_url,
                 description=description,
                 min_deposit=deposit_amount,
                 min_deposit_formatted=min_deposit_formatted,
@@ -186,6 +188,7 @@ async def get_casino(
         id=c.id,
         name=c.name,
         slug=c.slug,
+        logo_url=c.logo_url,
         description=description,
         min_deposit=deposit_amount,
         min_deposit_formatted=min_deposit_formatted,
