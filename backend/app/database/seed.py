@@ -373,6 +373,58 @@ async def seed():
                     "geo": ["BR"],
                     "affiliate_link": "https://lkwn.cc/ab45ce",
                 },
+                # Source: 1WIN manager Konstantin + 1waolqq.life/bonuses (March 2026)
+                # 600% across 4 deposits with crypto (130%+140%+160%+170%)
+                # Same wagering as fiat, promo code: JOGAI
+                {
+                    "casino_slug": "1win",
+                    "title_pt": "1WIN Crypto: 600% até R$7.000 nos 4 primeiros depósitos com cripto (código: JOGAI)",
+                    "title_es": "1WIN Crypto: 600% hasta R$7,000 en los 4 primeros depósitos con cripto (código: JOGAI)",
+                    "bonus_percent": 600,
+                    "max_bonus_amount": 7000.0,
+                    "max_bonus_currency": "BRL",
+                    "wagering_multiplier": 50.0,
+                    "wagering_deadline_days": 30,
+                    "max_bet": 25.0,
+                    "free_spins": 0,
+                    "no_deposit": False,
+                    "geo": ["BR"],
+                    "affiliate_link": "https://lkwn.cc/ab45ce",
+                },
+                # Source: 1WIN manager Konstantin + 1waolqq.life/bonuses (March 2026)
+                # Weekly cashback up to 30% on slots losses, no wagering
+                {
+                    "casino_slug": "1win",
+                    "title_pt": "1WIN: Cashback semanal até 30% em slots — sem rollover",
+                    "title_es": "1WIN: Cashback semanal hasta 30% en slots — sin rollover",
+                    "bonus_percent": 30,
+                    "max_bonus_amount": 0,
+                    "max_bonus_currency": "BRL",
+                    "wagering_multiplier": 0,
+                    "wagering_deadline_days": 0,
+                    "max_bet": 0,
+                    "free_spins": 0,
+                    "no_deposit": False,
+                    "geo": ["BR"],
+                    "affiliate_link": "https://lkwn.cc/ab45ce",
+                },
+                # Source: 1WIN manager Konstantin + 1waolqq.life/bonuses (March 2026)
+                # Express bonus: +7% to +15% on accumulator bets with 5+ events, no wagering
+                {
+                    "casino_slug": "1win",
+                    "title_pt": "1WIN: Bônus Expresso +7% a +15% em apostas múltiplas (5+ eventos)",
+                    "title_es": "1WIN: Bono Express +7% a +15% en apuestas múltiples (5+ eventos)",
+                    "bonus_percent": 15,
+                    "max_bonus_amount": 0,
+                    "max_bonus_currency": "BRL",
+                    "wagering_multiplier": 0,
+                    "wagering_deadline_days": 0,
+                    "max_bet": 0,
+                    "free_spins": 0,
+                    "no_deposit": False,
+                    "geo": ["BR"],
+                    "affiliate_link": "https://lkwn.cc/ab45ce",
+                },
 
                 # --- MX bonuses ---
                 # Source: pinupcassinos.com.br (same international offer applies to MX)
@@ -405,6 +457,57 @@ async def seed():
                     "wagering_deadline_days": 30,
                     "max_bet": 400.0,
                     "free_spins": 70,
+                    "no_deposit": False,
+                    "geo": ["MX"],
+                    "affiliate_link": "https://lkbz.cc/42546f",
+                },
+                # Source: 1WIN manager Konstantin + 1waolqq.life/bonuses (March 2026)
+                # 600% across 4 deposits with crypto (130%+140%+160%+170%)
+                {
+                    "casino_slug": "1win",
+                    "title_pt": "1WIN MX Crypto: 600% nos 4 primeiros depósitos com cripto (código: JOGAI)",
+                    "title_es": "1WIN MX Crypto: 600% en los 4 primeros depósitos con cripto (código: JOGAI)",
+                    "bonus_percent": 600,
+                    "max_bonus_amount": 60000.0,
+                    "max_bonus_currency": "MXN",
+                    "wagering_multiplier": 50.0,
+                    "wagering_deadline_days": 30,
+                    "max_bet": 400.0,
+                    "free_spins": 0,
+                    "no_deposit": False,
+                    "geo": ["MX"],
+                    "affiliate_link": "https://lkbz.cc/42546f",
+                },
+                # Source: 1WIN manager Konstantin + 1waolqq.life/bonuses (March 2026)
+                # Weekly cashback up to 30% on slots losses, no wagering
+                {
+                    "casino_slug": "1win",
+                    "title_pt": "1WIN MX: Cashback semanal até 30% em slots — sem rollover",
+                    "title_es": "1WIN MX: Cashback semanal hasta 30% en slots — sin rollover",
+                    "bonus_percent": 30,
+                    "max_bonus_amount": 0,
+                    "max_bonus_currency": "MXN",
+                    "wagering_multiplier": 0,
+                    "wagering_deadline_days": 0,
+                    "max_bet": 0,
+                    "free_spins": 0,
+                    "no_deposit": False,
+                    "geo": ["MX"],
+                    "affiliate_link": "https://lkbz.cc/42546f",
+                },
+                # Source: 1WIN manager Konstantin + 1waolqq.life/bonuses (March 2026)
+                # Express bonus: +7% to +15% on accumulator bets with 5+ events, no wagering
+                {
+                    "casino_slug": "1win",
+                    "title_pt": "1WIN MX: Bônus Expresso +7% a +15% em apostas múltiplas (5+ eventos)",
+                    "title_es": "1WIN MX: Bono Express +7% a +15% en apuestas múltiples (5+ eventos)",
+                    "bonus_percent": 15,
+                    "max_bonus_amount": 0,
+                    "max_bonus_currency": "MXN",
+                    "wagering_multiplier": 0,
+                    "wagering_deadline_days": 0,
+                    "max_bet": 0,
+                    "free_spins": 0,
                     "no_deposit": False,
                     "geo": ["MX"],
                     "affiliate_link": "https://lkbz.cc/42546f",
