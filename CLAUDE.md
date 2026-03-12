@@ -260,19 +260,32 @@ jogai/
 - [x] **Логотипы казино** — pinup.png + 1win.png в landing/public/img/
 - [x] **Telegram каналы** @jogai_br / @jogai_mx — описание, аватар
 
+### Шаг 12 — SEO + логотипы + бонусы 1WIN (2026-03-12)
+- [x] SEO: корневой редирект / → /pt-BR исправлен с 307 на 308 (permanent) для передачи веса
+- [x] Google Search Console: верифицирован, sitemap подключён (14 URL)
+- [x] Проиндексировано 3/14 страниц, запрошена индексация 6 приоритетных URL
+- [x] Логотипы казино: добавлены в API (logo_url в CasinoResponse, casino_logo_url в BonusResponse)
+- [x] Логотипы отображаются на лендинге: CasinoTable, BonusTable, /casinos, /casinos/[slug], /bonuses
+- [x] +6 бонусов 1WIN (3 BR + 3 MX) из верифицированных данных менеджера Константина:
+  - Crypto 600% на 4 депозита (score 8.0)
+  - Cashback до 30% на слоты, без wagering (score 9.5)
+  - Express бонус +7-15% на 5+ событий, без wagering (score 8.5)
+- [x] API: bonuses BR=4, MX=5 (было BR=1, MX=2)
+
 ### После запуска
 - [ ] Bot description + /setcommands в @BotFather
 - [ ] Privacy Policy / Terms на лендинге (требование Telegram для Mini App)
-- [ ] Google Search Console + sitemap.xml (SEO-индексация)
 - [ ] Caliente / Codere — получить партнёрские ссылки и активировать
+- [ ] Guides: slug-и для es-MX на испанском (сейчас португальские)
 
 ### Работает (проверено на проде 2026-03-12)
 - [x] Сервер: 8 контейнеров, всё healthy
-- [x] Landing: /pt-BR (200), /es-MX (200), SSL (Caddy)
-- [x] Логотипы: /img/pinup.png (200), /img/1win.png (200)
-- [x] API: casinos BR=1 (1WIN), MX=2 (1WIN+PIN-UP) | bonuses BR=1, MX=2 | slots=12
+- [x] Landing: /pt-BR (200), /es-MX (200), SSL (Caddy), 308 redirect с /
+- [x] Логотипы: /img/pinup.png (200), /img/1win.png (200) — отображаются в таблицах и карточках
+- [x] API: casinos BR=1 (1WIN), MX=2 (1WIN+PIN-UP) | bonuses BR=4, MX=5 | slots=12
 - [x] Bot: @jogai_bot — webhook активен
 - [x] Celery: 13 задач, beat + worker running, баги пофикшены
 - [x] AI: gpt-4o-mini + gpt-4o (OpenAI key OK)
 - [x] Odds API: ключ подключён
 - [x] DB: pool_pre_ping=True, защита от stale connections
+- [x] SEO: Google Search Console верифицирован, sitemap.xml (14 URL), индексация запрошена
