@@ -122,6 +122,6 @@
   "referral_invited_count": "invitados",
   "tracker_format": "Formato: tipo_juego | nombre_juego | monto_apuesta | monto_resultado",
   "tracker_format_example": "Ej: slots | Sweet Bonanza | 50 | 120",
-  "dm_new_bonus": "🔔 ¡NUEVO BONO TOP!\n\n🏆 [{casino}] — {title}\n⭐ Jogai Score: {score}/10 — {verdict}\n\n👉 ¡Envía /bonus para ver todos los bonos activos!",
-  "dm_expiring_bonus": "⏰ ¡BONO POR EXPIRAR!\n\n[{casino}] — {title}\n⏳ Válido hasta: {expires}\n\n👉 ¡Aprovecha antes de que termine! Envía /bonus"
+  "dm_new_bonus": "🔔 ¡NUEVO BONO TOP!\n\n🏆 <b>{casino}</b> — {title}\n⭐ Jogai Score: {score}/10 — {verdict}\n\n👉 <a href=\"{link}\">Regístrate y obtén el bono</a>",
+  "dm_expiring_bonus": "⏰ ¡BONO POR EXPIRAR!\n\n<b>{casino}</b> — {title}\n⏳ Válido hasta: {expires}\n\n👉 <a href=\"{link}\">¡Aprovecha antes de que termine!</a>"
 }

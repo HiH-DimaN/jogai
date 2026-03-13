@@ -35,7 +35,15 @@ async def generate_bonus_post(bonus: Bonus, locale: str) -> str:
             f"Verdict: {verdict}\n"
             f"Affiliate link: {affiliate_link}"
         )
-        return await chat(prompt, user_message, language, currency_symbol)
+        text = await chat(prompt, user_message, language, currency_symbol)
+        # Guarantee affiliate link is present even if AI omitted it
+        if affiliate_link and affiliate_link not in text:
+            cta = (
+                "Cadastre-se e ganhe o bônus" if locale.startswith("pt")
+                else "Regístrate y obtén el bono"
+            )
+            text += f'\n\n👉 <a href="{affiliate_link}">{cta}</a>'
+        return text
     except Exception:
         logger.warning("AI content generation failed, using template", exc_info=True)
         return _fallback_bonus_post(bonus, locale)
@@ -110,13 +118,14 @@ async def generate_slot_review(
     tip: str,
     casino_name: str,
     locale: str,
+    casino_link: str = "",
 ) -> str:
     """Generate a slot review post for the channel."""
     lang_suffix = "pt" if locale.startswith("pt") else "es"
     vol_key = f"slot_volatility_{volatility}"
     volatility_text = t(vol_key, locale)
     tip_text = t(tip, locale) if tip.startswith("slot_tip_") else tip
-    return t(
+    text = t(
         "channel_slot_review",
         locale,
         name=slot_name,
@@ -125,6 +134,13 @@ async def generate_slot_review(
         tip=tip_text,
         casino=casino_name,
     )
+    # Append casino affiliate link if available
+    if casino_link:
+        cta = (
+            "Jogue agora" if locale.startswith("pt") else "Juega ahora"
+        )
+        text += f'\n👉 <a href="{casino_link}">{cta} no {casino_name}</a>'
+    return text
 
 
 async def generate_sport_post(pick: SportPick, locale: str) -> str:

@@ -125,6 +125,7 @@ async def alert_new_bonuses() -> None:
             casino_name = bonus.casino.name if bonus.casino else ""
             verdict = t(bonus.verdict_key or "verdict_excellent", locale)
 
+            link = bonus.affiliate_link or ""
             message = t(
                 "dm_new_bonus",
                 locale,
@@ -132,10 +133,14 @@ async def alert_new_bonuses() -> None:
                 title=title,
                 score=bonus.jogai_score,
                 verdict=verdict,
+                link=link,
             )
 
             try:
-                await bot.send_message(chat_id=user.id, text=message)
+                await bot.send_message(
+                    chat_id=user.id, text=message, parse_mode="HTML",
+                    disable_web_page_preview=True,
+                )
                 await _save_dm_record(
                     "dm_new_bonus", user.id, message, locale, geo, bonus.id
                 )
@@ -208,16 +213,21 @@ async def alert_expiring_bonuses() -> None:
             casino_name = bonus.casino.name if bonus.casino else ""
             expires_str = bonus.expires_at.strftime("%d/%m %H:%M") if bonus.expires_at else ""
 
+            link = bonus.affiliate_link or ""
             message = t(
                 "dm_expiring_bonus",
                 locale,
                 casino=casino_name,
                 title=title,
                 expires=expires_str,
+                link=link,
             )
 
             try:
-                await bot.send_message(chat_id=user.id, text=message)
+                await bot.send_message(
+                    chat_id=user.id, text=message, parse_mode="HTML",
+                    disable_web_page_preview=True,
+                )
                 await _save_dm_record(
                     "dm_expiring_bonus", user.id, message, locale, user.geo or "BR", bonus.id
                 )

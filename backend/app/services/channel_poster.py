@@ -10,7 +10,7 @@ from app.bot.bot import get_bot
 from app.celery_app import celery
 from app.config import settings
 from app.database.engine import async_session, engine
-from app.database.models import Bonus, Post, Slot, SportPick
+from app.database.models import Bonus, Casino, Post, Slot, SportPick
 from app.i18n import t
 from app.services.content_generator import (
     generate_bonus_post,
@@ -175,6 +175,7 @@ async def _get_slot_for_review(geo: str) -> Slot | None:
     async with async_session() as session:
         result = await session.execute(
             select(Slot)
+            .options(selectinload(Slot.best_casino))
             .where(Slot.is_active.is_(True))
             .where(Slot.geo.any(geo))
             .where(Slot.tip_pt.isnot(None))
@@ -201,7 +202,24 @@ async def post_slot_review() -> None:
 
         lang_suffix = "pt" if locale.startswith("pt") else "es"
         tip = getattr(slot, f"tip_{lang_suffix}") or slot.tip_pt or ""
-        casino_name = slot.best_casino.name if slot.best_casino else "Casino"
+        best_casino = slot.best_casino
+        casino_name = best_casino.name if best_casino else "Casino"
+        casino_link = ""
+        if best_casino:
+            # Get affiliate link from best bonus of this casino
+            async with async_session() as session:
+                from sqlalchemy import select as sa_select
+                result = await session.execute(
+                    sa_select(Bonus.affiliate_link)
+                    .where(Bonus.casino_id == best_casino.id)
+                    .where(Bonus.is_active.is_(True))
+                    .where(Bonus.affiliate_link.isnot(None))
+                    .order_by(Bonus.jogai_score.desc())
+                    .limit(1)
+                )
+                row = result.scalar_one_or_none()
+                if row:
+                    casino_link = row
 
         text = await generate_slot_review(
             slot_name=slot.name,
@@ -210,6 +228,7 @@ async def post_slot_review() -> None:
             tip=tip,
             casino_name=casino_name,
             locale=locale,
+            casino_link=casino_link,
         )
         msg_id = await _send_to_channel(channel_id, text)
 
@@ -286,6 +305,7 @@ async def post_weekly_top() -> None:
             title = getattr(bonus, f"title_{lang_suffix}") or bonus.title_pt or ""
             casino_name = bonus.casino.name if bonus.casino else "Casino"
             verdict = t(bonus.verdict_key, locale) if bonus.verdict_key else ""
+            link = bonus.affiliate_link or ""
             lines.append("")
             lines.append(
                 t(
@@ -296,6 +316,12 @@ async def post_weekly_top() -> None:
                     score=bonus.jogai_score,
                 )
             )
+            if link:
+                cta = (
+                    "Cadastre-se e ganhe" if locale.startswith("pt")
+                    else "Regístrate y gana"
+                )
+                lines.append(f'👉 <a href="{link}">{cta}</a>')
 
         lines.append("")
         lines.append(t("channel_weekly_footer", locale))

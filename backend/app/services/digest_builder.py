@@ -39,24 +39,37 @@ async def _build_digest_message(locale: str, geo: str) -> str | None:
     lines = [t("bonus_day_title", locale, date=datetime.utcnow().strftime("%d/%m"))]
     lines.append("")
 
+    if locale.startswith("pt"):
+        cta_text = "Cadastre-se aqui"
+        promo_label = "código"
+    else:
+        cta_text = "Regístrate aquí"
+        promo_label = "código"
+
     for i, bonus in enumerate(bonuses, 1):
         title = getattr(bonus, f"title_{lang_suffix}") or bonus.title_pt or ""
         casino_name = bonus.casino.name if bonus.casino else "—"
+        casino = bonus.casino
+        promo_code = casino.promo_code if casino else None
         verdict = t(bonus.verdict_key or "verdict_caution", locale)
         score = float(bonus.jogai_score or 0)
+        link = bonus.affiliate_link or ""
 
-        lines.append(
-            t(
-                "bonus_card",
-                locale,
-                casino=casino_name,
-                title=title,
-                wagering=float(bonus.wagering_multiplier or 0),
-                deadline=bonus.wagering_deadline_days or 0,
-                score=f"{score:.1f}",
-                verdict=verdict,
-            )
+        line = t(
+            "bonus_card",
+            locale,
+            casino=casino_name,
+            title=title,
+            wagering=float(bonus.wagering_multiplier or 0),
+            deadline=bonus.wagering_deadline_days or 0,
+            score=f"{score:.1f}",
+            verdict=verdict,
         )
+        if promo_code:
+            line += f"\n🎟 {promo_label}: <b>{promo_code}</b>"
+        if link:
+            line += f'\n👉 <a href="{link}">{cta_text}</a>'
+        lines.append(line)
         if i < len(bonuses):
             lines.append("")
 
@@ -96,7 +109,10 @@ async def send_digest() -> None:
             continue
 
         try:
-            await bot.send_message(chat_id=user.id, text=message)
+            await bot.send_message(
+                chat_id=user.id, text=message, parse_mode="HTML",
+                disable_web_page_preview=True,
+            )
             sent_count += 1
         except Exception:
             logger.debug("Failed to send digest to user %d", user.id)
