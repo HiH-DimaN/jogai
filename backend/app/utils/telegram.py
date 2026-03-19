@@ -14,18 +14,39 @@ def _get_description(obj: Casino, locale: str) -> str:
     return getattr(obj, f"description_{suffix}", None) or getattr(obj, "description_pt", "") or ""
 
 
-def format_bonus_card(bonus: Bonus, locale: str) -> str:
+def format_bonus_card(
+    bonus: Bonus, locale: str, medal: str = "🏆"
+) -> str:
     casino_name = bonus.casino.name if bonus.casino else "—"
     title = _get_title(bonus, locale)
+    # Strip casino name prefix to avoid "1WIN — 1WIN: ..."
+    if title.upper().startswith(casino_name.upper()):
+        colon_idx = title.find(":")
+        if colon_idx != -1 and colon_idx < len(casino_name) + 15:
+            title = title[colon_idx + 1:].strip()
     verdict = t(bonus.verdict_key, locale) if bonus.verdict_key else "—"
+
+    # Build wagering line
+    wager = bonus.wagering_multiplier
+    if wager is not None and wager > 0:
+        deadline = bonus.wagering_deadline_days or 0
+        if locale.startswith("pt"):
+            wagering_line = f"🔄 Rollover: x{wager:.0f} | Prazo: {deadline} dias"
+        else:
+            wagering_line = f"🔄 Rollover: x{wager:.0f} | Plazo: {deadline} días"
+    else:
+        if locale.startswith("pt"):
+            wagering_line = "🔄 Sem rollover!"
+        else:
+            wagering_line = "🔄 ¡Sin rollover!"
 
     return t(
         "bonus_card",
         locale,
+        medal=medal,
         casino=casino_name,
         title=title,
-        wagering=str(bonus.wagering_multiplier or 0),
-        deadline=str(bonus.wagering_deadline_days or 0),
+        wagering_line=wagering_line,
         score=str(bonus.jogai_score or 0),
         verdict=verdict,
     )

@@ -15,6 +15,15 @@ from app.utils.formatters import format_currency
 logger = logging.getLogger(__name__)
 
 
+def _strip_casino_prefix(title: str, casino_name: str) -> str:
+    """Strip casino name prefix from title to avoid '1WIN — 1WIN: ...'."""
+    if title.upper().startswith(casino_name.upper()):
+        colon_idx = title.find(":")
+        if colon_idx != -1 and colon_idx < len(casino_name) + 15:
+            return title[colon_idx + 1:].strip()
+    return title
+
+
 async def _build_digest_message(locale: str, geo: str) -> str | None:
     """Build a digest message with top-5 bonuses for a given geo."""
     lang_suffix = "pt" if locale.startswith("pt") else "es"
@@ -36,42 +45,56 @@ async def _build_digest_message(locale: str, geo: str) -> str | None:
     if not bonuses:
         return None
 
-    lines = [t("bonus_day_title", locale, date=datetime.utcnow().strftime("%d/%m"))]
-    lines.append("")
+    today = datetime.utcnow().strftime("%d/%m")
+    medals = ["🏆", "🥈", "🥉", "🎯", "💎"]
 
     if locale.startswith("pt"):
+        header = f"🔥 <b>TOP BÔNUS DE HOJE ({today}):</b>\n"
         cta_text = "Cadastre-se aqui"
         promo_label = "código"
+        no_wager = "Sem rollover!"
     else:
+        header = f"🔥 <b>TOP BONOS DE HOY ({today}):</b>\n"
         cta_text = "Regístrate aquí"
         promo_label = "código"
+        no_wager = "¡Sin rollover!"
+
+    lines = [header]
 
     for i, bonus in enumerate(bonuses, 1):
         title = getattr(bonus, f"title_{lang_suffix}") or bonus.title_pt or ""
         casino_name = bonus.casino.name if bonus.casino else "—"
+        title = _strip_casino_prefix(title, casino_name)
         casino = bonus.casino
         promo_code = casino.promo_code if casino else None
         verdict = t(bonus.verdict_key or "verdict_caution", locale)
         score = float(bonus.jogai_score or 0)
         link = bonus.affiliate_link or ""
+        medal = medals[i - 1] if i <= 5 else "▪️"
 
-        line = t(
-            "bonus_card",
-            locale,
-            casino=casino_name,
-            title=title,
-            wagering=float(bonus.wagering_multiplier or 0),
-            deadline=bonus.wagering_deadline_days or 0,
-            score=f"{score:.1f}",
-            verdict=verdict,
+        # Wagering line
+        wager = bonus.wagering_multiplier
+        if wager is not None and wager > 0:
+            wager_text = f"x{wager:.0f}"
+            deadline = bonus.wagering_deadline_days or 0
+            if locale.startswith("pt"):
+                wager_line = f"🔄 Rollover: {wager_text} | Prazo: {deadline} dias"
+            else:
+                wager_line = f"🔄 Rollover: {wager_text} | Plazo: {deadline} días"
+        else:
+            wager_line = f"🔄 {no_wager}"
+
+        line = (
+            f"{medal} <b>{casino_name}</b> — {title}\n"
+            f"    {wager_line}\n"
+            f"    ⭐ Score: {score:.1f}/10 — {verdict}"
         )
         if promo_code:
-            line += f"\n🎟 {promo_label}: <b>{promo_code}</b>"
+            line += f"\n    🎟 {promo_label}: <b>{promo_code}</b>"
         if link:
-            line += f'\n👉 <a href="{link}">{cta_text}</a>'
+            line += f'\n    👉 <a href="{link}">{cta_text}</a>'
         lines.append(line)
-        if i < len(bonuses):
-            lines.append("")
+        lines.append("")
 
     return "\n".join(lines)
 
@@ -127,7 +150,7 @@ async def _dispose_and_run(coro):
     from app.bot.bot import reset_bot
     reset_bot()
     await engine.dispose()
-    await coro
+    return await coro
 
 
 @celery.task(name="app.services.digest_builder.task_send_digest")

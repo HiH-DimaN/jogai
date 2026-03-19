@@ -8,7 +8,7 @@
   "bonus_day_title": "🔥 TOP BÔNUS DE HOJE ({date}):",
   "bonus_all_title": "📋 TODOS OS BÔNUS ATIVOS ({date}):",
   "btn_see_all_bonuses": "📋 Ver todos os bônus",
-  "bonus_card": "🏆 [{casino}] — {title}\nWagering: x{wagering} | Prazo: {deadline} dias\n⭐ Jogai Score: {score}/10 — {verdict}",
+  "bonus_card": "{medal} <b>{casino}</b> — {title}\n    {wagering_line}\n    ⭐ Score: {score}/10 — {verdict}",
   "btn_get_bonus": "👉 Pegar bônus",
   "analyze_prompt": "Mande as condições do bônus — texto, screenshot ou link.",
   "analyze_result_title": "📊 ANÁLISE DO BÔNUS:",

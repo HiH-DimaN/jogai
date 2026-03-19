@@ -42,8 +42,10 @@ def _build_bonus_message(
     title_key = "bonus_all_title" if show_all else "bonus_day_title"
     text = t(title_key, locale, date=today) + "\n"
 
-    for bonus in bonuses:
-        text += "\n" + format_bonus_card(bonus, locale) + "\n"
+    medals = ["🏆", "🥈", "🥉", "🎯", "💎"]
+    for i, bonus in enumerate(bonuses):
+        medal = medals[i] if i < len(medals) else "▪️"
+        text += "\n" + format_bonus_card(bonus, locale, medal=medal) + "\n"
 
     buttons = []
     for bonus in bonuses:
