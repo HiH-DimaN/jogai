@@ -34,6 +34,9 @@ LEAGUES = {
         "soccer_uefa_champs_league",
         "soccer_epl",
         "soccer_spain_la_liga",
+        "soccer_italy_serie_a",
+        "soccer_germany_bundesliga",
+        "soccer_france_ligue_one",
     ],
 }
 
@@ -162,9 +165,9 @@ async def fetch_and_save_picks() -> int:
 
                 match_date = datetime.fromisoformat(match_date_str.replace("Z", "+00:00"))
 
-                # Only upcoming matches (next 3 days)
+                # Only upcoming matches (next 7 days)
                 now = datetime.now(timezone.utc)
-                if match_date < now or match_date > now + timedelta(days=3):
+                if match_date < now or match_date > now + timedelta(days=7):
                     continue
 
                 home = event.get("home_team", "")

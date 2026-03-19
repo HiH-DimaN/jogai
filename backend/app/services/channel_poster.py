@@ -148,7 +148,7 @@ async def post_sport_pick() -> None:
 
         pick = await _get_sport_pick(geo)
         if not pick:
-            logger.info("No sport pick for geo=%s, skipping", geo)
+            logger.warning("No sport pick for geo=%s, skipping", geo)
             continue
 
         text = await generate_sport_post(pick, locale)
@@ -214,6 +214,7 @@ async def post_slot_review() -> None:
                     .where(Bonus.casino_id == best_casino.id)
                     .where(Bonus.is_active.is_(True))
                     .where(Bonus.affiliate_link.isnot(None))
+                    .where(Bonus.geo.any(geo))
                     .order_by(Bonus.jogai_score.desc())
                     .limit(1)
                 )
@@ -367,7 +368,7 @@ async def _dispose_and_run(coro):
     from app.bot.bot import reset_bot
     reset_bot()
     await engine.dispose()
-    await coro
+    return await coro
 
 
 @celery.task(name="app.services.channel_poster.task_post_bonus_day")

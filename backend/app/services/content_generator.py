@@ -136,10 +136,11 @@ async def generate_slot_review(
     )
     # Append casino affiliate link if available
     if casino_link:
-        cta = (
-            "Jogue agora" if locale.startswith("pt") else "Juega ahora"
-        )
-        text += f'\n👉 <a href="{casino_link}">{cta} no {casino_name}</a>'
+        if locale.startswith("pt"):
+            cta = f"Jogue agora no {casino_name}"
+        else:
+            cta = f"Juega ahora en {casino_name}"
+        text += f'\n👉 <a href="{casino_link}">{cta}</a>'
     return text
 
 
