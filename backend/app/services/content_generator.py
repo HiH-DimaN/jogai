@@ -67,13 +67,95 @@ def _fallback_bonus_post(bonus: Bonus, locale: str) -> str:
     )
 
 
+def _strip_casino_prefix(title: str, casino_name: str) -> str:
+    """Strip casino name prefix from title to avoid '1WIN — 1WIN: ...'."""
+    if title.upper().startswith(casino_name.upper()):
+        colon_idx = title.find(":")
+        if colon_idx != -1 and colon_idx < len(casino_name) + 15:
+            return title[colon_idx + 1:].strip()
+    return title
+
+
 async def generate_bonus_digest(bonuses: list[Bonus], locale: str) -> str:
-    """Generate a multi-bonus digest post for the Telegram channel."""
+    """Generate a bonus post for the Telegram channel.
+
+    Alternates daily between two formats:
+    - Even days: full list of all bonuses
+    - Odd days: spotlight on the top bonus with detailed info
+    """
     from datetime import datetime
 
     lang_suffix = "pt" if locale.startswith("pt") else "es"
-    today = datetime.utcnow().strftime("%d/%m")
+    now = datetime.utcnow()
+    today = now.strftime("%d/%m")
+    is_spotlight = now.day % 2 == 1  # odd days = spotlight
 
+    if is_spotlight and bonuses:
+        return _generate_spotlight(bonuses, locale, lang_suffix, today)
+    return _generate_full_digest(bonuses, locale, lang_suffix, today)
+
+
+def _generate_spotlight(
+    bonuses: list[Bonus], locale: str, lang_suffix: str, today: str
+) -> str:
+    """Single bonus spotlight with detailed info."""
+    bonus = bonuses[0]
+    title = getattr(bonus, f"title_{lang_suffix}") or bonus.title_pt or ""
+    casino_name = bonus.casino.name if bonus.casino else "Casino"
+    title = _strip_casino_prefix(title, casino_name)
+    casino = bonus.casino
+    promo_code = casino.promo_code if casino else None
+    verdict = t(bonus.verdict_key, locale) if bonus.verdict_key else ""
+    link = bonus.affiliate_link or ""
+
+    if locale.startswith("pt"):
+        lines = [
+            f"🏆 <b>BÔNUS DO DIA ({today}):</b>\n",
+            f"🎰 <b>{casino_name}</b> — {title}\n",
+            f"⭐ Jogai Score: <b>{bonus.jogai_score}/10</b> — {verdict}\n",
+        ]
+        if bonus.bonus_percent:
+            lines.append(f"💰 Bônus: <b>{bonus.bonus_percent}%</b>")
+        if bonus.wagering_multiplier is not None and bonus.wagering_multiplier > 0:
+            lines.append(f"🔄 Rollover: <b>x{bonus.wagering_multiplier}</b>")
+        else:
+            lines.append("🔄 Rollover: <b>SEM rollover!</b>")
+        if bonus.free_spins:
+            lines.append(f"🎡 Free Spins: <b>{bonus.free_spins}</b>")
+        if promo_code:
+            lines.append(f"\n🎟 Código: <b>{promo_code}</b>")
+        if link:
+            lines.append(f'\n👉 <a href="{link}">Cadastre-se e ganhe o bônus</a>')
+        lines.append("\n⚡ Analisado por <b>Jogai AI</b> — só bônus verificados!")
+    else:
+        lines = [
+            f"🏆 <b>BONO DEL DÍA ({today}):</b>\n",
+            f"🎰 <b>{casino_name}</b> — {title}\n",
+            f"⭐ Jogai Score: <b>{bonus.jogai_score}/10</b> — {verdict}\n",
+        ]
+        if bonus.bonus_percent:
+            lines.append(f"💰 Bono: <b>{bonus.bonus_percent}%</b>")
+        if bonus.wagering_multiplier is not None and bonus.wagering_multiplier > 0:
+            lines.append(f"🔄 Rollover: <b>x{bonus.wagering_multiplier}</b>")
+        else:
+            lines.append("🔄 Rollover: <b>¡SIN rollover!</b>")
+        if bonus.free_spins:
+            lines.append(f"🎡 Free Spins: <b>{bonus.free_spins}</b>")
+        if promo_code:
+            lines.append(f"\n🎟 Código: <b>{promo_code}</b>")
+        if link:
+            lines.append(f'\n👉 <a href="{link}">Regístrate y obtén el bono</a>')
+        lines.append(
+            "\n⚡ Analizado por <b>Jogai AI</b> — ¡solo bonos verificados!"
+        )
+
+    return "\n".join(lines)
+
+
+def _generate_full_digest(
+    bonuses: list[Bonus], locale: str, lang_suffix: str, today: str
+) -> str:
+    """Full list of all active bonuses."""
     if locale.startswith("pt"):
         header = f"🔥 <b>MELHORES BÔNUS DE HOJE ({today}):</b>\n"
         cta_text = "Cadastre-se aqui"
@@ -89,6 +171,7 @@ async def generate_bonus_digest(bonuses: list[Bonus], locale: str) -> str:
     for i, bonus in enumerate(bonuses, 1):
         title = getattr(bonus, f"title_{lang_suffix}") or bonus.title_pt or ""
         casino_name = bonus.casino.name if bonus.casino else "Casino"
+        title = _strip_casino_prefix(title, casino_name)
         casino = bonus.casino
         promo_code = casino.promo_code if casino else None
         verdict = t(bonus.verdict_key, locale) if bonus.verdict_key else ""

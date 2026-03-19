@@ -114,7 +114,11 @@ async def post_comparison() -> None:
 
         pair = await _get_next_pair(geo)
         if not pair:
-            logger.info("No casino pairs for geo=%s, skipping", geo)
+            logger.info(
+                "No casino pairs for geo=%s, falling back to education", geo
+            )
+            from app.services.education_poster import _post_education_for_channel
+            await _post_education_for_channel(geo, locale, channel_id)
             continue
 
         c1, c2 = pair

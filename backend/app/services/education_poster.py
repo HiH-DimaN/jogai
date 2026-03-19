@@ -113,49 +113,55 @@ async def _get_next_topic() -> dict:
     return EDUCATION_TOPICS[0]
 
 
+async def _post_education_for_channel(
+    geo: str, locale: str, channel_id: int | str
+) -> None:
+    """Generate and post an educational article to a single channel."""
+    topic = await _get_next_topic()
+    language, currency_symbol = get_locale_params(locale)
+
+    try:
+        prompt = load_prompt("education_post", language, currency_symbol)
+        user_message = f"Topic: {topic['description']}"
+        text = await chat(prompt, user_message, language, currency_symbol, heavy=True)
+    except Exception:
+        logger.warning("AI education post failed for %s", topic["key"], exc_info=True)
+        return
+
+    if not text or len(text) < 50:
+        logger.warning("Education post too short, skipping")
+        return
+
+    # Add CTA to bot
+    bot_cta = (
+        '\n\n🤖 <a href="https://t.me/jogai_bot">Analise bônus com Jogai AI</a>'
+        if locale.startswith("pt")
+        else '\n\n🤖 <a href="https://t.me/jogai_bot">Analiza bonos con Jogai AI</a>'
+    )
+    text += bot_cta
+
+    # Send to channel
+    from app.services.channel_poster import _send_to_channel
+    msg_id = await _send_to_channel(channel_id, text)
+
+    await _save_post(
+        post_type="education",
+        title=topic["key"],
+        content=text,
+        locale=locale,
+        geo=geo,
+        telegram_message_id=msg_id,
+        telegram_channel=channel_id,
+    )
+    logger.info("Posted education [%s] for geo=%s", topic["key"], geo)
+
+
 async def post_education() -> None:
     """Generate and post an educational article to each channel."""
-    topic = await _get_next_topic()
-
     for geo, ch in CHANNELS.items():
         locale = ch["locale"]
         channel_id = ch["id"]
-        language, currency_symbol = get_locale_params(locale)
-
-        try:
-            prompt = load_prompt("education_post", language, currency_symbol)
-            user_message = f"Topic: {topic['description']}"
-            text = await chat(prompt, user_message, language, currency_symbol, heavy=True)
-        except Exception:
-            logger.warning("AI education post failed for %s", topic["key"], exc_info=True)
-            continue
-
-        if not text or len(text) < 50:
-            logger.warning("Education post too short, skipping")
-            continue
-
-        # Add CTA to bot
-        bot_cta = (
-            '\n\n🤖 <a href="https://t.me/jogai_bot">Analise bônus com Jogai AI</a>'
-            if locale.startswith("pt")
-            else '\n\n🤖 <a href="https://t.me/jogai_bot">Analiza bonos con Jogai AI</a>'
-        )
-        text += bot_cta
-
-        # Send to channel
-        from app.services.channel_poster import _send_to_channel
-        msg_id = await _send_to_channel(channel_id, text)
-
-        await _save_post(
-            post_type="education",
-            title=topic["key"],
-            content=text,
-            locale=locale,
-            geo=geo,
-            telegram_message_id=msg_id,
-            telegram_channel=channel_id,
-        )
-        logger.info("Posted education [%s] for geo=%s", topic["key"], geo)
+        await _post_education_for_channel(geo, locale, channel_id)
 
 
 # --- Celery task ---
@@ -165,7 +171,7 @@ async def _dispose_and_run(coro):
     from app.bot.bot import reset_bot
     reset_bot()
     await engine.dispose()
-    await coro
+    return await coro
 
 
 @celery.task(name="app.services.education_poster.task_post_education")
