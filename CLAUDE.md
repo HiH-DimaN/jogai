@@ -326,6 +326,15 @@ jogai/
 - [x] **Ротация формата дайджеста:** чётные дни = полный список, нечётные = spotlight (детали одного бонуса)
 - [x] **Fallback education для BR по средам** — когда < 2 казино, comparison заменяется на education
 - [x] **Fix wagering_multiplier==0** — корректно показывает "SEM rollover!" / "¡SIN rollover!"
+- [x] **Fix DM-дайджест (digest_builder.py):**
+  - Дубль имени убран (strip casino prefix)
+  - Медали 🏆🥈🥉🎯💎 вместо одинаковых 🏆
+  - "Wagering: x0.0 | Prazo: 0 dias" → "🔄 Sem rollover!"
+  - Форматирование wagering: x50 → "🔄 Rollover: x50 | Prazo: 30 dias"
+  - Fix `return await coro` в `_dispose_and_run()`
+- [x] **Fix бот /bonus (bonus_card i18n + format_bonus_card):**
+  - Обновлён шаблон bonus_card: medal param, wagering_line param
+  - format_bonus_card: strip prefix, build wagering line, medal support
 - [x] Задеплоено и проверено на проде
 
 ### Работает (проверено на проде 2026-03-19)
