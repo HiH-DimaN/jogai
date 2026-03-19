@@ -322,6 +322,10 @@ jogai/
   - Окно поиска матчей расширено 3→7 дней
   - Добавлены GLOBAL-лиги: Serie A, Bundesliga, Ligue 1 (fallback)
   - Лог `warning` при отсутствии sport picks
+- [x] **Fix: дубль имени казино в дайджесте** — "1WIN — 1WIN: Cashback..." → "1WIN — Cashback..."
+- [x] **Ротация формата дайджеста:** чётные дни = полный список, нечётные = spotlight (детали одного бонуса)
+- [x] **Fallback education для BR по средам** — когда < 2 казино, comparison заменяется на education
+- [x] **Fix wagering_multiplier==0** — корректно показывает "SEM rollover!" / "¡SIN rollover!"
 - [x] Задеплоено и проверено на проде
 
 ### Работает (проверено на проде 2026-03-19)
