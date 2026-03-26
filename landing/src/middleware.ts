@@ -18,9 +18,19 @@ export default function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 308);
   }
 
+  // Paths without locale prefix: redirect to default locale
+  // e.g. /casinos → /pt-BR/casinos, /bonuses → /pt-BR/bonuses
+  const hasLocale = locales.some((l) => pathname.startsWith(`/${l}`));
+  if (!hasLocale) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${defaultLocale}${pathname}`;
+    return NextResponse.redirect(url, 308);
+  }
+
   return intlMiddleware(request);
 }
 
 export const config = {
-  matcher: ['/', '/(pt-BR|es-MX)/:path*'],
+  // Match all paths except _next, api, static files
+  matcher: ['/((?!_next|api|img|.*\\..*).*)'],
 };
