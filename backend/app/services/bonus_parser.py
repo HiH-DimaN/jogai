@@ -25,33 +25,18 @@ logger = logging.getLogger(__name__)
 REVIEW_SOURCES: list[dict] = [
     # BR sources
     {
-        "url": "https://www.askgamblers.com/casino-bonuses/brazil",
-        "geo": "BR",
-        "locale": "pt_BR",
-    },
-    {
         "url": "https://www.casino.org/br/bonus/",
         "geo": "BR",
         "locale": "pt_BR",
     },
-    {
-        "url": "https://www.oddschecker.com/br/cassino/bonus-de-cassino",
-        "geo": "BR",
-        "locale": "pt_BR",
-    },
     # MX sources
-    {
-        "url": "https://www.askgamblers.com/casino-bonuses/mexico",
-        "geo": "MX",
-        "locale": "es_MX",
-    },
     {
         "url": "https://www.casino.org/mx/bonos/",
         "geo": "MX",
         "locale": "es_MX",
     },
     {
-        "url": "https://www.oddschecker.com/mx/casino/bonos-de-casino",
+        "url": "https://www.legalbet.mx/bonos/",
         "geo": "MX",
         "locale": "es_MX",
     },
@@ -76,7 +61,6 @@ async def fetch_page(url: str) -> str | None:
             timeout=30.0,
             follow_redirects=True,
             headers=HEADERS,
-            http2=True,
         ) as client:
             response = await client.get(url)
             if response.status_code == 403:
@@ -89,7 +73,7 @@ async def fetch_page(url: str) -> str | None:
         return None
 
 
-def extract_text_blocks(html: str, max_length: int = 10000) -> str:
+def extract_text_blocks(html: str, max_length: int = 30000) -> str:
     """Extract meaningful text from HTML, strip navigation/scripts."""
     soup = BeautifulSoup(html, "lxml")
 

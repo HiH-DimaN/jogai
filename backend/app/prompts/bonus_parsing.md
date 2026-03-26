@@ -11,7 +11,7 @@ Return a JSON array of objects with these exact fields:
 ```json
 [
   {
-    "casino_name": "Original casino name (e.g. Pin-Up, Bet365, 1Win, Rivalo, Caliente, Codere)",
+    "casino_name": "Original casino name (e.g. Pin-Up, 1Win, Caliente, Codere)",
     "title_pt": "Bonus title in Portuguese (Brazilian), under 80 chars",
     "title_es": "Bonus title in Spanish (Mexican), under 80 chars",
     "bonus_percent": 100,
@@ -33,4 +33,4 @@ Rules:
 - Only extract welcome/deposit bonuses, not loyalty programs or tournaments
 - Return ONLY valid JSON array, no extra text
 - If no bonuses found, return empty array: []
-- Focus on these casinos if present: Pin-Up, 1Win, Bet365, Rivalo, Caliente, Codere
+- Focus on these casinos if present: Pin-Up, 1Win, Caliente, Codere
