@@ -139,6 +139,12 @@ async def parse_casino_source(source: dict) -> list[dict]:
         )
         return []
 
+    logger.info(
+        "AI returned %d items for %s: %s",
+        len(result), casino_slug,
+        str(result)[:500] if result else "[]",
+    )
+
     # Enrich each bonus — casino_slug is pre-assigned, no matching needed
     enriched = []
     for bonus_data in result:
