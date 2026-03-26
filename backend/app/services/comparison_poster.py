@@ -161,7 +161,7 @@ async def post_comparison() -> None:
 
         # Send to channel
         from app.services.channel_poster import _send_to_channel
-        msg_id = await _send_to_channel(channel_id, text)
+        msg_id = await _send_to_channel(channel_id, text, geo=geo, post_type="comparison")
 
         pair_key = f"{c1.slug}_vs_{c2.slug}"
         await _save_post(

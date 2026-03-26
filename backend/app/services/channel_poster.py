@@ -26,6 +26,37 @@ CHANNELS: dict[str, dict] = {
     "MX": {"id": settings.telegram_channel_mx_id, "locale": "es_MX"},
 }
 
+# Hashtags per geo — base set always appended + post-type specific
+HASHTAGS_BASE: dict[str, list[str]] = {
+    "BR": ["#casino", "#bonus", "#apostas", "#slots", "#jogai"],
+    "MX": ["#casino", "#bono", "#apuestas", "#slots", "#jogai"],
+}
+
+HASHTAGS_POST_TYPE: dict[str, dict[str, list[str]]] = {
+    "BR": {
+        "bonus_day": ["#boasvindas", "#deposito", "#promocao"],
+        "sport_pick": ["#apostasesportivas", "#futebol", "#palpite"],
+        "slot_review": ["#slot", "#rtp", "#caçaniquel"],
+        "weekly_top": ["#topslots", "#melhorslot", "#rtp"],
+        "education": ["#dicas", "#tutorial", "#comoapostar"],
+        "comparison": ["#comparacao", "#melhorescasinos"],
+    },
+    "MX": {
+        "bonus_day": ["#bienvenida", "#deposito", "#promocion"],
+        "sport_pick": ["#apuestasdeportivas", "#futbol", "#pronostico"],
+        "slot_review": ["#slot", "#rtp", "#tragamonedas"],
+        "weekly_top": ["#topslots", "#mejorslot", "#rtp"],
+        "education": ["#consejos", "#tutorial", "#comoapostar"],
+        "comparison": ["#comparacion", "#mejorescasinos"],
+    },
+}
+
+
+def _build_hashtags(geo: str, post_type: str) -> str:
+    """Build hashtag string for a post."""
+    tags = HASHTAGS_BASE.get(geo, []) + HASHTAGS_POST_TYPE.get(geo, {}).get(post_type, [])
+    return " ".join(tags)
+
 
 
 async def _get_active_bonuses(geo: str) -> list[Bonus]:
@@ -91,12 +122,25 @@ async def _save_post(
 
 
 async def _send_to_channel(
-    channel_id: str, text: str, parse_mode: str = "HTML"
+    channel_id: str,
+    text: str,
+    parse_mode: str = "HTML",
+    geo: str = "",
+    post_type: str = "",
 ) -> int | None:
-    """Send a message to a Telegram channel. Returns message_id."""
+    """Send a message to a Telegram channel. Returns message_id.
+
+    Automatically appends SEO hashtags when geo and post_type are provided.
+    """
     if not channel_id or channel_id == "placeholder":
         logger.warning("Channel ID not configured, skipping send")
         return None
+
+    # Append hashtags for Telegram SEO
+    if geo and post_type:
+        hashtags = _build_hashtags(geo, post_type)
+        if hashtags:
+            text = f"{text}\n\n{hashtags}"
 
     try:
         bot = get_bot()
@@ -124,7 +168,7 @@ async def post_bonus_day() -> None:
             continue
 
         text = await generate_bonus_digest(bonuses, locale)
-        msg_id = await _send_to_channel(channel_id, text)
+        msg_id = await _send_to_channel(channel_id, text, geo=geo, post_type="bonus_day")
 
         await _save_post(
             post_type="bonus_day",
@@ -152,7 +196,7 @@ async def post_sport_pick() -> None:
             continue
 
         text = await generate_sport_post(pick, locale)
-        msg_id = await _send_to_channel(channel_id, text)
+        msg_id = await _send_to_channel(channel_id, text, geo=geo, post_type="sport_pick")
 
         await _save_post(
             post_type="sport_pick",
@@ -231,7 +275,7 @@ async def post_slot_review() -> None:
             locale=locale,
             casino_link=casino_link,
         )
-        msg_id = await _send_to_channel(channel_id, text)
+        msg_id = await _send_to_channel(channel_id, text, geo=geo, post_type="slot_review")
 
         await _save_post(
             post_type="slot_review",
@@ -324,7 +368,7 @@ async def post_weekly_top() -> None:
         lines.append(t("channel_weekly_footer", locale))
 
         text = "\n".join(lines)
-        msg_id = await _send_to_channel(channel_id, text)
+        msg_id = await _send_to_channel(channel_id, text, geo=geo, post_type="weekly_top")
 
         await _save_post(
             post_type="weekly_top",

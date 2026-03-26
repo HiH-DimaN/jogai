@@ -137,7 +137,7 @@ async def _post_education_for_channel(
 
     # Send to channel
     from app.services.channel_poster import _send_to_channel
-    msg_id = await _send_to_channel(channel_id, text)
+    msg_id = await _send_to_channel(channel_id, text, geo=geo, post_type="education")
 
     await _save_post(
         post_type="education",
