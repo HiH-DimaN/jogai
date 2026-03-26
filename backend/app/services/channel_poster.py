@@ -318,11 +318,7 @@ async def post_weekly_top() -> None:
                 )
             )
             if link:
-                cta = (
-                    "Cadastre-se e ganhe" if locale.startswith("pt")
-                    else "Regístrate y gana"
-                )
-                lines.append(f'👉 <a href="{link}">{cta}</a>')
+                lines.append(f'👉 <a href="{link}">{t("channel_weekly_cta", locale)}</a>')
 
         lines.append("")
         lines.append(t("channel_weekly_footer", locale))

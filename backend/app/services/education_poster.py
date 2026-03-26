@@ -133,12 +133,7 @@ async def _post_education_for_channel(
         return
 
     # Add CTA to bot
-    bot_cta = (
-        '\n\n🤖 <a href="https://t.me/jogai_bot">Analise bônus com Jogai AI</a>'
-        if locale.startswith("pt")
-        else '\n\n🤖 <a href="https://t.me/jogai_bot">Analiza bonos con Jogai AI</a>'
-    )
-    text += bot_cta
+    text += f'\n\n🤖 <a href="https://t.me/jogai_bot">{t("channel_education_cta", locale)}</a>'
 
     # Send to channel
     from app.services.channel_poster import _send_to_channel

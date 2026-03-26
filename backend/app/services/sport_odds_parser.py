@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 # Leagues relevant to our geos
 LEAGUES = {
     "BR": [
-        "soccer_brazil_serie_a",
+        "soccer_brazil_campeonato",
         "soccer_brazil_serie_b",
         "soccer_conmebol_copa_libertadores",
     ],
@@ -163,12 +163,15 @@ async def fetch_and_save_picks() -> int:
                 if not match_date_str:
                     continue
 
-                match_date = datetime.fromisoformat(match_date_str.replace("Z", "+00:00"))
+                match_date_aware = datetime.fromisoformat(match_date_str.replace("Z", "+00:00"))
 
                 # Only upcoming matches (next 7 days)
                 now = datetime.now(timezone.utc)
-                if match_date < now or match_date > now + timedelta(days=7):
+                if match_date_aware < now or match_date_aware > now + timedelta(days=7):
                     continue
+
+                # Strip timezone for DB compatibility (TIMESTAMP WITHOUT TIME ZONE)
+                match_date = match_date_aware.replace(tzinfo=None)
 
                 home = event.get("home_team", "")
                 away = event.get("away_team", "")

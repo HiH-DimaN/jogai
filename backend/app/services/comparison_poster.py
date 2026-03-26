@@ -146,16 +146,15 @@ async def post_comparison() -> None:
         if not text or len(text) < 50:
             continue
 
-        # Add CTA with affiliate links
+        # Add CTA with affiliate links (reuse bonus1/bonus2 from above)
         cta_lines = []
-        for c in [c1, c2]:
-            best_b = await _get_best_bonus(c.id, geo)
+        for c, best_b in [(c1, bonus1), (c2, bonus2)]:
             link = best_b.affiliate_link if best_b else None
             promo = c.promo_code
             if link:
                 cta = f'👉 <a href="{link}">{c.name}</a>'
                 if promo:
-                    cta += f" (código: <b>{promo}</b>)"
+                    cta += f" ({t('promo_code_label', locale)}: <b>{promo}</b>)"
                 cta_lines.append(cta)
         if cta_lines:
             text += "\n\n" + "\n".join(cta_lines)
@@ -184,7 +183,7 @@ async def _dispose_and_run(coro):
     from app.bot.bot import reset_bot
     reset_bot()
     await engine.dispose()
-    await coro
+    return await coro
 
 
 @celery.task(name="app.services.comparison_poster.task_post_comparison")

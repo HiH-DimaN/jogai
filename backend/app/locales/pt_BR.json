@@ -122,6 +122,8 @@
   "referral_invited_count": "convidados",
   "tracker_format": "Formato: tipo_jogo | nome_jogo | valor_aposta | valor_resultado",
   "tracker_format_example": "Ex: slots | Sweet Bonanza | 50 | 120",
+  "channel_weekly_cta": "Cadastre-se e ganhe",
+  "channel_education_cta": "Analise bônus com Jogai AI",
   "dm_new_bonus": "🔔 NOVO BÔNUS TOP!\n\n🏆 <b>{casino}</b> — {title}\n⭐ Jogai Score: {score}/10 — {verdict}\n\n👉 <a href=\"{link}\">Cadastre-se e ganhe o bônus</a>",
   "dm_expiring_bonus": "⏰ BÔNUS EXPIRANDO!\n\n<b>{casino}</b> — {title}\n⏳ Válido até: {expires}\n\n👉 <a href=\"{link}\">Aproveite antes que acabe!</a>"
 }
