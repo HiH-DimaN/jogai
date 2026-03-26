@@ -73,6 +73,7 @@ async def chat_json(
     response = await chat(prompt, message, language, currency_symbol, heavy=heavy)
 
     # Extract JSON from response (may be wrapped in markdown code block)
+    logger.info("chat_json raw response (first 300 chars): %s", response[:300] if response else "<empty>")
     text = response.strip()
     if "```json" in text:
         text = text.split("```json")[1].split("```")[0].strip()
@@ -80,9 +81,11 @@ async def chat_json(
         text = text.split("```")[1].split("```")[0].strip()
 
     try:
-        return json.loads(text)
+        parsed = json.loads(text)
+        logger.info("chat_json parsed OK, type=%s, len=%s", type(parsed).__name__, len(parsed) if isinstance(parsed, (list, dict)) else "n/a")
+        return parsed
     except json.JSONDecodeError:
-        logger.error("Failed to parse LLM JSON response: %s", text[:200])
+        logger.error("Failed to parse LLM JSON response (len=%d): %s", len(text), text[:500])
         return {}
 
 
