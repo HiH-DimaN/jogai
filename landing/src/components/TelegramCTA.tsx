@@ -1,9 +1,16 @@
 'use client';
 
-import {useTranslations} from 'next-intl';
+import {useLocale, useTranslations} from 'next-intl';
+
+const CHANNEL_MAP: Record<string, string> = {
+  'pt-BR': 'https://t.me/jogai_br',
+  'es-MX': 'https://t.me/jogai_mx',
+};
 
 export default function TelegramCTA() {
   const t = useTranslations('telegram');
+  const locale = useLocale();
+  const channelUrl = CHANNEL_MAP[locale] || CHANNEL_MAP['pt-BR'];
 
   return (
     <section className="mx-auto max-w-4xl px-4 py-20 text-center">
@@ -18,7 +25,7 @@ export default function TelegramCTA() {
             {t('cta_bot')}
           </a>
           <a
-            href="https://t.me/jogai_channel"
+            href={channelUrl}
             className="rounded-lg border border-jogai-border px-8 py-3 font-bold text-jogai-text transition hover:border-jogai-accent"
           >
             {t('cta_channel')}
