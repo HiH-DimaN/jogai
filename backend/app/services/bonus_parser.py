@@ -132,7 +132,7 @@ async def parse_review_source(source: dict, casino_slugs: list[str]) -> list[dic
     prompt = load_prompt("bonus_parsing", language, currency_symbol)
 
     try:
-        result = await chat_json(prompt, text, language, currency_symbol, heavy=True)
+        result = await chat_json(prompt, text, language, currency_symbol, heavy=False)
     except Exception:
         logger.error("AI parsing failed for %s", source["url"], exc_info=True)
         return []
@@ -286,7 +286,7 @@ async def run_parser() -> dict[str, int]:
     stats: dict[str, int] = {}
     all_bonuses: list[dict] = []
 
-    for source in REVIEW_SOURCES:
+    for i, source in enumerate(REVIEW_SOURCES):
         try:
             bonuses = await parse_review_source(source, casino_slugs)
             all_bonuses.extend(bonuses)
@@ -294,6 +294,10 @@ async def run_parser() -> dict[str, int]:
         except Exception:
             logger.error("Parser failed for %s", source["url"], exc_info=True)
             stats[source["url"]] = 0
+
+        # Pause between sources to avoid AI rate limits
+        if i < len(REVIEW_SOURCES) - 1:
+            await asyncio.sleep(5)
 
     # Deduplicate by (casino_slug, title_pt)
     seen: set[tuple[str, str]] = set()
