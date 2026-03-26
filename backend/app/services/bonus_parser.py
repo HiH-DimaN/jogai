@@ -1,7 +1,7 @@
-"""Automated casino bonus parser: fetch review/affiliate pages → AI extract → upsert DB.
+"""Automated casino bonus parser: fetch per-casino review pages → AI extract → upsert DB.
 
-Instead of scraping casino sites directly (which return 403),
-we parse affiliate/review sites that aggregate bonus info and are designed to be crawled.
+Strategy: parse specific per-casino pages on review sites (legalbet.mx)
+where each page focuses on one casino → clean data, no AI matching needed.
 """
 
 import asyncio
@@ -20,23 +20,25 @@ from app.services.llm import chat_json, get_locale_params, load_prompt
 
 logger = logging.getLogger(__name__)
 
-# Review/affiliate sources that aggregate casino bonus info
-# These sites are designed to be crawled (SEO-driven) and don't block bots
-REVIEW_SOURCES: list[dict] = [
-    # BR sources
+# Per-casino review pages — each URL is about a specific casino
+# casino_slug must match Casino.slug in DB
+CASINO_SOURCES: list[dict] = [
+    # MX sources (legalbet.mx has detailed per-casino pages)
     {
-        "url": "https://www.casino.org/br/bonus/",
-        "geo": "BR",
-        "locale": "pt_BR",
-    },
-    # MX sources
-    {
-        "url": "https://www.casino.org/mx/bonos/",
+        "url": "https://legalbet.mx/casas-de-apuestas/1win/",
+        "casino_slug": "1win",
         "geo": "MX",
         "locale": "es_MX",
     },
     {
-        "url": "https://www.legalbet.mx/bonos/",
+        "url": "https://legalbet.mx/casas-de-apuestas/caliente/",
+        "casino_slug": "caliente",
+        "geo": "MX",
+        "locale": "es_MX",
+    },
+    {
+        "url": "https://legalbet.mx/casas-de-apuestas/codere/",
+        "casino_slug": "codere",
         "geo": "MX",
         "locale": "es_MX",
     },
@@ -48,7 +50,7 @@ HEADERS = {
         "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
     ),
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-    "Accept-Language": "pt-BR,pt;q=0.9,es;q=0.8,en;q=0.7",
+    "Accept-Language": "es-MX,es;q=0.9,pt-BR;q=0.8,en;q=0.7",
     "Accept-Encoding": "gzip, deflate, br",
     "Cache-Control": "no-cache",
 }
@@ -73,7 +75,7 @@ async def fetch_page(url: str) -> str | None:
         return None
 
 
-def extract_text_blocks(html: str, max_length: int = 30000) -> str:
+def extract_text_blocks(html: str, max_length: int = 20000) -> str:
     """Extract meaningful text from HTML, strip navigation/scripts."""
     soup = BeautifulSoup(html, "lxml")
 
@@ -90,49 +92,35 @@ def extract_text_blocks(html: str, max_length: int = 30000) -> str:
     return text
 
 
-def _match_casino_slug(casino_name: str, casino_slugs: list[str]) -> str | None:
-    """Try to match AI-extracted casino name to our known casino slugs."""
-    name_lower = casino_name.lower().strip()
-
-    # Direct match mappings
-    mappings = {
-        "pin-up": "pinup",
-        "pin up": "pinup",
-        "pinup": "pinup",
-        "1win": "1win",
-        "caliente": "caliente",
-        "codere": "codere",
-    }
-
-    for key, slug in mappings.items():
-        if key in name_lower and slug in casino_slugs:
-            return slug
-
-    # Fuzzy: check if any slug is substring of the name
-    for slug in casino_slugs:
-        if slug in name_lower:
-            return slug
-
-    return None
-
-
-async def parse_review_source(source: dict, casino_slugs: list[str]) -> list[dict]:
-    """Fetch a review page and extract bonuses via AI."""
+async def parse_casino_source(source: dict) -> list[dict]:
+    """Fetch a per-casino review page and extract bonuses via AI."""
     html = await fetch_page(source["url"])
     if not html:
         return []
 
     text = extract_text_blocks(html)
     if len(text.strip()) < 100:
-        logger.warning("Too little text from %s (%d chars), skipping", source["url"], len(text.strip()))
+        logger.warning(
+            "Too little text from %s (%d chars), skipping",
+            source["url"], len(text.strip()),
+        )
         return []
 
     locale = source["locale"]
     language, currency_symbol = get_locale_params(locale)
     prompt = load_prompt("bonus_parsing", language, currency_symbol)
 
+    casino_slug = source["casino_slug"]
+    casino_name = casino_slug.upper().replace("_", " ")
+
+    # Tell AI which casino this page is about
+    user_message = (
+        f"This page is about casino: {casino_name}\n"
+        f"Extract all bonuses for {casino_name} from this text:\n\n{text}"
+    )
+
     try:
-        result = await chat_json(prompt, text, language, currency_symbol, heavy=False)
+        result = await chat_json(prompt, user_message, language, currency_symbol, heavy=False)
     except Exception:
         logger.error("AI parsing failed for %s", source["url"], exc_info=True)
         return []
@@ -145,32 +133,40 @@ async def parse_review_source(source: dict, casino_slugs: list[str]) -> list[dic
             result = [result] if result else []
 
     if not isinstance(result, list):
-        logger.warning("Unexpected AI response type for %s: %s", source["url"], type(result))
+        logger.warning(
+            "Unexpected AI response type for %s: %s",
+            source["url"], type(result),
+        )
         return []
 
-    # Enrich each bonus with score and match to our casinos
+    # Enrich each bonus — casino_slug is pre-assigned, no matching needed
     enriched = []
     for bonus_data in result:
-        if not isinstance(bonus_data, dict) or not bonus_data.get("title_pt"):
+        if not isinstance(bonus_data, dict):
             continue
 
-        # Try to match casino
-        casino_name = bonus_data.get("casino_name", "")
-        matched_slug = _match_casino_slug(casino_name, casino_slugs)
-        if not matched_slug:
-            logger.debug("Could not match casino '%s' to known casinos, skipping", casino_name)
+        # Require at least a title in one language
+        if not bonus_data.get("title_pt") and not bonus_data.get("title_es"):
             continue
 
-        bonus_data["casino_slug"] = matched_slug
+        # If only one language title provided, use it for both
+        if not bonus_data.get("title_pt"):
+            bonus_data["title_pt"] = bonus_data.get("title_es", "")
+        if not bonus_data.get("title_es"):
+            bonus_data["title_es"] = bonus_data.get("title_pt", "")
+
+        bonus_data["casino_slug"] = casino_slug
+        bonus_data["casino_name"] = casino_name
         bonus_data["geo"] = source["geo"]
 
         # Calculate Jogai Score
+        deposit = 100.0 if source["geo"] == "BR" else 2000.0
         score_result = calculate_jogai_score(
             bonus_percent=bonus_data.get("bonus_percent") or 100,
             wagering_multiplier=bonus_data.get("wagering_multiplier") or 35,
             deadline_days=bonus_data.get("wagering_deadline_days") or 30,
             max_bet=bonus_data.get("max_bet") or 25,
-            deposit=100.0 if source["geo"] == "BR" else 2000.0,
+            deposit=deposit,
             free_spins=bonus_data.get("free_spins") or 0,
             no_deposit=bonus_data.get("no_deposit", False),
         )
@@ -181,7 +177,10 @@ async def parse_review_source(source: dict, casino_slugs: list[str]) -> list[dic
         bonus_data["profit_probability"] = score_result["profit_probability"]
         enriched.append(bonus_data)
 
-    logger.info("Parsed %d bonuses from %s", len(enriched), source["url"])
+    logger.info(
+        "Parsed %d bonuses for %s from %s",
+        len(enriched), casino_slug, source["url"],
+    )
     return enriched
 
 
@@ -225,17 +224,23 @@ async def upsert_bonuses(bonuses: list[dict]) -> int:
                 bonus.title_es = bonus_data.get("title_es", bonus.title_es)
                 bonus.bonus_percent = bonus_data.get("bonus_percent", bonus.bonus_percent)
                 bonus.max_bonus_amount = bonus_data.get("max_bonus_amount", bonus.max_bonus_amount)
-                bonus.wagering_multiplier = bonus_data.get("wagering_multiplier", bonus.wagering_multiplier)
-                bonus.wagering_deadline_days = bonus_data.get("wagering_deadline_days", bonus.wagering_deadline_days)
+                bonus.wagering_multiplier = bonus_data.get(
+                    "wagering_multiplier", bonus.wagering_multiplier
+                )
+                bonus.wagering_deadline_days = bonus_data.get(
+                    "wagering_deadline_days", bonus.wagering_deadline_days
+                )
                 bonus.max_bet = bonus_data.get("max_bet", bonus.max_bet)
                 bonus.free_spins = bonus_data.get("free_spins", bonus.free_spins)
                 bonus.no_deposit = bonus_data.get("no_deposit", bonus.no_deposit)
                 bonus.jogai_score = bonus_data.get("jogai_score", bonus.jogai_score)
                 bonus.verdict_key = bonus_data.get("verdict_key", bonus.verdict_key)
                 bonus.expected_loss = bonus_data.get("expected_loss", bonus.expected_loss)
-                bonus.profit_probability = bonus_data.get("profit_probability", bonus.profit_probability)
+                bonus.profit_probability = bonus_data.get(
+                    "profit_probability", bonus.profit_probability
+                )
                 bonus.updated_at = now
-                logger.info("Updated bonus: %s", title_pt)
+                logger.info("Updated bonus: %s (%s)", title_pt, casino_slug)
             else:
                 # Create new
                 affiliate_link = None
@@ -267,7 +272,7 @@ async def upsert_bonuses(bonuses: list[dict]) -> int:
                     geo=[geo],
                 )
                 session.add(new_bonus)
-                logger.info("Created bonus: %s", title_pt)
+                logger.info("Created bonus: %s (%s)", title_pt, casino_slug)
 
             upserted += 1
 
@@ -277,18 +282,13 @@ async def upsert_bonuses(bonuses: list[dict]) -> int:
 
 
 async def run_parser() -> dict[str, int]:
-    """Run parser for all review sources. Returns stats."""
-    # Load known casino slugs
-    async with async_session() as session:
-        result = await session.execute(select(Casino.slug))
-        casino_slugs = [row[0] for row in result.all()]
-
+    """Run parser for all casino sources. Returns stats."""
     stats: dict[str, int] = {}
     all_bonuses: list[dict] = []
 
-    for i, source in enumerate(REVIEW_SOURCES):
+    for i, source in enumerate(CASINO_SOURCES):
         try:
-            bonuses = await parse_review_source(source, casino_slugs)
+            bonuses = await parse_casino_source(source)
             all_bonuses.extend(bonuses)
             stats[source["url"]] = len(bonuses)
         except Exception:
@@ -296,7 +296,7 @@ async def run_parser() -> dict[str, int]:
             stats[source["url"]] = 0
 
         # Pause between sources to avoid AI rate limits
-        if i < len(REVIEW_SOURCES) - 1:
+        if i < len(CASINO_SOURCES) - 1:
             await asyncio.sleep(5)
 
     # Deduplicate by (casino_slug, title_pt)
