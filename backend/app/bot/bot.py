@@ -1,5 +1,8 @@
+import os
+
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
+from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.enums import ParseMode
 
 from app.config import settings
@@ -14,8 +17,11 @@ def get_bot() -> Bot:
     """Get or create the singleton bot (for webhook/polling context)."""
     global _bot
     if _bot is None:
+        proxy = os.getenv("TELEGRAM_PROXY")
+        session = AiohttpSession(proxy=proxy) if proxy else None
         _bot = Bot(
             token=settings.telegram_bot_token,
+            session=session,
             default=DefaultBotProperties(parse_mode=ParseMode.HTML),
         )
     return _bot
