@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 from contextlib import asynccontextmanager
 
 from aiogram.types import Update
@@ -53,7 +54,9 @@ def _setup_bot() -> None:
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     _setup_bot()
-    if settings.environment == "production":
+    use_polling = os.getenv("TG_USE_POLLING") == "1"
+    polling_task: asyncio.Task | None = None
+    if settings.environment == "production" and not use_polling:
         bot = get_bot()
         webhook_url = f"{settings.app_url}/bot/webhook"
         for attempt in range(3):
@@ -64,8 +67,18 @@ async def lifespan(app: FastAPI):
             except Exception:
                 logger.warning("set_webhook attempt %d failed, retrying...", attempt + 1)
                 await asyncio.sleep(2)
+    elif use_polling:
+        bot = get_bot()
+        try:
+            await bot.delete_webhook(drop_pending_updates=True)
+        except Exception:
+            logger.warning("delete_webhook before polling failed", exc_info=True)
+        polling_task = asyncio.create_task(dp.start_polling(bot))
+        logger.info("Bot started in polling mode")
     yield
-    if settings.environment == "production":
+    if polling_task:
+        polling_task.cancel()
+    if settings.environment == "production" and not use_polling:
         try:
             bot = get_bot()
             await bot.delete_webhook()
