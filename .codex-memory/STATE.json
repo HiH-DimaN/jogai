@@ -1,0 +1,50 @@
+{
+  "sessionState": "ADOPTED",
+  "currentStage": "IDLE",
+  "intent": "Existing project adopted into Product Factory OS Product Factory OS.",
+  "classification": {
+    "productType": "",
+    "domain": "",
+    "complexity": "",
+    "requiredModules": [],
+    "infrastructure": []
+  },
+  "architecture": {
+    "pattern": "",
+    "backend": "",
+    "frontend": "",
+    "database": "",
+    "auth": "",
+    "deployment": ""
+  },
+  "existingProject": {
+    "isExistingProject": true,
+    "detectedStack": [],
+    "availableCommands": [],
+    "currentTaskRoute": "",
+    "lastAnalysisSummary": "Adopted with minimal Product Factory OS state. Run /task to classify work and inspect the repository before changes."
+  },
+  "currentNode": "",
+  "gateResults": {
+    "strategy": "",
+    "architecture": "",
+    "tests": "",
+    "review": "",
+    "security": "",
+    "dependencies": "",
+    "hardening": "",
+    "deploymentReadiness": ""
+  },
+  "verificationHistory": [],
+  "decisionLog": [],
+  "artifactHashes": {},
+  "lastSuccessfulState": "ADOPTED",
+  "artifacts": [
+    "CODEX.md",
+    ".codex-memory/MEMORY.md"
+  ],
+  "completedModules": [],
+  "failedValidations": [],
+  "blockers": [],
+  "nextAction": "Classify product and create missing PFO planning artifacts before major work."
+}
